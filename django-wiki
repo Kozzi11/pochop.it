@@ -6,3 +6,7 @@ python manage.py startapp nazev_aplikace
 
 Aktualizace/Vytvoření DB Modelů
 python manage.py migrate
+
+
+Vytvoreni uzivatele pro administraci /admin
+python manage.py createsuperuser
