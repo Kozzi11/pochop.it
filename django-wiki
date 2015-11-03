@@ -5,7 +5,8 @@ python manage.py startapp nazev_aplikace
 
 
 Aktualizace/Vytvoření DB Modelů
-python manage.py migrate
+python manage.py makemigrations - pripravy dotazy
+python manage.py migrate - spusti dotazy
 
 
 Vytvoreni uzivatele pro administraci /admin
