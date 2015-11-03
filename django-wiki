@@ -1,0 +1,8 @@
+
+
+Vytvoření app
+python manage.py startapp nazev_aplikace
+
+
+Aktualizace/Vytvoření DB Modelů
+python manage.py migrate
