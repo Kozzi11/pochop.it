@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PochopIT</title>
-</head>
-<body>
+{% extends "pochopit/base.html" %}
+
+{% block title %}PochopIT{% endblock %}
+
+{% block content %}
 <div style="margin: 120px auto; text-align: center; width: 600px">
      {% load staticfiles %}
      <img alt="logo pochopit" src="{% static "homepage/pochop_it_logo.png" %}">
@@ -15,5 +13,4 @@
      <div style="height: 40px; width: 100%; background: #9CE23E"></div>
      <div style="height: 40px; width: 100%; background: #77b233"></div>
  </div>
-</body>
-</html>
+{% endblock %}
