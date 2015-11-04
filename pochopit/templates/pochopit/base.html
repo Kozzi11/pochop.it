@@ -1,11 +1,18 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}PochopIT{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "pochopit/style.css" %}">
+    <script type="text/javascript" src="{% static "pochopit/jquery-1.11.3.min.js" %}" ></script>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 
 <body>
+    {% bootstrap_messages %}
     <div id="sidebar">
         {% block sidebar %}{% endblock %}
     </div>
