@@ -11,3 +11,8 @@ python manage.py migrate - spusti dotazy
 
 Vytvoreni uzivatele pro administraci /admin
 python manage.py createsuperuser
+
+
+Prace s preklady
+python manage.py makemessages
+python manage.py compilemessages
