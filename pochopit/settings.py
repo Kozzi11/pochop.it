@@ -55,6 +55,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+LOCALE_PATHS = (BASE_DIR + '/website/locale', )
+
 ROOT_URLCONF = 'pochopit.urls'
 
 TEMPLATES = [
