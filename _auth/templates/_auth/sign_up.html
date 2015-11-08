@@ -1,6 +1,7 @@
 {% extends "pochopit/base.html" %}
 {% load bootstrap3 %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block title %}PochopIT{% endblock %}
 
@@ -14,7 +15,7 @@
               {% bootstrap_form form %}
               {% buttons %}
                 <button type="submit" class="btn btn-primary">
-                  {% bootstrap_icon "star" %} Submit
+                   {% trans "Submit" %}
                 </button>
               {% endbuttons %}
             </form>

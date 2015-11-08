@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-08 16:37+0100\n"
+"POT-Creation-Date: 2015-11-08 20:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\homepage\views.py:8
+#: .\_auth\forms.py:6
+msgid "First name"
+msgstr ""
+
+#: .\_auth\forms.py:7
+msgid "Last name"
+msgstr ""
+
+#: .\_auth\forms.py:8
+msgid "Age"
+msgstr ""
+
+#: .\_auth\templates\_auth\sign_up.html:18
+msgid "Submit"
+msgstr ""
+
+#: .\_homepage\views.py:8
 msgid "test prekladu"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:55
+#: .\pochopit\templates\pochopit\base.html:54
 msgid "About"
 msgstr "about"
 
-#: .\pochopit\templates\pochopit\base.html:56
+#: .\pochopit\templates\pochopit\base.html:55
 msgid "Contact"
+msgstr ""
+
+#: .\pochopit\templates\pochopit\base.html:59
+msgid "Sign up"
+msgstr ""
+
+#: .\pochopit\templates\pochopit\base.html:62
+msgid "Sign in"
 msgstr ""

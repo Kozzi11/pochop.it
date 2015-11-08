@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
                 ('type', models.IntegerField(choices=[(1, 'Text'), (1, 'Image')])),
                 ('order', models.IntegerField()),
-                ('parent', models.ForeignKey(to='courses.Component')),
+                ('parent', models.ForeignKey(to='_courses.Component')),
             ],
         ),
         migrations.CreateModel(
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30)),
                 ('order', models.IntegerField()),
-                ('courses', models.ForeignKey(to='courses.Course')),
+                ('courses', models.ForeignKey(to='_courses.Course')),
             ],
         ),
         migrations.CreateModel(
@@ -49,12 +49,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
                 ('order', models.IntegerField()),
-                ('lesson', models.ForeignKey(to='courses.Lesson')),
+                ('lesson', models.ForeignKey(to='_courses.Lesson')),
             ],
         ),
         migrations.AddField(
             model_name='compoenentconfig',
             name='component',
-            field=models.ForeignKey(to='courses.Component'),
+            field=models.ForeignKey(to='_courses.Component'),
         ),
     ]

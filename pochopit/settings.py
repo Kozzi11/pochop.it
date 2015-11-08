@@ -39,8 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap3',
     'pochopit',
-    'homepage',
-    'courses'
+    '_homepage',
+    '_auth',
+    '_courses'
 )
 
 MIDDLEWARE_CLASSES = (
