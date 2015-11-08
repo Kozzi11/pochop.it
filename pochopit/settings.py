@@ -109,6 +109,10 @@ STATIC_URL = '/static/'
 
 LOCALE_PATHS = (BASE_DIR + '/locale', )
 
+LOGIN_URL = '/login'
+
+LOGIN_REDIRECT_URL = '/'
+
 BOOTSTRAP3 = {
 
     # The URL to the jQuery JavaScript file
