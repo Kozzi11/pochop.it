@@ -1,11 +1,30 @@
 .navbar-brand {
     padding: 13px 15px;
 }
-
 #content {
     margin-top: 80px;
 }
-
 .spacer {
     margin-top: 40px;
+}
+.btn-primary {
+    background-color: #6ec315;
+    border-color: #59ab15;
+}
+.navbar-default .navbar-nav>li>a {
+    font-weight: bold;
+}
+.navbar-default .navbar-nav>li>a:hover {
+    /*background-color: #6ec315;*/
+    color: #6ec315;
+}
+.btn-primary:hover {
+    background-color: #79d115;
+    border-color: #62b515;
+}
+#navbar-search-form  {
+    width: 40%;
+}
+#navbar-search-form input{
+    width: 100%;
 }
