@@ -19,5 +19,6 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': '_auth/login.html'}),
+    url(r'^logout/$', auth_views.logout),
     url(r'^sing_up/$', views.sign_up, name='sign_up')
 ]

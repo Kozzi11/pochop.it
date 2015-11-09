@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-09 21:38+0100\n"
+"POT-Creation-Date: 2015-11-09 23:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,21 +39,33 @@ msgid "test prekladu"
 msgstr ""
 
 #: pochopit/templates/pochopit/base.html:54
+msgid "Search"
+msgstr ""
+
+#: pochopit/templates/pochopit/base.html:57
 msgid "About"
 msgstr "O nás"
 
-#: pochopit/templates/pochopit/base.html:55
+#: pochopit/templates/pochopit/base.html:58
 msgid "Contact"
 msgstr "Kontakt"
 
-#: pochopit/templates/pochopit/base.html:60
+#: pochopit/templates/pochopit/base.html:63
 msgid "Sign up"
 msgstr "Registrovat"
 
-#: pochopit/templates/pochopit/base.html:63
+#: pochopit/templates/pochopit/base.html:66
 msgid "Sign in"
 msgstr "Přihlásit"
 
-#: pochopit/templates/pochopit/base.html:69
+#: pochopit/templates/pochopit/base.html:73
 msgid "Settings"
 msgstr "Nastavení"
+
+#: pochopit/templates/pochopit/base.html:77
+msgid "My account"
+msgstr "Můj účet"
+
+#: pochopit/templates/pochopit/base.html:78
+msgid "Sign out"
+msgstr "Odhlásit"
