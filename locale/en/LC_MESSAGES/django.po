@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-09 23:06+0100\n"
+"POT-Creation-Date: 2015-11-11 16:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,7 @@ msgid "Age"
 msgstr ""
 
 #: _auth/templates/_auth/sign_up.html:18
+#: _courses/templates/_courses/courses.html:18
 msgid "Submit"
 msgstr ""
 
@@ -37,34 +38,38 @@ msgstr ""
 msgid "test prekladu"
 msgstr ""
 
-#: pochopit/templates/pochopit/base.html:54
+#: pochopit/templates/pochopit/base.html:55
 msgid "Search"
 msgstr ""
 
-#: pochopit/templates/pochopit/base.html:57
-msgid "About"
-msgstr "about"
-
 #: pochopit/templates/pochopit/base.html:58
-msgid "Contact"
+msgid "Courses"
 msgstr ""
 
 #: pochopit/templates/pochopit/base.html:63
-msgid "Sign up"
-msgstr ""
-
-#: pochopit/templates/pochopit/base.html:66
-msgid "Sign in"
-msgstr ""
-
-#: pochopit/templates/pochopit/base.html:73
 msgid "Settings"
 msgstr ""
 
-#: pochopit/templates/pochopit/base.html:77
+#: pochopit/templates/pochopit/base.html:67
 msgid "My account"
 msgstr ""
 
-#: pochopit/templates/pochopit/base.html:78
+#: pochopit/templates/pochopit/base.html:68
 msgid "Sign out"
+msgstr ""
+
+#: pochopit/templates/pochopit/base.html:74
+msgid "About"
+msgstr "about"
+
+#: pochopit/templates/pochopit/base.html:75
+msgid "Contact"
+msgstr ""
+
+#: pochopit/templates/pochopit/base.html:79
+msgid "Sign up"
+msgstr ""
+
+#: pochopit/templates/pochopit/base.html:82
+msgid "Sign in"
 msgstr ""

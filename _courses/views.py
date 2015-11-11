@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def courses(request, tab_name):
+    return render(request, '_courses/courses.html', {'tab_name': tab_name})
