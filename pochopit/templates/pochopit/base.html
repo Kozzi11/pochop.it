@@ -50,34 +50,37 @@
           </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form id="navbar-search-form" class="navbar-form navbar-left" role="search">
-              <input type="text" class="form-control" placeholder="{% trans "Search" %}">
-          </form>
-          <ul class="nav navbar-nav">
-            <li><a href="">{% trans "About" %}</a></li>
-            <li><a href="">{% trans "Contact" %}</a></li>
-          </ul>
-          {% if not user.is_authenticated %}
+          {% if user.is_authenticated %}
+              <form id="navbar-search-form" class="navbar-form navbar-left" role="search">
+                <input type="text" class="form-control" placeholder="{% trans "Search" %}">
+              </form>
+              <ul class="nav navbar-nav">
+                    <li><a href="">{% trans "Courses" %}</a></li>
+              </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="{% url 'sign_up' %}">{% trans "Sign up" %}</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans "Settings" %}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">{% trans "My account" %}</a></li>
+                        <li><a href="{% url 'logout' %}">{% trans "Sign out" %}</a></li>
+                    </ul>
                 </li>
-                  <li>
-                      <a href="{% url 'login' %}">{% trans "Sign in" %}</a>
-                  </li>
               </ul>
           {% else %}
+              <ul class="nav navbar-nav">
+                    <li><a href="">{% trans "About" %}</a></li>
+                    <li><a href="">{% trans "Contact" %}</a></li>
+              </ul>
               <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    {% trans "Settings" %}
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">{% trans "My account" %}</a></li>
-                  <li><a href="{% url 'logout' %}">{% trans "Sign out" %}</a></li>
-                </ul>
-              </li>
+                  <li>
+                    <a href="{% url 'sign_up' %}">{% trans "Sign up" %}</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'login' %}">{% trans "Sign in" %}</a>
+                  </li>
               </ul>
           {% endif %}
         </div><!--/.nav-collapse -->
