@@ -7,19 +7,29 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-               <ul class="nav nav-tabs nav-pills">
+            <div class="col-md-2">
+               <ul id="left-nav-tabs" class="nav nav-tabs nav-pills nav-stacked">
                   {% if tabs.all %}
                       <li class="active" role="presentation"><a href="{% url 'courses' 'all' %}">{% trans "All" %}</a></li>
                   {% else %}
                       <li role="presentation"><a href="{% url 'courses' 'all' %}">{% trans "All" %}</a></li>
                   {% endif %}
                   {% if tabs.in_progress %}
-                      <li class="active" role="presentation"><a href="{% url 'courses' 'in_progress' %}">{% trans "In progress" %}</a></li>
+                      <li class="active" role="presentation">
+                          <a href="{% url 'courses' 'in_progress' %}">
+                              {% trans "In progress" %}
+                              <span class="badge pull-right">3</span>
+                          </a>
+                      </li>
                   {% else %}
-                      <li role="presentation"><a href="{% url 'courses' 'in_progress' %}">{% trans "In progress" %}</a></li>
+                      <li role="presentation">
+                          <a href="{% url 'courses' 'in_progress' %}">
+                              {% trans "In progress" %}
+                              <span class="badge pull-right">3</span>
+                          </a>
+                      </li>
                   {% endif %}
                   {% if tabs.completed %}
                       <li class="active" role="presentation"><a href="{% url 'courses' 'completed' %}">{% trans "Completed" %}</a></li>
@@ -27,17 +37,20 @@
                       <li role="presentation"><a href="{% url 'courses' 'completed' %}">{% trans "Completed" %}</a></li>
                   {% endif %}
                   {% if tabs.my_courses %}
-                      <li class="pull-right active" role="presentation"><a href="{% url 'courses' 'my_courses' %}">{% trans "My courses" %}</a></li>
+                      <li class="active" role="presentation"><a href="{% url 'courses' 'my_courses' %}">{% trans "My courses" %}</a></li>
                   {% else %}
-                      <li class="pull-right" role="presentation"><a href="{% url 'courses' 'my_courses' %}">{% trans "My courses" %}</a></li>
+                      <li role="presentation">
+                        <a href="{% url 'courses' 'my_courses' %}">
+                          {% trans "My courses" %}
+                          <span class="badge pull-right">14</span>
+                        </a>
+                      </li>
                   {% endif %}
                 </ul>
             </div>
-        </div>
-        <div class="row spacer">
-            <div class="col-md-12">
-            {% block tab_content %}
-            {% endblock %}
+            <div class="col-md-10">
+                {% block tab_content %}
+                {% endblock %}
             </div>
         </div>
      </div>

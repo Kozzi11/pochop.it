@@ -16,7 +16,7 @@ a:hover, .dropdown-menu>li>a:hover{
 
 /* OBENE OBSAH */
 #content {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 .spacer {
     margin-top: 25px;
@@ -45,20 +45,26 @@ a {
     border-color: #62b515;
 }
 
-/* TABOVAC */
+/* BOCNI NAVIGACNI MENU */
+
+#left-nav-tabs {
+    border: none;
+    border-right: 1px solid #ddd;
+}
+
 .nav-pills>li.active>a {
     border: none;
+    border-right: 4px solid #69BF10;
     border-radius: 0;
-    border-bottom: 4px solid #69BF10;
-    background-color: inherit;
-    color: #5a5a5a;
+    background-color: transparent;
+    color: #69BF10;
 }
 .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus  {
     border: none;
+    border-right: 4px solid #69BF10;
     border-radius: 0;
-    border-bottom: 4px solid transparent;
     background-color: inherit;
-    color: #5a5a5a;
+    color: #69BF10;
     outline: none;
 }
 .nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
@@ -66,4 +72,13 @@ a {
     background-color: transparent;
     color: #69BF10;
     outline: none;
+}
+.nav-pills>.active>a>.badge {
+    color: #69BF10;
+}
+
+/* GRID */
+.grid .grid-cell {
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
