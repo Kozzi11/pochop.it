@@ -51,9 +51,6 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           {% if user.is_authenticated %}
-              <form id="navbar-search-form" class="navbar-form navbar-left" role="search">
-                <input type="text" class="form-control" placeholder="{% trans "Search" %}">
-              </form>
               <ul class="nav navbar-nav">
                     <li><a href="{% url 'courses' 'in_progress' %}">{% trans "Courses" %}</a></li>
               </ul>

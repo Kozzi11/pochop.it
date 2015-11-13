@@ -1,18 +1,6 @@
+/* MENICKO */
 .navbar-brand {
     padding: 13px 15px;
-}
-#content {
-    margin-top: 40px;
-}
-.spacer {
-    margin-top: 25px;
-}
-.btn-primary {
-    background-color: #69BF10;
-    border-color: #59ab15;
-}
-a {
-    color: #5a5a5a;
 }
 .navbar-default .navbar-nav>li>a {
     font-weight: bold;
@@ -24,6 +12,23 @@ a {
 .navbar-default .navbar-nav>li>a:hover,
 a:hover, .dropdown-menu>li>a:hover{
     color: #69BF10;
+}
+
+/* OBENE OBSAH */
+#content {
+    margin-top: 40px;
+}
+.spacer {
+    margin-top: 25px;
+}
+a {
+    color: #5a5a5a;
+}
+
+/* FORMY */
+.btn-primary {
+    background-color: #69BF10;
+    border-color: #59ab15;
 }
 .form-control:focus {
     border-color: #69BF10;
@@ -39,9 +44,26 @@ a:hover, .dropdown-menu>li>a:hover{
     background-color: #6ec910;
     border-color: #62b515;
 }
-#navbar-search-form  {
-    width: 40%;
+
+/* TABOVAC */
+.nav-pills>li.active>a {
+    border: none;
+    border-radius: 0;
+    border-bottom: 4px solid #69BF10;
+    background-color: inherit;
+    color: #5a5a5a;
 }
-#navbar-search-form input{
-    width: 100%;
+.nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus  {
+    border: none;
+    border-radius: 0;
+    border-bottom: 4px solid transparent;
+    background-color: inherit;
+    color: #5a5a5a;
+    outline: none;
+}
+.nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
+    border-color: transparent;
+    background-color: transparent;
+    color: #69BF10;
+    outline: none;
 }
