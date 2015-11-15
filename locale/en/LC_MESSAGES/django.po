@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 22:02+0100\n"
+"POT-Creation-Date: 2015-11-14 16:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,20 +33,28 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:14
+#: .\_courses\templates\_courses\courses.html:15
+#: .\_courses\templates\_courses\courses.html:17
 msgid "All"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:15
+#: .\_courses\templates\_courses\courses.html:22
+#: .\_courses\templates\_courses\courses.html:29
 msgid "In progress"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:16
+#: .\_courses\templates\_courses\courses.html:35
+#: .\_courses\templates\_courses\courses.html:37
 msgid "Completed"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:17
+#: .\_courses\templates\_courses\courses.html:43
+#: .\_courses\templates\_courses\courses.html:49
 msgid "My courses"
+msgstr ""
+
+#: .\_courses\templates\_courses\my.html:10
+msgid "Create new course"
 msgstr ""
 
 #: .\_homepage\views.py:8
@@ -54,37 +62,33 @@ msgid "test prekladu"
 msgstr ""
 
 #: .\pochopit\templates\pochopit\base.html:55
-msgid "Search"
-msgstr ""
-
-#: .\pochopit\templates\pochopit\base.html:58
 msgid "Courses"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:63
+#: .\pochopit\templates\pochopit\base.html:60
 msgid "Settings"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:67
+#: .\pochopit\templates\pochopit\base.html:64
 msgid "My account"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:68
+#: .\pochopit\templates\pochopit\base.html:65
 msgid "Sign out"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:74
+#: .\pochopit\templates\pochopit\base.html:71
 msgid "About"
 msgstr "about"
 
-#: .\pochopit\templates\pochopit\base.html:75
+#: .\pochopit\templates\pochopit\base.html:72
 msgid "Contact"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:79
+#: .\pochopit\templates\pochopit\base.html:76
 msgid "Sign up"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:82
+#: .\pochopit\templates\pochopit\base.html:79
 msgid "Sign in"
 msgstr ""

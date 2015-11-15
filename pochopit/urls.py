@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^', include('_homepage.urls')),
     url(r'^', include('_auth.urls')),
     url(r'^', include('_courses.urls')),
-    url('^', include('django.contrib.auth.urls'))
+    url('^', include('django.contrib.auth.urls')),
+    url(r'^djangojs/', include('djangojs.urls')),
 ]

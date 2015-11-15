@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 22:02+0100\n"
+"POT-Creation-Date: 2015-11-14 16:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,61 +34,68 @@ msgstr "Věk"
 msgid "Submit"
 msgstr "Odeslat"
 
-#: .\_courses\templates\_courses\courses.html:14
+#: .\_courses\templates\_courses\courses.html:15
+#: .\_courses\templates\_courses\courses.html:17
 msgid "All"
 msgstr "Všechny"
 
-#: .\_courses\templates\_courses\courses.html:15
+#: .\_courses\templates\_courses\courses.html:22
+#: .\_courses\templates\_courses\courses.html:29
 msgid "In progress"
 msgstr "Rozpracované"
 
-#: .\_courses\templates\_courses\courses.html:16
+#: .\_courses\templates\_courses\courses.html:35
+#: .\_courses\templates\_courses\courses.html:37
 msgid "Completed"
 msgstr "Dokončené"
 
-#: .\_courses\templates\_courses\courses.html:17
+#: .\_courses\templates\_courses\courses.html:43
+#: .\_courses\templates\_courses\courses.html:49
 msgid "My courses"
 msgstr "Mé kurzy"
+
+#: .\_courses\templates\_courses\my.html:10
+msgid "Create new course"
+msgstr "Vytvořit nový kurz"
 
 #: .\_homepage\views.py:8
 msgid "test prekladu"
 msgstr ""
 
 #: .\pochopit\templates\pochopit\base.html:55
-msgid "Search"
-msgstr "Hledat"
-
-#: .\pochopit\templates\pochopit\base.html:58
 msgid "Courses"
 msgstr "Kurzy"
 
-#: .\pochopit\templates\pochopit\base.html:63
+#: .\pochopit\templates\pochopit\base.html:60
 msgid "Settings"
 msgstr "Nastavení"
 
-#: .\pochopit\templates\pochopit\base.html:67
+#: .\pochopit\templates\pochopit\base.html:64
 msgid "My account"
 msgstr "Můj účet"
 
-#: .\pochopit\templates\pochopit\base.html:68
+#: .\pochopit\templates\pochopit\base.html:65
 msgid "Sign out"
 msgstr "Odhlásit"
 
-#: .\pochopit\templates\pochopit\base.html:74
+#: .\pochopit\templates\pochopit\base.html:71
 msgid "About"
 msgstr "O nás"
 
-#: .\pochopit\templates\pochopit\base.html:75
+#: .\pochopit\templates\pochopit\base.html:72
 msgid "Contact"
 msgstr "Kontakt"
 
-#: .\pochopit\templates\pochopit\base.html:79
+#: .\pochopit\templates\pochopit\base.html:76
 msgid "Sign up"
 msgstr "Registrovat"
 
-#: .\pochopit\templates\pochopit\base.html:82
+#: .\pochopit\templates\pochopit\base.html:79
 msgid "Sign in"
 msgstr "Přihlásit"
+
+#~ msgid "Search"
+#~ msgstr "Hledat"
 
 #~ msgid "My"
 #~ msgstr "Mé Kurzy"

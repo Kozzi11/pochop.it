@@ -1,6 +1,8 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% load i18n %}
+{% load eztables %}
+{% load js %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,15 +31,19 @@
     <title>{% block title %}PochopIT{% endblock %}</title>
     <script type="text/javascript" src="{% static "pochopit/js/jquery-1.11.3.min.js" %}" ></script>
     <script type="text/javascript" src="{% static "pochopit/js/jquery.bootstrap-autohidingnavbar.min.js" %}" ></script>
+    {% django_js jquery=false i18n=false csrf=false %}
     {% bootstrap_css %}
+    {% datatables_bootstrap_css %}
     {% bootstrap_javascript %}
+    {% datatables_js %}
+    {% datatables_bootstrap_js %}
     <link rel="stylesheet" type="text/css" href="{% static "pochopit/css/style.css" %}">
 </head>
 
 <body>
     {% bootstrap_messages %}
     <nav class="navbar navbar-default navbar-static-top">
-      <div class="container-fluid">
+      <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
