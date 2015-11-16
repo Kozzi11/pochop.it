@@ -1,23 +1,39 @@
 
 
-Vytvoření app
+#Vytvoření app
 python manage.py startapp nazev_aplikace
 
 
-Aktualizace/Vytvoření DB Modelů
+#Aktualizace/Vytvoření DB Modelů
 python manage.py makemigrations - pripravy dotazy
 python manage.py migrate - spusti dotazy
 
 
-Vytvoreni uzivatele pro administraci /admin
+#Vytvoreni uzivatele pro administraci /admin
 python manage.py createsuperuser
 
 
-Prace s preklady
+#Prace s preklady
 Na widlich je potreba jeste naistalovat getttext viz: https://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows
 cody zemi: http://www.gnu.org/software/gettext/manual/gettext.html#Language-Codes
 
-pokud chceme pridat novy jazyk tak: python manage.py makemessages -l cs
+#pokud chceme pridat novy jazyk tak: python manage.py makemessages -l cs
 
 python manage.py makemessages
 python manage.py compilemessages
+
+
+#podpora tabulek (gridu)
+sudo pip install django-eztables
+
+1) je potreba upravit v souboru {/usr/lib/python3.5/site-packages/}eztables/views.py radek uplne na konci
+z mimetype=JSON_MIMETYPE => content_type=JSON_MIMETYPE
+
+2) v soboru {/usr/lib/python3.5/site-packages/}eztables/static/js/libs/datatables/datatables.bootstrap.js
+nahradit
+            '<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
+            '<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
+
+za
+            '<li class="prev disabled"><a href="#"><span aria-hidden="true">&laquo;</span></a></li>'+
+            '<li class="next disabled"><a href="#"><span aria-hidden="true">&raquo;</span></a></li>'+
