@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth import get_user
 from _courses.models import Course
 from eztables.views import DatatablesView
-# from pochopit.viewcomponents.tab import Tab
+from pochopit.viewcomponents.tab import Tab
 
 
 def courses(request, tab_name):
@@ -13,10 +13,10 @@ def courses(request, tab_name):
         tab_name = 'in_progress'
 
     tabs = [
-            # Tab(_('All'), reverse('courses', args=('all',)), tab_name == 'all'),
-            # Tab(_('In progress'), reverse('courses', args=('in_progress',)), tab_name == 'in_progress', 2),
-            # Tab(_('Completed'), reverse('courses', args=('completed',)), tab_name == 'completed', 8),
-            # Tab(_('My courses'), reverse('courses', args=('my',)), tab_name == 'my', 3)
+            Tab(_('All'), reverse('courses', args=('all',)), tab_name == 'all'),
+            Tab(_('In progress'), reverse('courses', args=('in_progress',)), tab_name == 'in_progress', 2),
+            Tab(_('Completed'), reverse('courses', args=('completed',)), tab_name == 'completed', 8),
+            Tab(_('My courses'), reverse('courses', args=('my',)), tab_name == 'my', 3)
     ]
 
     template_name = '_courses/' + tab_name + '.html'
