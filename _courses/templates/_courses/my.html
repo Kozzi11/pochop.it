@@ -1,30 +1,28 @@
-{% extends "pochopit/base_side_panel.html" %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 {% load i18n %}
 
-{% block tab_content %}
-    <div class="row">
-        <div class="col-md-12">
-            <a href="{% url "courses_new" %}" class="btn btn-primary btn pull-right">
-                <span class="glyphicon glyphicon-plus"></span> {% trans "Create new course" %}
-            </a>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <a href="{% url "courses_new" %}" class="btn btn-primary btn pull-right">
+            <span class="glyphicon glyphicon-plus"></span> {% trans "Create new course" %}
+        </a>
     </div>
-    <div class="row spacer">
-        <div class="col-md-12">
-    <table id="course-table" class="table">
-        <thead>
-            <tr>
-                <th>Author</th>
-                <th>Name</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-        </div>
+</div>
+<div class="row spacer">
+    <div class="col-md-12">
+<table id="course-table" class="table">
+    <thead>
+        <tr>
+            <th>Author</th>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
     </div>
+</div>
 
 <script>
     $('#course-table').dataTable({
@@ -35,4 +33,3 @@
         "sAjaxSource": Django.url('course_datatables_view')
     });
 </script>
-{% endblock %}
