@@ -1,0 +1,25 @@
+1 - instalce pycharm (profession edition)
+
+2 - pokud v pycharm vybereme ze chceme zalozit django projekt tak by se mel naistalovat
+    jak python tak django
+
+3 - pokud v kroku dva nedoslo k naistalovani pythonu nebo djanga tak je naistalujeme rucne
+  - instalace python 3.x - https://www.python.org/downloads/
+  - instalace pip: https://pip.pypa.io/en/latest/installing/#install-pip
+  - pip install Django - u linuxu je mozne ze budete potrebovat prikaz spustit jako sudo
+
+4 - pip install django-bootstrap3 - u linuxu je mozne ze budete potrebovat prikaz spustit jako sudo
+
+5 - pip install django-eztables - u linuxu je mozne ze budete potrebovat prikaz spustit jako sudo
+
+6 - pull projektu z githubu
+
+7 - v jiz pulnutem projektu spustit v terminalu:
+  - python manage.py makemigrations
+  - python manage.py migrate
+
+8 - vytvoreni super usera
+  - python manage.py createsuperuser
+
+9 - Na widlich je potreba jeste naistalovat getttext viz:
+    htps://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows

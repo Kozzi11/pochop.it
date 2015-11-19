@@ -30,6 +30,9 @@
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": Django.url('course_datatables_view')
+        "sAjaxSource": Django.url('course_datatables_view'),
+        "oLanguage": {
+        "sUrl": Django.file("js/libs/datatables/language.cs.json")
+        }
     });
 </script>

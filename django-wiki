@@ -14,8 +14,8 @@ python manage.py createsuperuser
 
 
 #Prace s preklady
-Na widlich je potreba jeste naistalovat getttext viz: https://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows
-cody zemi: http://www.gnu.org/software/gettext/manual/gettext.html#Language-Codes
+Na widlich je potreba jeste naistalovat getttext viz: htps://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows
+cody zemi: http://www.gnu.org/software/gettext/manual/gettext.html#Language-Codest
 
 #pokud chceme pridat novy jazyk tak: python manage.py makemessages -l cs
 
