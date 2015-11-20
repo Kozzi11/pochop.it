@@ -17,6 +17,7 @@
             <th>Author</th>
             <th>Name</th>
             <th>Description</th>
+            <th></th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -30,9 +31,23 @@
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": Django.url('course_datatables_view'),
+        "sAjaxSource": "{% url "course_datatables_view" %}",
+        "aoColumns": [
+            null,
+            null,
+            null,
+            {
+                "bSortable": false,
+                "mRender": function ( data, type, full ) {
+                     var url = Django.url('courses_edit', data);
+		             return '<a href="' + url + '" class="btn btn-default btn-sm">' +
+                                '<span class="glyphicon glyphicon-pencil"></span>' +
+                             '</a>';
+                }
+            }
+        ],
         "oLanguage": {
-        "sUrl": Django.file("js/libs/datatables/language.cs.json")
+            "sUrl": '{% static "js/libs/datatables/language.cs.json" %}'
         }
     });
 </script>

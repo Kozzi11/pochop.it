@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.contrib.auth import get_user
@@ -8,14 +8,29 @@ from eztables.views import DatatablesView
 from pochopit.viewcomponents.tab import Tab
 
 
-def courses(request):
+def courses(request, tab='#in-progress'):
     tabs = [
-            Tab(_('All'), reverse('courses_all'), True),
-            Tab(_('In progress'), reverse('courses_in_progress'), False, 2),
-            Tab(_('Completed'), reverse('courses_completed'), False, 8),
-            Tab(_('My courses'), reverse('courses_my'), False, 3)
+            Tab(_('All'), 'courses_all', is_active=True),
+            Tab(_('In progress'), 'courses_in-progress', buddge_number=2),
+            Tab(_('Completed'), 'courses_completed', buddge_number=8),
+            Tab(_('My courses'), 'courses_my', buddge_number=3)
     ]
-    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs})
+
+    active_tab = tabs[0]
+
+    if tab == '#all':
+        active_tab = tabs[0]
+
+    if tab == '#in-progress':
+        active_tab = tabs[1]
+
+    if tab == '#completed':
+        active_tab = tabs[2]
+
+    if tab == '#my':
+        active_tab = tabs[3]
+
+    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs, 'active_tab': active_tab})
 
 
 def all_tab(request):
@@ -41,12 +56,21 @@ def new(request):
     return HttpResponseRedirect(reverse('courses_edit', args=(course.id,)))
 
 
-def edit(request, course_id):
+def edit(request, course_id, tab='#main'):
     tabs = [
-        Tab(_('Main'), reverse('courses_edit_main_tab', args=(course_id,)), True),
-        Tab(_('Lessons'), reverse('courses_edit_lessons_tab', args=(course_id,)), False),
+        Tab(_('Main'), 'courses_edit_main', params=(course_id,), is_active=True),
+        Tab(_('Lessons'), 'courses_edit_lessons', params=(course_id,)),
     ]
-    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs})
+
+    active_tab = tabs[0]
+
+    if tab == '#main':
+        active_tab = tabs[0]
+
+    if tab == '#lessons':
+        active_tab = tabs[1]
+
+    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs, 'active_tab': active_tab})
 
 
 def edit_main_tab(request, course_id):
@@ -60,7 +84,8 @@ def edit_lessons_tab(request, course_id):
 class CourseDatatablesView(DatatablesView):
     model = Course
     fields = (
-        'author',
-        'name',
+        'author__username',
+        '{name}',
         'description',
+        'id',
     )

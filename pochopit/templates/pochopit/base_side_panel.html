@@ -11,8 +11,8 @@
             <div class="col-md-3">
                 <ul id="left-nav-tabs" class="nav nav-tabs nav-pills nav-stacked">
                     {% for tab in tabs %}
-                        <li class="{{ tab.className }}" role="presentation">
-                            <a onclick="changeTab(this, '{{ tab.url }}')">
+                        <li id="{{ tab.shortName }}" class="{{ tab.className }}" role="presentation">
+                            <a href="#{{ tab.shortName }}" onclick="changeTab(this, '{{ tab.url }}')">
                                 {{ tab.name }}
                                 {% if tab.addBaddge %}
                                     <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
@@ -35,5 +35,7 @@
             jQuery('#left-nav-tabs').find('li').removeClass('active');
             jQuery(element).closest('li').addClass('active');
         }
+        var id = '#' + '{{ active_tab.shortName }}';
+        changeTab(jQuery(id)[0], '{{ active_tab.url }}')
     </script>
 {% endblock %}
