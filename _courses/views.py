@@ -43,15 +43,6 @@ def new_course(request):
     return HttpResponseRedirect(reverse('courses_edit', args=(course.id,)))
 
 
-def new_lesson(request, course_id):
-    lesson = Lesson()
-    lesson.name = _('undefined')
-    lesson.course_id = course_id
-    lesson.order = 0
-    lesson.save()
-    return HttpResponseRedirect(reverse('courses_edit_lesson', args=(lesson.id,)))
-
-
 def edit_course(request, course_id):
     course = Course.objects.get(id=course_id)
     tabs = [
@@ -61,22 +52,6 @@ def edit_course(request, course_id):
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
         ContextBarItem(course.name, '#')
-    ]
-    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs,
-                                                             'context_bar_items': context_bar_items})
-
-
-def edit_lesson(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    course = lesson.course
-    tabs = [
-        Tab(_('Main'), 'courses_lesson_edit_main', params=(lesson_id,)),
-        Tab(_('Slides'), 'courses_lesson_edit_slides', params=(lesson_id,), is_active=True),
-    ]
-    context_bar_items = [
-        ContextBarItem(_('Courses'), reverse('courses')),
-        ContextBarItem(course.name, reverse('courses_edit', args=(course.id,))),
-        ContextBarItem(lesson.name, '#')
     ]
     return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs,
                                                              'context_bar_items': context_bar_items})
@@ -96,6 +71,31 @@ def course_main_tab(request, course_id):
 
 def course_lessons_tab(request, course_id):
     return render(request, '_courses/edit/lessons.html', {'course_id': course_id})
+
+
+def new_lesson(request, course_id):
+    lesson = Lesson()
+    lesson.name = _('undefined')
+    lesson.course_id = course_id
+    lesson.order = 0
+    lesson.save()
+    return HttpResponseRedirect(reverse('courses_edit_lesson', args=(lesson.id,)))
+
+
+def edit_lesson(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    course = lesson.course
+    tabs = [
+        Tab(_('Main'), 'courses_lesson_edit_main', params=(lesson_id,)),
+        Tab(_('Slides'), 'courses_lesson_edit_slides', params=(lesson_id,), is_active=True),
+    ]
+    context_bar_items = [
+        ContextBarItem(_('Courses'), reverse('courses')),
+        ContextBarItem(course.name, reverse('courses_edit', args=(course.id,))),
+        ContextBarItem(lesson.name, '#')
+    ]
+    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs,
+                                                             'context_bar_items': context_bar_items})
 
 
 def lesson_main_tab(request, lesson_id):
