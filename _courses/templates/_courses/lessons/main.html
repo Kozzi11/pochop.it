@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load i18n %}
 
-<form action="{% url "courses_edit_main" course_id %}" method="post" class="form">
+<form action="{% url "courses_lesson_edit_main" lesson_id %}" method="post" class="form">
   {% csrf_token %}
     <div class="form-group text-right">
         <button type="submit" class="btn btn-primary">

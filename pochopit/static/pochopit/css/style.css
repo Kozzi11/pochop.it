@@ -27,11 +27,23 @@ a:hover, .dropdown-menu>li>a:hover{
 a {
     color: #5a5a5a;
 }
-
 .btn-default:hover {
     color: #69BF10;
     background-color: inherit;
     border-color: #69BF10;
+}
+.pagination>.active>a {
+    background-color: transparent;
+    color: #000;
+    border-color: #ddd;
+}
+.pagination>.active>a:hover {
+    background-color: transparent;
+    color: #69BF10;
+    border-color: #69BF10;
+}
+.alert {
+    margin-top: -20px;
 }
 
 /* FORMY */
@@ -93,4 +105,26 @@ a {
 .grid .grid-cell {
     margin-bottom: 15px;
     margin-top: 15px;
+}
+
+/* CONTEXT NAV-BAR */
+ul.context-nav-bar {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.context-nav-bar li {
+    display: inline;
+}
+.context-nav-bar li:before {
+    content: "> ";
+}
+.context-nav-bar li:first-child:before {
+    content: "";
+}
+.context-nav-bar li:last-child a {
+    color: #69BF10;
+}
+.context-nav-bar li a {
+    cursor: pointer;
 }

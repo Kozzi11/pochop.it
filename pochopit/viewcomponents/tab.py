@@ -2,19 +2,21 @@ from django.core.urlresolvers import reverse
 
 
 class Tab:
-    name = ''
+    title = ''
     url = '#'
-    shorName = ''
+    shortName = ''
     className = ''
     addBaddge = False
     baddgeNumber = 0
+    isActive = False
 
-    def __init__(self, name: str, viewname: str, params=None, is_active=False, buddge_number=None):
-        self.name = name
+    def __init__(self, title: str, viewname: str, params=None, is_active=False, buddge_number=None):
+        self.title = title
         self.shortName = viewname.split('_')[-1]
         self.url = reverse(viewname, args=params)
         if is_active:
             self.className = 'active'
+        self.isActive = is_active
 
         if buddge_number is not None:
             self.baddgeNumber = buddge_number
