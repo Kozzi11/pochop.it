@@ -1,0 +1,13 @@
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+
+<form action="{% url "course_main" course_id %}" method="post" class="form">
+  {% csrf_token %}
+    <div class="form-group text-right">
+        <button type="submit" class="btn btn-primary">
+            {% trans "Save" %}
+        </button>
+    </div>
+  {% bootstrap_form form %}
+</form>

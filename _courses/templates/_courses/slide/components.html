@@ -1,21 +1,18 @@
 {% load staticfiles %}
 {% load i18n %}
-
 <div class="row">
     <div class="col-md-12">
-        <a href="{% url "course_new" %}" class="btn btn-primary btn pull-right">
-            <span class="glyphicon glyphicon-plus"></span> {% trans "Create new course" %}
+        <a href="{% url "component_new" slide_id %}" class="btn btn-primary btn pull-right">
+            <span class="glyphicon glyphicon-plus"></span> {% trans "Add new component" %}
         </a>
     </div>
 </div>
 <div class="row spacer">
     <div class="col-md-12">
-<table id="course-table" class="table">
+<table id="component-table" class="table">
     <thead>
         <tr>
-            <th>Author</th>
-            <th>{% Courses %}</th>
-            <th>Description</th>
+            <th>{% trans "Component" %}</th>
             <th></th>
         </tr>
     </thead>
@@ -25,21 +22,20 @@
 </div>
 
 <script>
-    $('#course-table').dataTable({
+    $('#component-table').dataTable({
         "bPaginate": true,
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "{% url "courses_data" %}",
-        "sServerMethod": 'POST',
+        "sAjaxSource": "{% url "components_data" slide_id%}",
         "aoColumns": [
-            null,
-            null,
-            null,
+            {
+                "bSortable": false
+            },
             {
                 "bSortable": false,
                 "mRender": function ( data, type, full ) {
-                     var url = Django.url('course_edit', data);
+                     var url = Django.url('component_edit', data);
 		             return '<a href="' + url + '" class="btn btn-default btn-sm">' +
                                 '<span class="glyphicon glyphicon-pencil"></span>' +
                              '</a>';

@@ -7,27 +7,30 @@ class Course(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=30)
+    title = models.CharField(max_length=254)
     description = models.TextField(max_length=300)
 
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course)
-    name = models.CharField(max_length=30)
+    title = models.CharField(max_length=254)
     order = models.IntegerField()
 
 
 class Slide(models.Model):
     lesson = models.ForeignKey(Lesson)
+    title = models.CharField(max_length=254)
     order = models.IntegerField()
 
 
 class Component(models.Model):
     TYPES = (
         (1, 'Text'),
-        (1, 'Image'),
+        (2, 'Image'),
     )
-    parent = models.ForeignKey('self')
+    # parent = models.ForeignKey('self')
+    slide = models.ForeignKey(Slide)
+    title = models.CharField(max_length=254)
     type = models.IntegerField(choices=TYPES)
     order = models.IntegerField()
 

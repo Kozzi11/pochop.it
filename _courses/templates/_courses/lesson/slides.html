@@ -2,17 +2,17 @@
 {% load i18n %}
 <div class="row">
     <div class="col-md-12">
-        <a href="{% url "courses_lesson_new" course_id %}" class="btn btn-primary btn pull-right">
+        <a href="{% url "slide_new" lesson_id %}" class="btn btn-primary btn pull-right">
             <span class="glyphicon glyphicon-plus"></span> {% trans "Create new slide" %}
         </a>
     </div>
 </div>
 <div class="row spacer">
     <div class="col-md-12">
-<table id="course-table" class="table">
+<table id="lesson-table" class="table">
     <thead>
         <tr>
-            <th>{% trans "Title" %}</th>
+            <th>{% trans "Slide" %}</th>
             <th></th>
         </tr>
     </thead>
@@ -22,18 +22,20 @@
 </div>
 
 <script>
-    $('#course-table').dataTable({
+    $('#lesson-table').dataTable({
         "bPaginate": true,
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "{% url "course_lessons_datatables_view" %}",
+        "sAjaxSource": "{% url "slides_data" lesson_id%}",
         "aoColumns": [
-            null,
+            {
+                "bSortable": false
+            },
             {
                 "bSortable": false,
                 "mRender": function ( data, type, full ) {
-                     var url = Django.url('courses_edit_lesson', data);
+                     var url = Django.url('slide_edit', data);
 		             return '<a href="' + url + '" class="btn btn-default btn-sm">' +
                                 '<span class="glyphicon glyphicon-pencil"></span>' +
                              '</a>';

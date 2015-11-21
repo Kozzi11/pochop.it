@@ -2,7 +2,7 @@
 {% load i18n %}
 <div class="row">
     <div class="col-md-12">
-        <a href="{% url "courses_lesson_new" course_id %}" class="btn btn-primary btn pull-right">
+        <a href="{% url "lesson_new" course_id %}" class="btn btn-primary btn pull-right">
             <span class="glyphicon glyphicon-plus"></span> {% trans "Create new lesson" %}
         </a>
     </div>
@@ -12,7 +12,7 @@
 <table id="course-table" class="table">
     <thead>
         <tr>
-            <th>{% trans "Title" %}</th>
+            <th>{% trans "Lesson" %}</th>
             <th></th>
         </tr>
     </thead>
@@ -27,13 +27,14 @@
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "{% url "course_lessons_datatables_view" %}",
+        "sAjaxSource": "{% url "lessons_data" course_id%}",
+        "sServerMethod": 'POST',
         "aoColumns": [
             null,
             {
                 "bSortable": false,
                 "mRender": function ( data, type, full ) {
-                     var url = Django.url('courses_edit_lesson', data);
+                     var url = Django.url('lesson_edit', data);
 		             return '<a href="' + url + '" class="btn btn-default btn-sm">' +
                                 '<span class="glyphicon glyphicon-pencil"></span>' +
                              '</a>';
