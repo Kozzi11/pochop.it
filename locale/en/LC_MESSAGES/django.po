@@ -8,87 +8,140 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-14 16:25+0100\n"
+"POT-Creation-Date: 2015-11-23 11:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 
-#: .\_auth\forms.py:6
+#: _auth/forms.py:6
 msgid "First name"
 msgstr ""
 
-#: .\_auth\forms.py:7
+#: _auth/forms.py:7
 msgid "Last name"
 msgstr ""
 
-#: .\_auth\forms.py:8
+#: _auth/forms.py:8
 msgid "Age"
 msgstr ""
 
-#: .\_auth\templates\_auth\sign_up.html:18
+#: _auth/templates/_auth/sign_up.html:18
 msgid "Submit"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:15
-#: .\_courses\templates\_courses\courses.html:17
-msgid "All"
+#: _courses/templates/_courses/component/main.html:9
+#: _courses/templates/_courses/course/main.html:9
+#: _courses/templates/_courses/lesson/main.html:9
+#: _courses/templates/_courses/slide/main.html:9
+msgid "Save"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:22
-#: .\_courses\templates\_courses\courses.html:29
-msgid "In progress"
+#: _courses/templates/_courses/course/lessons.html:6
+msgid "Create new lesson"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:35
-#: .\_courses\templates\_courses\courses.html:37
-msgid "Completed"
+#: _courses/templates/_courses/course/lessons.html:15
+msgid "Lesson"
 msgstr ""
 
-#: .\_courses\templates\_courses\courses.html:43
-#: .\_courses\templates\_courses\courses.html:49
-msgid "My courses"
+#: _courses/templates/_courses/lesson/slides.html:6
+msgid "Create new slide"
 msgstr ""
 
-#: .\_courses\templates\_courses\my.html:10
+#: _courses/templates/_courses/lesson/slides.html:15
+msgid "Slide"
+msgstr ""
+
+#: _courses/templates/_courses/my.html:7
 msgid "Create new course"
 msgstr ""
 
-#: .\_homepage\views.py:8
-msgid "test prekladu"
+#: _courses/templates/_courses/my.html:17
+msgid "Course"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:55
+#: _courses/templates/_courses/slide/components.html:6
+msgid "Add new component"
+msgstr ""
+
+#: _courses/templates/_courses/slide/components.html:15
+msgid "Component"
+msgstr ""
+
+#: _courses/views.py:15
+msgid "All"
+msgstr ""
+
+#: _courses/views.py:16
+msgid "In progress"
+msgstr ""
+
+#: _courses/views.py:17
+msgid "Completed"
+msgstr ""
+
+#: _courses/views.py:18
+msgid "My courses"
+msgstr ""
+
+#: _courses/views.py:49 _courses/views.py:89 _courses/views.py:130
+#: _courses/views.py:174
+msgid "Main"
+msgstr ""
+
+#: _courses/views.py:50
+msgid "Lessons"
+msgstr ""
+
+#: _courses/views.py:53 _courses/views.py:93 _courses/views.py:134
+#: _courses/views.py:178 pochopit/templates/pochopit/base.html:60
 msgid "Courses"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:60
+#: _courses/views.py:78
+msgid "undefined"
+msgstr ""
+
+#: _courses/views.py:90
+msgid "Slides"
+msgstr ""
+
+#: _courses/views.py:131
+msgid "Compenents"
+msgstr ""
+
+#: _courses/views.py:175 pochopit/templates/pochopit/base.html:65
 msgid "Settings"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:64
+#: _homepage/views.py:8
+msgid "test prekladu"
+msgstr ""
+
+#: pochopit/templates/pochopit/base.html:69
 msgid "My account"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:65
+#: pochopit/templates/pochopit/base.html:70
 msgid "Sign out"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:71
+#: pochopit/templates/pochopit/base.html:76
 msgid "About"
 msgstr "about"
 
-#: .\pochopit\templates\pochopit\base.html:72
+#: pochopit/templates/pochopit/base.html:77
 msgid "Contact"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:76
+#: pochopit/templates/pochopit/base.html:81
 msgid "Sign up"
 msgstr ""
 
-#: .\pochopit\templates\pochopit\base.html:79
+#: pochopit/templates/pochopit/base.html:84
 msgid "Sign in"
 msgstr ""

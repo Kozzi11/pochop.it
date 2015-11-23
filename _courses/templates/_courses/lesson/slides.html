@@ -3,17 +3,17 @@
 <div class="row">
     <div class="col-md-12">
         <a href="{% url "slide_new" lesson_id %}" class="btn btn-primary btn pull-right">
-            <span class="glyphicon glyphicon-plus"></span> {% trans "Create new slide" %}
+            <span class="glyphicon glyphicon-plus"></span> {% trans "Add new slide" %}
         </a>
     </div>
 </div>
 <div class="row spacer">
     <div class="col-md-12">
-<table id="lesson-table" class="table">
+<table id="lesson-table" class="table table-bordered">
     <thead>
         <tr>
             <th>{% trans "Slide" %}</th>
-            <th></th>
+            <th style="width: 155px"></th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -36,8 +36,14 @@
                 "bSortable": false,
                 "mRender": function ( data, type, full ) {
                      var url = Django.url('slide_edit', data);
-		             return '<a href="' + url + '" class="btn btn-default btn-sm">' +
+		             return '<a href="' + url + '" class="table-btn btn btn-default btn-sm">' +
                                 '<span class="glyphicon glyphicon-pencil"></span>' +
+                             '</a>' +
+                             '<a href="' + url + '" class="table-btn btn btn-default btn-sm pull-right">' +
+                                '<span class="glyphicon glyphicon-arrow-up"></span>' +
+                             '</a>' +
+                             '<a href="' + url + '" class="table-btn btn btn-default btn-sm pull-right">' +
+                                '<span class="glyphicon glyphicon-arrow-down"></span>' +
                              '</a>';
                 }
             }
