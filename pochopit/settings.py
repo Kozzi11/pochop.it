@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'pochopit',
     '_homepage',
     '_auth',
-    '_courses'
+    '_courses',
+    '_components',
 )
 
 MIDDLEWARE_CLASSES = (

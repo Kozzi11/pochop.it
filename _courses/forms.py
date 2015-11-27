@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from _courses.models import Course, Lesson, Slide, Component
+from _courses.models import Course, Lesson, Slide, ComponentData
 
 
 class CourseForm(ModelForm):
@@ -31,7 +31,7 @@ class SlideForm(ModelForm):
 
 class ComponentForm(ModelForm):
     class Meta:
-        model = Component
+        model = ComponentData
         fields = [
             'title',
             'type',

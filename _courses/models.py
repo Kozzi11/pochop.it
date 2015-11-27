@@ -23,11 +23,15 @@ class Slide(models.Model):
     order = models.IntegerField()
 
 
-class Component(models.Model):
-    TYPES = (
-        (1, 'Text'),
-        (2, 'Image'),
-    )
+class ComponentData(models.Model):
+    TYPE_HTML = 1
+    TYPE_IMAGE = 2
+
+    TYPES = {
+        TYPE_HTML: 'HTML',
+        TYPE_IMAGE: 'IMAGE',
+    }
+
     # parent = models.ForeignKey('self')
     slide = models.ForeignKey(Slide)
     title = models.CharField(max_length=254)
@@ -36,6 +40,6 @@ class Component(models.Model):
 
 
 class CompoenentConfig(models.Model):
-    component = models.ForeignKey(Component)
+    componentData = models.ForeignKey(ComponentData)
     key = models.IntegerField()
     value = models.CharField(max_length=254)

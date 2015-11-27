@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.contrib.auth import get_user
 from _courses.forms import CourseForm, LessonForm, SlideForm, ComponentForm
-from _courses.models import Course, Lesson, Slide, Component
+from _courses.models import Course, Lesson, Slide, ComponentData
 from eztables.views import DatatablesView
 from pochopit.viewcomponents.context_bar_item import ContextBarItem
 from pochopit.viewcomponents.tab import Tab
@@ -157,7 +157,7 @@ def slide_components_tab(request, slide_id):
 
 
 def new_component(request, slide_id):
-    component = Component()
+    component = ComponentData()
     component.slide_id = slide_id
     component.type = 1
     component.order = 0
@@ -166,7 +166,7 @@ def new_component(request, slide_id):
 
 
 def edit_component(request, component_id):
-    component = Component.objects.get(id=component_id)
+    component = ComponentData.objects.get(id=component_id)
     slide = component.slide
     lesson = slide.lesson
     course = lesson.course
@@ -186,7 +186,7 @@ def edit_component(request, component_id):
 
 
 def component_main_tab(request, component_id):
-    component = Component.objects.get(id=component_id)
+    component = ComponentData.objects.get(id=component_id)
     if request.method == 'POST':
         form = ComponentForm(request.POST, instance=component)
         form.save()
@@ -241,13 +241,13 @@ class SlideDatatablesView(DatatablesView):
 
 
 class ComponentsDatatablesView(DatatablesView):
-    model = Component
+    model = ComponentData
     fields = (
         'title',
         'id',
     )
 
     def post(self, request, *args, **kwargs):
-        self.queryset = Component.objects.filter(slide=args[0])
+        self.queryset = ComponentData.objects.filter(slide=args[0])
         return super(ComponentsDatatablesView, self).post(request, args, kwargs)
 
