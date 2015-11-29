@@ -105,6 +105,27 @@ a {
 .nav-pills>.active>a>.badge {
     color: #69BF10;
 }
+.tab_group a{
+    cursor: default;
+}
+.nav-stacked>li.tab-offset-1 {
+    margin-left: 19px;
+}
+.nav-stacked>li.tab-offset-2 {
+    margin-left: 38px;
+}
+.nav-stacked>li.tab-offset-3 {
+    margin-left: 57px;
+}
+.nav-stacked>li.tab-offset-4 {
+    margin-left: 76px;
+}
+.nav-stacked>li.collapsed {
+    display: none;
+}
+#left-nav-tabs .action-buttons {
+    display: inline-block;
+}
 
 /* GRID */
 .grid .grid-cell {

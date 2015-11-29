@@ -35,7 +35,7 @@ class ComponentData(models.Model):
     # parent = models.ForeignKey('self')
     slide = models.ForeignKey(Slide)
     title = models.CharField(max_length=254)
-    type = models.IntegerField(choices=TYPES)
+    type = models.IntegerField(choices=TYPES.items())
     order = models.IntegerField()
 
 

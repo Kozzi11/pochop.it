@@ -9,6 +9,8 @@ class Tab:
     addBaddge = False
     baddgeNumber = 0
     isActive = False
+    isTabGroup = False
+    offset = 0
 
     def __init__(self, title: str, viewname: str, params=None, is_active=False, buddge_number=None):
         self.title = title
@@ -21,3 +23,5 @@ class Tab:
         if buddge_number is not None:
             self.baddgeNumber = buddge_number
             self.addBaddge = True
+
+        self.parrent = None

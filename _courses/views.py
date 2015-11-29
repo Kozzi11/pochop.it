@@ -8,6 +8,7 @@ from _courses.models import Course, Lesson, Slide, ComponentData
 from eztables.views import DatatablesView
 from pochopit.viewcomponents.context_bar_item import ContextBarItem
 from pochopit.viewcomponents.tab import Tab
+from pochopit.viewcomponents.tab_group import TabGroup
 
 
 def courses(request):
@@ -46,9 +47,20 @@ def new_course(request):
 def edit_course(request, course_id):
     course = Course.objects.get(id=course_id)
     tabs = [
-        Tab(_('Main'), 'course_main', params=(course_id,)),
-        Tab(_('Lessons'), 'course_lessons', params=(course_id,), is_active=True),
+        # Tab(course.title, 'course_main', params=(course_id,)),
+        # Tab(_('Lessons'), 'course_lessons', params=(course_id,), is_active=True),
     ]
+
+    courses_tab_group = TabGroup(course.title)
+
+    for lesson in course.lesson_set.all():
+        lessons_tab_group = TabGroup(lesson.title)
+        for slide in lesson.slide_set.all():
+            lessons_tab_group.add_tab(Tab(slide.title, 'course_main', params=(course_id,)))
+        courses_tab_group.add_tab_group(lessons_tab_group)
+
+    tabs += courses_tab_group.get_items()
+
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
         ContextBarItem(course.title, '#')

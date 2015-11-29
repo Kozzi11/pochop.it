@@ -11,24 +11,40 @@
             <div class="col-md-3">
                 <ul id="left-nav-tabs" class="nav nav-tabs nav-pills nav-stacked">
                     {% for tab in tabs %}
-                        <li class="{{ tab.className }}" role="presentation">
-                            <a id="{{ tab.shortName }}" href="#{{ tab.shortName }}" ajax_url="{{ tab.url }}" onclick="changeTab(this)">
-                                {{ tab.title }}
-                                {% if tab.addBaddge %}
-                                    <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
-                                {% endif %}
-                            </a>
-                        </li>
-                        {% if tab.isActive %}
-                            <script>
-                                $( document ).ready(function() {
-                                    if (!window.location.hash) {
-                                        var tabId = '#' + '{{ tab.shortName }}';
-                                        window.location.hash = tabId;
-                                        changeTab(jQuery(tabId)[0]);
-                                    }
-                                });
-                            </script>
+                        {% if tab.isTabGroup %}
+                            <li class="tab_group tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}" uid="{{ tab.uid }}" role="presentation">
+                                <a href="#" onclick="kokos({{ tab.uid }}, true)">
+                                    <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    {{ tab.title }}
+                                    {% if tab.addBaddge %}
+                                        <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
+                                    {% endif %}
+                                    <div class="action-buttons">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </div>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="{{ tab.className }} tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}" role="presentation">
+                                <a id="{{ tab.shortName }}" href="#{{ tab.shortName }}" ajax_url="{{ tab.url }}" onclick="changeTab(this)">
+                                    {{ tab.title }}
+                                    {% if tab.addBaddge %}
+                                        <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            {% if tab.isActive %}
+                                <script>
+                                    $( document ).ready(function() {
+                                        if (!window.location.hash) {
+                                            var tabId = '#' + '{{ tab.shortName }}';
+                                            window.location.hash = tabId;
+                                            changeTab(jQuery(tabId)[0]);
+                                        }
+                                    });
+                                </script>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </ul>
@@ -53,6 +69,32 @@
             content.load(jQuery(element).attr('ajax_url'));
             jQuery('#left-nav-tabs').find('li').removeClass('active');
             jQuery(element).closest('li').addClass('active');
+        }
+
+        function kokos(uid, top) {
+            var childs = jQuery('.uid-' + uid);
+            childs.each(function(i, element) {
+                element = jQuery(element);
+                if (element.is(':visible')) {
+                    if (top) {
+                        element.addClass('collapsed');
+                    }
+                    element.hide();
+                    if (element.hasClass('tab_group')) {
+                        kokos(element.attr("uid"), false);
+                    }
+                } else {
+                    if (top) {
+                        element.removeClass('collapsed');
+                        element.show();
+                    } else if(!element.hasClass('collapsed')) {
+                        element.show();
+                    }
+                    if (element.hasClass('tab_group')) {
+                        kokos(element.attr("uid"), false);
+                    }
+                }
+            });
         }
 
         if (window.location.hash) {
