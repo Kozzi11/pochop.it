@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.contrib.auth import get_user
@@ -9,16 +9,25 @@ from eztables.views import DatatablesView
 from pochopit.viewcomponents.context_bar_item import ContextBarItem
 from pochopit.viewcomponents.tab import Tab
 from pochopit.viewcomponents.tab_group import TabGroup
+from pochopit.viewcomponents.tabs_manager import TabsManager
 
 
 def courses(request):
-    tabs = [
-        Tab(_('All'), 'courses_all', is_active=True),
-        Tab(_('In progress'), 'courses_in-progress', buddge_number=2),
-        Tab(_('Completed'), 'courses_completed', buddge_number=8),
-        Tab(_('My courses'), 'courses_my', buddge_number=3)
-    ]
-    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs})
+    tabs_manager = TabsManager(request, 'courses_all')
+    tabs_manager.add_tab(
+        Tab(_('All'), reverse('courses_all'), 'courses_all', is_active=True)
+    )
+    tabs_manager.add_tab(
+        Tab(_('In progress'),  reverse('courses_in-progress'), 'courses_in-progress', buddge_number=2)
+    )
+    tabs_manager.add_tab(
+        Tab(_('Completed'), reverse('courses_completed'), 'courses_completed', buddge_number=8)
+    )
+    tabs_manager.add_tab(
+        Tab(_('My courses'), reverse('courses_my'), 'courses_my', buddge_number=3)
+    )
+
+    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs_manager.get_tabs()})
 
 
 def all_courses(request):
@@ -40,34 +49,66 @@ def my_courses(request):
 def new_course(request):
     course = Course()
     course.author = get_user(request)
+    course.title = _('Unnamed course')
     course.save()
-    return HttpResponseRedirect(reverse('course_edit', args=(course.id,)))
+
+    lesson = Lesson()
+    lesson.title = _('Lesson 1')
+    lesson.course = course
+    lesson.order = 0
+    lesson.save()
+
+    slide = Slide()
+    slide.lesson = lesson
+    slide.title = _('Slide 1')
+    slide.order = 0
+    slide.save()
+
+    component_data = ComponentData()
+    component_data.title = _('Unnamed component')
+    component_data.slide = slide
+    component_data.type = ComponentData.TYPE_HTML
+    component_data.order = 0
+    component_data.save()
+
+    url = "%s#course_main" % reverse('course_edit', args=(course.id,))
+    return HttpResponseRedirect(url)
+
+
+def delete_course(request, course_id):
+    course = Course.objects.get(id=course_id)
+    course.delete()
+    url = "%s#courses_my" % reverse('courses')
+    return HttpResponseRedirect(url)
 
 
 def edit_course(request, course_id):
+
+    tabs_manager = TabsManager(request, 'course_main')
     course = Course.objects.get(id=course_id)
-    tabs = [
-        # Tab(course.title, 'course_main', params=(course_id,)),
-        # Tab(_('Lessons'), 'course_lessons', params=(course_id,), is_active=True),
-    ]
+
+    js_after_ajax = 'location.reload();'
 
     courses_tab_group = TabGroup(course.title)
+    courses_tab_group.add_action_button(reverse('course_main', args=(course.id,)), 'pencil', short_name='course_main')
+    courses_tab_group.add_action_button(reverse('lesson_new', args=(course.id,)), 'plus', js_after=js_after_ajax)
 
     for lesson in course.lesson_set.all():
         lessons_tab_group = TabGroup(lesson.title)
-        lessons_tab_group.add_action_button('slide_new', reverse('slide_new', args=(lesson.id,)), 'plus')
-        lessons_tab_group.add_action_button('lesson_main', reverse('lesson_main', args=(lesson.id,)), 'pencil')
+        lessons_tab_group.add_action_button(reverse('lesson_main', args=(lesson.id,)), 'pencil',
+                                            short_name='lesson_main')
+        lessons_tab_group.add_action_button(reverse('slide_new', args=(lesson.id,)), 'plus', js_after=js_after_ajax)
         for slide in lesson.slide_set.all():
-            lessons_tab_group.add_tab(Tab(slide.title, 'course_main', params=(course_id,)))
+            lessons_tab_group.add_tab(Tab(slide.title, reverse('course_main', args=(course_id,)), 'course_main'))
         courses_tab_group.add_tab_group(lessons_tab_group)
 
-    tabs += courses_tab_group.get_items()
+    tabs_manager.add_tab_group(courses_tab_group)
 
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
         ContextBarItem(course.title, '#')
     ]
-    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs,
+    return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs_manager.get_tabs(),
                                                              'context_bar_items': context_bar_items})
 
 
@@ -88,20 +129,35 @@ def course_lessons_tab(request, course_id):
 
 
 def new_lesson(request, course_id):
+    course = Course.objects.get(id=course_id)
     lesson = Lesson()
-    lesson.title = _('undefined')
-    lesson.course_id = course_id
-    lesson.order = 0
+    lesson.title = _('Unnamed lesson')
+    lesson.course = course
+    lesson.order = course.lesson_set.count()
     lesson.save()
-    return HttpResponseRedirect(reverse('lesson_edit', args=(lesson.id,)))
+
+    slide = Slide()
+    slide.lesson = lesson
+    slide.title = _('1. slide')
+    slide.order = 0
+    slide.save()
+
+    component_data = ComponentData()
+    component_data.title = _('Unnamed component')
+    component_data.slide = slide
+    component_data.type = ComponentData.TYPE_HTML
+    component_data.order = 0
+    component_data.save()
+
+    return HttpResponse()
 
 
 def edit_lesson(request, lesson_id):
     lesson = Lesson.objects.get(id=lesson_id)
     course = lesson.course
     tabs = [
-        Tab(_('Main'), 'lesson_main', params=(lesson_id,)),
-        Tab(_('Slides'), 'lesson_slides', params=(lesson_id,), is_active=True),
+        Tab(_('Main'), reverse('lesson_main', args=(lesson_id,)), 'lesson_main'),
+        Tab(_('Slides'), reverse('lesson_slides', args=(lesson_id,)), 'lesson_slides', is_active=True),
     ]
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
@@ -141,8 +197,8 @@ def edit_slide(request, slide_id):
     lesson = slide.lesson
     course = lesson.course
     tabs = [
-        Tab(_('Main'), 'slide_main', params=(slide_id,)),
-        Tab(_('Compenents'), 'slide_components', params=(slide_id,), is_active=True),
+        Tab(_('Main'), reverse('slide_main', args=(slide_id,)), 'slide_main'),
+        Tab(_('Compenents'), reverse('slide_components', args=(slide_id,)), 'slide_components', is_active=True),
     ]
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
@@ -185,8 +241,8 @@ def edit_component(request, component_id):
     lesson = slide.lesson
     course = lesson.course
     tabs = [
-        Tab(_('Main'), 'component_main', params=(component_id,)),
-        Tab(_('Settings'), 'component_settings', params=(component_id,), is_active=True),
+        Tab(_('Main'), reverse('component_main', args=(component_id,)), 'component_main'),
+        Tab(_('Settings'), reverse('component_settings', args=(component_id,)), 'component_settings', is_active=True),
     ]
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
@@ -264,4 +320,3 @@ class ComponentsDatatablesView(DatatablesView):
     def post(self, request, *args, **kwargs):
         self.queryset = ComponentData.objects.filter(slide=args[0])
         return super(ComponentsDatatablesView, self).post(request, args, kwargs)
-

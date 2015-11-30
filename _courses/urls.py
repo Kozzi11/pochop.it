@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^course/(.*)/edit$', views.edit_course, name='course_edit'),
     url(r'^course/(.*)/main_tab$', views.course_main_tab, name='course_main'),
     url(r'^course/(.*)/lesssons_tab$', views.course_lessons_tab, name='course_lessons'),
+    url(r'^course/(.*)/delete$', views.delete_course, name='course_delete'),
 
     url(r'^lessons/(.*)/data$', LessonDatatablesView.as_view(),  name='lessons_data'),
     url(r'^lesson/(.*)/new$', views.new_lesson, name='lesson_new'),

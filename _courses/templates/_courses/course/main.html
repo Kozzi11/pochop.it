@@ -11,3 +11,8 @@
     </div>
   {% bootstrap_form form %}
 </form>
+<div class="form-group text-right">
+    <a href="{% url 'course_delete' course_id %}" class="btn btn-danger">
+        {% trans "Delete" %}
+    </a>
+</div>

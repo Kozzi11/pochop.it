@@ -37,8 +37,11 @@ class TabGroup:
             item.offset += 1
             self.items.append(item)
 
-    def add_action_button(self, short_name: str, url: str, glyphicon: str):
-        self.action_buttons.append({'shortName': short_name, 'url': url, 'glyphicon': 'glyphicon-' + glyphicon})
+    def add_action_button(self, url: str, glyphicon: str, short_name='', is_active=False, js_after=''):
+        self.action_buttons.append({'shortName': short_name, 'url': url,
+                                    'glyphicon': 'glyphicon-' + glyphicon,
+                                    'js_after': js_after,
+                                    'is_active': is_active})
 
     def get_items(self):
         return self.items

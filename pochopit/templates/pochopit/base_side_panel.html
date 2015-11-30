@@ -13,7 +13,7 @@
                     {% for tab in tabs %}
                         {% if tab.isTabGroup %}
                             <li class="tab_group tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}"
-                                uid="{{ tab.uid }}" onclick="kokos({{ tab.uid }}, true)" role="presentation">
+                                uid="{{ tab.uid }}" onclick="toogleTabsVisibility({{ tab.uid }}, true)" role="presentation">
                                 <span class="glyphicon glyphicon-triangle-bottom"></span>
                                 {{ tab.title }}
                                 {% if tab.addBaddge %}
@@ -21,9 +21,23 @@
                                 {% endif %}
                                 <div class="action-buttons">
                                     {% for button in tab.action_buttons %}
-                                        <a href="#{{ button.shortName }}" ajax_url="{{ button.url }}" onclick="event.stopPropagation();changeTab(this)">
+                                        <a href="#{{ button.shortName }}" ajax_url="{{ button.url }}"
+                                           id="{{ button.shortName }}"
+                                           js_after="{{ button.js_after }}"
+                                           onclick="event.stopPropagation();changeTab(this)">
                                             <span class="glyphicon {{ button.glyphicon }}"></span>
                                         </a>
+                                        {% if button.is_active %}
+                                            <script>
+                                                $( document ).ready(function() {
+                                                    if (!window.location.hash) {
+                                                        var tabId = '#' + '{{ button.shortName }}';
+                                                        window.location.hash = tabId;
+                                                        changeTab(jQuery(tabId)[0]);
+                                                    }
+                                                });
+                                            </script>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </li>
@@ -67,13 +81,19 @@
     <script>
         function changeTab(element) {
             var content = jQuery('#tab-content');
+            element = jQuery(element);
             content.html('');
-            content.load(jQuery(element).attr('ajax_url'));
+            content.load(element.attr('ajax_url'), null, function() {
+                var js = element.attr('js_after');
+                if (js) {
+                    eval(js);
+                }
+            });
             jQuery('#left-nav-tabs').find('li').removeClass('active');
-            jQuery(element).closest('li').addClass('active');
+            element.closest('li').addClass('active');
         }
 
-        function kokos(uid, top) {
+        function toogleTabsVisibility(uid, top) {
             var childs = jQuery('.uid-' + uid);
             childs.each(function(i, element) {
                 element = jQuery(element);
@@ -83,7 +103,7 @@
                     }
                     element.hide();
                     if (element.hasClass('tab_group')) {
-                        kokos(element.attr("uid"), false);
+                        toogleTabsVisibility(element.attr("uid"), false);
                     }
                 } else {
                     if (top) {
@@ -93,7 +113,7 @@
                         element.show();
                     }
                     if (element.hasClass('tab_group')) {
-                        kokos(element.attr("uid"), false);
+                        toogleTabsVisibility(element.attr("uid"), false);
                     }
                 }
             });
