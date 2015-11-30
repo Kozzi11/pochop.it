@@ -12,18 +12,20 @@
                 <ul id="left-nav-tabs" class="nav nav-tabs nav-pills nav-stacked">
                     {% for tab in tabs %}
                         {% if tab.isTabGroup %}
-                            <li class="tab_group tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}" uid="{{ tab.uid }}" role="presentation">
-                                <a href="#" onclick="kokos({{ tab.uid }}, true)">
-                                    <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    {{ tab.title }}
-                                    {% if tab.addBaddge %}
-                                        <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
-                                    {% endif %}
-                                    <div class="action-buttons">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </div>
-                                </a>
+                            <li class="tab_group tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}"
+                                uid="{{ tab.uid }}" onclick="kokos({{ tab.uid }}, true)" role="presentation">
+                                <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                {{ tab.title }}
+                                {% if tab.addBaddge %}
+                                    <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
+                                {% endif %}
+                                <div class="action-buttons">
+                                    {% for button in tab.action_buttons %}
+                                        <a href="#{{ button.shortName }}" ajax_url="{{ button.url }}" onclick="event.stopPropagation();changeTab(this)">
+                                            <span class="glyphicon {{ button.glyphicon }}"></span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
                             </li>
                         {% else %}
                             <li class="{{ tab.className }} tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}" role="presentation">
