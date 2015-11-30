@@ -55,6 +55,8 @@ def edit_course(request, course_id):
 
     for lesson in course.lesson_set.all():
         lessons_tab_group = TabGroup(lesson.title)
+        lessons_tab_group.add_action_button('slide_new', reverse('slide_new', args=(lesson.id,)), 'plus')
+        lessons_tab_group.add_action_button('lesson_main', reverse('lesson_main', args=(lesson.id,)), 'pencil')
         for slide in lesson.slide_set.all():
             lessons_tab_group.add_tab(Tab(slide.title, 'course_main', params=(course_id,)))
         courses_tab_group.add_tab_group(lessons_tab_group)
@@ -103,7 +105,7 @@ def edit_lesson(request, lesson_id):
     ]
     context_bar_items = [
         ContextBarItem(_('Courses'), reverse('courses')),
-        ContextBarItem(course.title, reverse('course_edit', args=(course.id,))),
+        ContextBarItem(course.title, reverse('lesson_main', args=(course.id,))),
         ContextBarItem(lesson.title, '#')
     ]
     return render(request, 'pochopit/base_side_panel.html', {'tabs': tabs,
@@ -115,7 +117,7 @@ def lesson_main_tab(request, lesson_id):
     if request.method == 'POST':
         form = LessonForm(request.POST, instance=lesson)
         form.save()
-        return HttpResponseRedirect(reverse('lesson_edit', args=(lesson_id,)))
+        return HttpResponseRedirect(reverse('course_edit', args=(lesson.course.id,)))
     else:
         form = LessonForm(instance=lesson)
 

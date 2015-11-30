@@ -105,8 +105,9 @@ a {
 .nav-pills>.active>a>.badge {
     color: #69BF10;
 }
-.tab_group a{
+#left-nav-tabs .tab_group {
     cursor: default;
+    padding: 10px 15px;
 }
 .nav-stacked>li.tab-offset-1 {
     margin-left: 19px;
@@ -127,6 +128,14 @@ a {
     display: inline-block;
 }
 
+#left-nav-tabs .action-buttons .glyphicon {
+    padding-left: 6px;
+    font-size: 12px;
+}
+#left-nav-tabs .action-buttons .glyphicon:hover {
+    color: #69BF10;
+    cursor: pointer;
+}
 /* GRID */
 .grid .grid-cell {
     margin-bottom: 15px;
