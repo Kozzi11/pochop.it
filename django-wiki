@@ -31,7 +31,7 @@ z mimetype=JSON_MIMETYPE => content_type=JSON_MIMETYPE
 
 2) v soboru {/usr/lib/python3.5/site-packages/}eztables/static/js/libs/datatables/datatables.bootstrap.js
 nahradit
-        '<ul>'+
+        '<ul>'+\
             '<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
             '<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
         '</ul>'
