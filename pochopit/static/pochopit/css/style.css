@@ -131,16 +131,13 @@ a {
 #left-nav-tabs .action-buttons .glyphicon {
     padding-left: 6px;
     font-size: 12px;
+    color: #5a5a5a;
 }
-#left-nav-tabs .action-buttons a:hover {
+#left-nav-tabs .action-buttons span:hover {
     color: #69BF10;
     cursor: pointer;
-    text-decoration: none;
 }
-#left-nav-tabs .action-buttons a:focus {
-    color: #5a5a5a;
-    text-decoration: none;
-}
+
 /* GRID */
 .grid .grid-cell {
     margin-bottom: 15px;

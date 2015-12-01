@@ -1,13 +1,19 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 {% load i18n %}
+{% load url_constants %}
 
-<form action="{% url "slide_main" slide_id %}" method="post" class="form">
+<div class="form-group text-right">
+    <a href="{% url_from_constant '_courses' 'SLIDE_DELETE' slide_id %}" class="btn btn-danger">
+        {% trans "Delete" %}
+    </a>
+</div>
+<form action="{% url_from_constant "_courses" "SLIDE_MAIN" slide_id %}" method="post" class="form">
   {% csrf_token %}
+  {% bootstrap_form form %}
     <div class="form-group text-right">
         <button type="submit" class="btn btn-primary">
             {% trans "Save" %}
         </button>
     </div>
-  {% bootstrap_form form %}
 </form>

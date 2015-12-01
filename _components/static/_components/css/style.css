@@ -1,0 +1,22 @@
+.component-frame {
+    border: 1px solid #E7E7E7;
+    margin-bottom: 12px;
+}
+.component-top-panel {
+    background-color: #F8F8F8;
+    padding: 8px 8px;
+}
+.component-content {
+    padding: 12px 12px;
+}
+.component-top-panel .title {
+    font-size: 18px;
+}
+.component-top-panel .glyphicon {
+    cursor: pointer;
+    color: #5a5a5a;
+    padding-right: 12px;
+}
+.component-top-panel .glyphicon:hover {
+    color: #69BF10;
+}

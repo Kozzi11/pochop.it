@@ -1,8 +1,9 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load url_constants %}
 <div class="row">
     <div class="col-md-12">
-        <a href="{% url "component_new" slide_id %}" class="btn btn-primary btn pull-right">
+        <a href="{% url_from_constant 'courses' 'COMPONENT_NEW' slide_id %}" class="btn btn-primary btn pull-right">
             <span class="glyphicon glyphicon-plus"></span> {% trans "Add new component" %}
         </a>
     </div>
@@ -27,7 +28,7 @@
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "{% url "components_data" slide_id%}",
+        "sAjaxSource": "{% url_from_constant "_courses" "COMPONENTS_DATA" slide_id%}",
         "aoColumns": [
             {
                 "bSortable": false
@@ -35,7 +36,7 @@
             {
                 "bSortable": false,
                 "mRender": function ( data, type, full ) {
-                     var url = Django.url('component_edit', data);
+                     var url = Django.url('{% urls_constant '_courses' 'COMPONENT_EDIT' %}', data);
 		             return '<a href="' + url + '" class="table-btn btn btn-default btn-sm">' +
                                 '<span class="glyphicon glyphicon-pencil"></span>' +
                              '</a>' +

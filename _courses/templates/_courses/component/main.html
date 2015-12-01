@@ -1,8 +1,9 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 {% load i18n %}
+{% load url_constants %}
 
-<form action="{% url "component_main" component_id %}" method="post" class="form">
+<form action="{% url_from_constant "_courses" "COMPONENT_MAIN" component_id %}" method="post" class="form">
   {% csrf_token %}
     <div class="form-group text-right">
         <button type="submit" class="btn btn-primary">

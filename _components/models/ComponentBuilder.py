@@ -4,7 +4,6 @@ from _courses.models import ComponentData
 
 
 class ComoponentBuilder:
-    pass
 
     @staticmethod
     def prepare_component(component_data: ComponentData)->Component:

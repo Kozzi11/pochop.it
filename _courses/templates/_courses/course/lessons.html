@@ -1,8 +1,9 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load url_constants %}
 <div class="row">
     <div class="col-md-12">
-        <a href="{% url "lesson_new" course_id %}" class="btn btn-primary btn pull-right">
+        <a href="{% url_from_constant "_courses" "LESSON_NEW" course_id %}" class="btn btn-primary btn pull-right">
             <span class="glyphicon glyphicon-plus"></span> {% trans "Add new lesson" %}
         </a>
     </div>
@@ -27,14 +28,14 @@
         "sPaginationType": "bootstrap",
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "{% url "lessons_data" course_id%}",
+        "sAjaxSource": "{% url_from_constant "_courses" "LESSONS_DATA" course_id%}",
         "sServerMethod": 'POST',
         "aoColumns": [
             null,
             {
                 "bSortable": false,
                 "mRender": function ( data, type, full ) {
-                     var url = Django.url('lesson_edit', data);
+                     var url = Django.url('{% urls_constant '_courses' 'LESSON_EDIT' %}', data);
 		             return '<a href="' + url + '" class="table-btn btn btn-default btn-sm">' +
                                 '<span class="glyphicon glyphicon-pencil"></span>' +
                              '</a>' +

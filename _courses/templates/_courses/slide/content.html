@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load url_constants %}
+
+<div class="row col-md-12">
+    <button onclick="jQuery.post('{% url_from_constant "_courses" "COMPONENT_NEW" slide_id %}', null, function(){location.reload();})"
+            class="btn btn-primary btn pull-right">
+        <span class="glyphicon glyphicon-plus"></span> {% trans "Add component" %}
+    </button>
+</div>
+<div class="row spacer col-md-12">
+
+</div>
+{% for component in components %}
+    <div class="row col-md-12">
+        <div id="component-{{ component.get_id }}" class="component-frame">
+            <div class="component-top-panel">
+                <span class="title">{{ component.get_title }}</span>
+                <span id="{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
+                      ajax_url="{% url_from_constant '_courses' 'COMPONENT_MAIN' component.get_id %}"
+                      onclick="window.location.hash = '{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}';"></span>
+                <span class="glyphicon glyphicon-arrow-up pull-right"></span>
+                <span class="glyphicon glyphicon-arrow-down pull-right"></span>
+            </div>
+            <div class="component-content">
+                {{ component.render_content }}
+            </div>
+        </div>
+    </div>
+{% endfor %}
