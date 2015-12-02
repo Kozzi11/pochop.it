@@ -13,7 +13,7 @@
                     {% for tab in tabs %}
                         {% if tab.isTabGroup %}
                             <li class="tab_group tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}"
-                                uid="{{ tab.uid }}" onclick="toogleTabsVisibility({{ tab.uid }}, true)" role="presentation">
+                                uid="{{ tab.uid }}" onclick="toogleTabsVisibility({{ tab.uid }}, this)" role="presentation">
                                 <span class="glyphicon glyphicon-triangle-bottom"></span>
                                 {{ tab.title }}
                                 {% if tab.addBaddge %}
@@ -111,27 +111,39 @@
             element.closest('li').addClass('active');
         }
 
-        function toogleTabsVisibility(uid, top) {
+        function toogleTabsVisibility(uid, parent) {
+            if (parent) {
+                parent = jQuery(parent);
+                var trangleIcon = parent.children('.glyphicon');
+                if (trangleIcon.hasClass('glyphicon-triangle-bottom')) {
+                    trangleIcon.removeClass('glyphicon-triangle-bottom');
+                    trangleIcon.addClass('glyphicon-triangle-right');
+                } else {
+                    trangleIcon.removeClass('glyphicon-triangle-right');
+                    trangleIcon.addClass('glyphicon-triangle-bottom');
+                }
+            }
+
             var childs = jQuery('.uid-' + uid);
             childs.each(function(i, element) {
                 element = jQuery(element);
                 if (element.is(':visible')) {
-                    if (top) {
+                    if (parent) {
                         element.addClass('collapsed');
                     }
                     element.hide();
                     if (element.hasClass('tab_group')) {
-                        toogleTabsVisibility(element.attr("uid"), false);
+                        toogleTabsVisibility(element.attr("uid"), null);
                     }
                 } else {
-                    if (top) {
+                    if (parent) {
                         element.removeClass('collapsed');
                         element.show();
                     } else if(!element.hasClass('collapsed')) {
                         element.show();
                     }
                     if (element.hasClass('tab_group')) {
-                        toogleTabsVisibility(element.attr("uid"), false);
+                        toogleTabsVisibility(element.attr("uid"), null);
                     }
                 }
             });

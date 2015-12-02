@@ -293,11 +293,23 @@ def component_settings_tab(request, component_id):
 
 def component_change_order(request, component_data_id, step):
     component_data = ComponentData.objects.get(id=component_data_id)
-    new_positon = component_data.order + step
+    old_position = component_data.order
+    new_positon = old_position + step
+    count_of_components = component_data.slide.componentdata_set.count()
 
-    # if new_positon < 0: //todo
-    #     component_data.
-    # count_of_components = component_data.slide.componentdata_set.count()
+    if step > 0 and new_positon > count_of_components:
+        return HttpResponse()
+    elif step < 0 and new_positon < 0:
+        return HttpResponse()
+
+    for data in component_data.slide.componentdata_set.all():
+        if data.order == new_positon:
+            data.order = old_position
+            data.save()
+            break
+
+    component_data.order = new_positon
+    component_data.save()
     return HttpResponse()
 
 
