@@ -18,8 +18,8 @@
                 <span id="{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
                       ajax_url="{% url_from_constant '_courses' 'COMPONENT_MAIN' component.get_id %}"
                       onclick="window.location.hash = '{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}';"></span>
-                <span onclick="" class="glyphicon glyphicon-arrow-up pull-right"></span>
-                <span class="glyphicon glyphicon-arrow-down pull-right"></span>
+                <span onclick="jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id -1 %}')" class="glyphicon glyphicon-arrow-up pull-right"></span>
+                <span onclick="jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id 1 %}')" class="glyphicon glyphicon-arrow-down pull-right"></span>
             </div>
             <div class="component-content">
                 {{ component.render_content }}
