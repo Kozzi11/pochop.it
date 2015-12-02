@@ -70,6 +70,13 @@ a {
     background-color: #6ec910;
     border-color: #62b515;
 }
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+     user-select: none;
+}
 
 /* BOCNI NAVIGACNI MENU */
 

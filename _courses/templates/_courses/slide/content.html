@@ -2,6 +2,11 @@
 {% load url_constants %}
 
 <div class="row col-md-12">
+    <ul class="context-nav-bar pull-left">
+        {% for item in context_bar_items %}
+            <li><span>{{ item.title }}</span></li>
+        {% endfor %}
+    </ul>
     <button onclick="jQuery.post('{% url_from_constant "_courses" "COMPONENT_NEW" slide_id %}', null, function(){location.reload();})"
             class="btn btn-primary btn pull-right">
         <span class="glyphicon glyphicon-plus"></span> {% trans "Add component" %}
@@ -10,20 +15,44 @@
 <div class="row spacer col-md-12">
 
 </div>
-{% for component in components %}
-    <div class="row col-md-12">
-        <div id="component-{{ component.get_id }}" class="component-frame">
-            <div class="component-top-panel">
-                <span class="title">{{ component.get_title }}</span>
-                <span id="{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
-                      ajax_url="{% url_from_constant '_courses' 'COMPONENT_MAIN' component.get_id %}"
-                      onclick="window.location.hash = '{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}';"></span>
-                <span onclick="jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id -1 %}')" class="glyphicon glyphicon-arrow-up pull-right"></span>
-                <span onclick="jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id 1 %}')" class="glyphicon glyphicon-arrow-down pull-right"></span>
+<ul id="sortable">
+    {% for component in components %}
+        <li class="row col-md-12" id="component-{{ component.get_id }}">
+            <div class="component-frame">
+                <div class="component-top-panel">
+                    <span class="title">{{ component.get_title }}</span>
+                    <span id="{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
+                          ajax_url="{% url_from_constant '_courses' 'COMPONENT_MAIN' component.get_id %}"
+                          onclick="window.location.hash = '{% urls_constant '_courses' 'COMPONENT_MAIN' %}{{ component.get_id }}';"></span>
+
+                        <span onclick="
+                            jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id -1 %}');
+                            var row = jQuery(this).closest('.row');
+                            row.insertBefore(row.prev('.row'));
+                            "
+                          class="glyphicon glyphicon-arrow-up pull-right"></span>
+
+                        <span onclick="jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id 1 %}');
+                                var row = jQuery(this).closest('.row');
+                                row.insertAfter(row.next('.row'));
+                                "
+                              class="glyphicon glyphicon-arrow-down pull-right"></span>
+
+                </div>
+                <div class="component-content">
+                    {{ component.render_content }}
+                </div>
             </div>
-            <div class="component-content">
-                {{ component.render_content }}
-            </div>
-        </div>
-    </div>
-{% endfor %}
+        </li>
+    {% endfor %}
+</ul>
+<script>
+      $(function() {
+    $('#sortable').sortable({
+        update: function( event, ui ) {
+
+        }
+    });
+    $('#sortable').disableSelection();
+  });
+</script>

@@ -24,6 +24,7 @@
     <link rel="icon" type="image/png" href="{% static "pochopit/favicon/favicon-16x16.png" %}" sizes="16x16">
     <link rel="manifest" href="{% static "pochopit/favicon/manifest.json" %}">
     <link rel="mask-icon" href="{% static "pochopit/favicon/safari-pinned-tab.svg" %}" color="#5bbad5">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <meta name="apple-mobile-web-app-title" content="PochopIT">
     <meta name="application-name" content="PochopIT">
     <meta name="msapplication-TileColor" content="#da532c">
@@ -32,6 +33,7 @@
     <title>{% block title %}PochopIT{% endblock %}</title>
     <script type="text/javascript" src="{% static "pochopit/js/jquery-1.11.3.min.js" %}" ></script>
     <script type="text/javascript" src="{% static "pochopit/js/jquery.bootstrap-autohidingnavbar.min.js" %}" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     {% django_js jquery=false i18n=false csrf=false %}
     {% bootstrap_css %}
     {% datatables_bootstrap_css %}

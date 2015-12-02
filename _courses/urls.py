@@ -35,6 +35,7 @@ COMPONENT_NEW = 'component_new'
 COMPONENT_EDIT = 'component_edit'
 COMPONENT_MAIN = 'component_main'
 COMPONENT_SETTINGS = 'component_settings'
+COMPONENT_DELETE = 'component_delete'
 COMPONENT_CHANGE_ORDER = 'component_change_order'
 
 urlpatterns = [
@@ -71,6 +72,7 @@ urlpatterns = [
     url(r'^component/(.*)/edit$', views.edit_component, name=COMPONENT_EDIT),
     url(r'^component/(.*)/main_tab$', views.component_main_tab, name=COMPONENT_MAIN),
     url(r'^component/(.*)/settings_tab$', views.component_settings_tab, name=COMPONENT_SETTINGS),
+    url(r'^component/(.*)/delete$', views.delete_component, name=COMPONENT_DELETE),
     url(r'^component/(.*)/change_order/(.*)$', views.component_change_order, name=COMPONENT_CHANGE_ORDER),
 
 ]

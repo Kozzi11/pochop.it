@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <ul id="left-nav-tabs" class="nav nav-tabs nav-pills nav-stacked">
+                <ul id="left-nav-tabs" class="nav nav-tabs nav-pills nav-stacked noselect">
                     {% for tab in tabs %}
                         {% if tab.isTabGroup %}
                             <li class="tab_group tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}"
@@ -24,7 +24,7 @@
                                         <span ajax_url="{{ button.url }}"
                                            id="{{ button.shortName }}"
                                            js_after="{{ button.js_after }}"
-                                           onclick="event.stopPropagation(); window.location.hash = '#{{ button.shortName }}';">
+                                           onclick="event.stopPropagation(); event.preventDefault(); window.location.hash = '#{{ button.shortName }}';">
                                             <span class="glyphicon {{ button.glyphicon }}"></span>
                                         </span>
                                         {% if button.is_active %}
@@ -52,7 +52,7 @@
                                             <span ajax_url="{{ button.url }}"
                                                id="{{ button.shortName }}"
                                                js_after="{{ button.js_after }}"
-                                               onclick="event.stopPropagation(); window.location.hash = '#{{ button.shortName }}';">
+                                               onclick="event.stopPropagation(); event.preventDefault(); window.location.hash = '#{{ button.shortName }}';">
                                                 <span class="glyphicon {{ button.glyphicon }}"></span>
                                             </span>
                                             {% if button.is_active %}
@@ -84,11 +84,6 @@
                 </ul>
             </div>
             <div class="col-md-9">
-                <ul class="context-nav-bar">
-                    {% for item in context_bar_items %}
-                        <li><a href="{{ item.url }}">{{ item.title }}</a></li>
-                    {% endfor %}
-                </ul>
                 <div id="tab-content">
                     {% block tab_content %}
                     {% endblock %}
@@ -101,7 +96,7 @@
             var content = jQuery('#tab-content');
             element = jQuery(element);
             content.html('');
-            content.load(element.attr('ajax_url'), null, function() {
+            content.load(element.attr('ajax_url'), null, function(data) {
                 var js = element.attr('js_after');
                 if (js) {
                     eval(js);
