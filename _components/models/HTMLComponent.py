@@ -1,9 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.template import loader
-
 from _components import urls
 from _components.models.Component import Component
-from _courses.models import ComponentData
+from _courses.models import ComponentData, ComponentConfig
 
 
 class HTMLComponent(Component):
@@ -15,7 +14,11 @@ class HTMLComponent(Component):
         self.component_data = component_data
 
     def render_content(self) -> str:
-        content = 'Content of HMTL component'
+        if self.component_data.componentconfig_set.filter(key=ComponentConfig.KEY_CONTENT).exists():
+            content = self.component_data.componentconfig_set.get(key=ComponentConfig.KEY_CONTENT).value
+        else:
+            content = 'Empty'
+
         return loader.render_to_string('_components/html/html_content.html', {'content': content})
 
     def get_settings_url(self) -> str:

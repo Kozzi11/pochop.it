@@ -39,7 +39,10 @@ class ComponentData(models.Model):
     order = models.IntegerField()
 
 
-class CompoenentConfig(models.Model):
+class ComponentConfig(models.Model):
+
+    KEY_CONTENT = 1
+
     componentData = models.ForeignKey(ComponentData)
     key = models.IntegerField()
     value = models.CharField(max_length=254)

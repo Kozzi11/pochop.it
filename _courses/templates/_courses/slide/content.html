@@ -7,7 +7,7 @@
             <li><span>{{ item.title }}</span></li>
         {% endfor %}
     </ul>
-    <button onclick="jQuery.post('{% url_from_constant "_courses" "COMPONENT_NEW" slide_id %}', null, function(){location.reload();})"
+    <button onclick="jQuery.post('{% url_from_constant "_courses" "COMPONENT_NEW" slide_id %}', null, function(){changeTab();})"
             class="btn btn-primary btn pull-right">
         <span class="glyphicon glyphicon-plus"></span> {% trans "Add component" %}
     </button>
