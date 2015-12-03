@@ -73,14 +73,15 @@ def new_course(request):
     component_data.order = 0
     component_data.save()
 
-    url = reverse(urls.COURSE_EDIT, args=(course.id,)) + "#" + urls.SLIDE_EDIT_CONTENT + str(slide.id)
+    url = reverse(urls.COURSE_EDIT, args=(course.id,)) + "#" + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
+                                                                             args=(slide.id,))
     return HttpResponseRedirect(url)
 
 
 def delete_course(request, course_id):
     course = Course.objects.get(id=course_id)
     course.delete()
-    url = reverse(urls.COURSES) + "#" + urls.COURSES_MY
+    url = reverse(urls.COURSES) + "#" + reverse(urls.COURSES_MY)
     return HttpResponseRedirect(url)
 
 
@@ -88,13 +89,14 @@ def edit_course(request, course_id):
     tabs_manager = TabsManager(request)
     course = Course.objects.get(id=course_id)
 
-    js_after_ajax = 'location.hash = data; location.reload();'
+    js_after_ajax = 'location.reload();'
 
     courses_tab_group = TabGroup(course.title)
     courses_tab_group.add_action_button(reverse(urls.COURSE_MAIN, args=(course.id,)), 'pencil',
                                         short_name=urls.COURSE_MAIN + str(course_id))
     courses_tab_group.add_action_button(reverse(urls.LESSON_NEW, args=(course.id,)), 'plus',
-                                        short_name=urls.LESSON_NEW + str(course_id), js_after=js_after_ajax)
+                                        short_name=urls.LESSON_NEW + str(course_id), change_content=False,
+                                        js_after=js_after_ajax)
 
     lesson_set = course.lesson_set.all()
     lesson_count = len(lesson_set)
@@ -104,7 +106,8 @@ def edit_course(request, course_id):
         lessons_tab_group.add_action_button(reverse(urls.LESSON_MAIN, args=(lesson.id,)), 'pencil',
                                             short_name=urls.LESSON_MAIN + str(lesson.id))
         lessons_tab_group.add_action_button(reverse(urls.SLIDE_NEW, args=(lesson.id,)), 'plus',
-                                            short_name=urls.SLIDE_NEW + str(lesson.id), js_after=js_after_ajax)
+                                            short_name=urls.SLIDE_NEW + str(lesson.id), change_content=False,
+                                            js_after=js_after_ajax)
         slide_set = lesson.slide_set.all()
         slide_count = len(slide_set)
         k = 1
@@ -193,7 +196,8 @@ def lesson_main_tab(request, lesson_id):
         form = LessonForm(request.POST, instance=lesson)
         form.save()
         last_slide_id = lesson.slide_set.first().id
-        url = reverse(urls.COURSE_EDIT, args=(lesson.course.id,)) + "#" + urls.SLIDE_EDIT_CONTENT + str(last_slide_id)
+        url = reverse(urls.COURSE_EDIT, args=(lesson.course.id,)) + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
+                                                                                  args=(last_slide_id,))
         return HttpResponseRedirect(url)
     else:
         form = LessonForm(instance=lesson)
@@ -221,7 +225,7 @@ def new_slide(request, lesson_id):
     component_data.type = ComponentData.TYPE_HTML
     component_data.order = 0
     component_data.save()
-    return HttpResponse(urls.SLIDE_EDIT_CONTENT + str(slide.id))
+    return HttpResponse(reverse(urls.SLIDE_EDIT_CONTENT, args=(slide.id,)))
 
 
 def delete_slide(request, slide_id):
@@ -236,7 +240,8 @@ def slide_main_tab(request, slide_id):
     if request.method == 'POST':
         form = SlideForm(request.POST, instance=slide)
         form.save()
-        url = reverse(urls.COURSE_EDIT, args=(slide.lesson.course_id,)) + "#" + urls.SLIDE_MAIN + str(slide_id)
+        url = reverse(urls.COURSE_EDIT, args=(slide.lesson.course_id,)) + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
+                                                                                        args=(slide_id,))
         return HttpResponseRedirect(url)
     else:
         form = SlideForm(instance=slide)

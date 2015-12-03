@@ -21,18 +21,25 @@
                                 {% endif %}
                                 <div class="action-buttons">
                                     {% for button in tab.action_buttons %}
-                                        <span ajax_url="{{ button.url }}"
-                                           id="{{ button.shortName }}"
+                                        <span
+                                           id="{{ button.url|cut:"/" }}"
                                            js_after="{{ button.js_after }}"
-                                           onclick="event.stopPropagation(); event.preventDefault(); window.location.hash = '#{{ button.shortName }}';">
+
+                                           {% if button.change_content %}
+                                               onclick="event.stopPropagation(); event.preventDefault(); window.location.hash = '#{{ button.url }}';"
+                                           {% else%}
+                                               onclick="event.stopPropagation(); event.preventDefault(); jQuery.post('{{ button.url }}', null, function(data) {
+                                                            {{ button.js_after }}
+                                                       })"
+                                           {% endif %}
+                                        >
                                             <span class="glyphicon {{ button.glyphicon }}"></span>
                                         </span>
                                         {% if button.is_active %}
                                             <script>
                                                 $( document ).ready(function() {
                                                     if (!window.location.hash) {
-                                                        var tabId = '#' + '{{ button.shortName }}';
-                                                        window.location.hash = tabId;
+                                                        window.location.hash = '#' + '{{ button.url }}';
                                                     }
                                                 });
                                             </script>
@@ -42,25 +49,31 @@
                             </li>
                         {% else %}
                             <li class="{{ tab.className }} tab-offset-{{ tab.offset }} uid-{{ tab.parrent.uid }}" role="presentation">
-                                <a id="{{ tab.shortName }}" href="#{{ tab.shortName }}" ajax_url="{{ tab.url }}" onclick="changeTab(this)">
+                                <a id="{{ tab.url|cut:"/" }}" href="#{{ tab.url }}">
                                     {{ tab.title }}
                                     {% if tab.addBaddge %}
                                         <span class="badge pull-right">{{ tab.baddgeNumber }}</span>
                                     {% endif %}
                                     <div class="action-buttons">
                                         {% for button in tab.action_buttons %}
-                                            <span ajax_url="{{ button.url }}"
-                                               id="{{ button.shortName }}"
+                                            <span
+                                               id="{{ button.url|cut:"/" }}"
                                                js_after="{{ button.js_after }}"
-                                               onclick="event.stopPropagation(); event.preventDefault(); window.location.hash = '#{{ button.shortName }}';">
+                                               {% if button.change_content %}
+                                                    onclick="window.location.hash = '#{{ button.url }}';"
+                                               {% else%}
+                                                    onclick="event.stopPropagation(); event.preventDefault(); jQuery.post('{{ button.url }}', null, function(data) {
+                                                            {{ button.js_after }}
+                                                       })"
+                                               {% endif %}
+                                            >
                                                 <span class="glyphicon {{ button.glyphicon }}"></span>
                                             </span>
                                             {% if button.is_active %}
                                                 <script>
                                                     $( document ).ready(function() {
                                                         if (!window.location.hash) {
-                                                            var tabId = '#' + '{{ button.shortName }}';
-                                                            window.location.hash = tabId;
+                                                            window.location.hash = '#' + '{{ button.url }}';
                                                         }
                                                     });
                                                 </script>
@@ -73,8 +86,7 @@
                                 <script>
                                     $( document ).ready(function() {
                                         if (!window.location.hash) {
-                                            var tabId = '#' + '{{ tab.shortName }}';
-                                            window.location.hash = tabId;
+                                            window.location.hash = '#' + '{{ tab.url }}';
                                         }
                                     });
                                 </script>
@@ -92,11 +104,11 @@
         </div>
      </div>
     <script>
-        function changeTab(element) {
+        function changeTab() {
             var content = jQuery('#tab-content');
-            element = jQuery(element);
+            var element = jQuery(location.hash.replace(/\//g, ''));
             content.html('');
-            content.load(element.attr('ajax_url'), null, function(data) {
+            content.load(location.hash.replace('#', ''), null, function(data) {
                 var js = element.attr('js_after');
                 if (js) {
                     eval(js);
@@ -106,7 +118,15 @@
             element.closest('li').addClass('active');
         }
 
-        function toogleTabsVisibility(uid, parent) {
+        $(window).on('hashchange', function() {
+            changeTab();
+        });
+
+        if (window.location.hash) {
+            changeTab();
+        }
+
+            function toogleTabsVisibility(uid, parent) {
             if (parent) {
                 parent = jQuery(parent);
                 var trangleIcon = parent.children('.glyphicon');
@@ -142,16 +162,6 @@
                     }
                 }
             });
-        }
-
-        $(window).on('hashchange', function() {
-            var tabId = window.location.hash;
-            changeTab(jQuery(tabId)[0]);
-        });
-
-        if (window.location.hash) {
-            var tabId = window.location.hash;
-            changeTab(jQuery(tabId)[0]);
         }
     </script>
 {% endblock %}

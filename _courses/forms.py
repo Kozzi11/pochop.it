@@ -31,7 +31,7 @@ class SlideForm(forms.ModelForm):
 
 
 class ComponentForm(forms.ModelForm):
-    content = forms.CharField(widget=TinyMCE(attrs={'rows': 25}))
+    content = forms.CharField(widget=TinyMCE(attrs={'rows': 25}), required=False)
 
     class Meta:
         model = ComponentData

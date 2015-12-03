@@ -15,8 +15,8 @@ def html(request, component_data_id):
         form = ComponentForm(request.POST, instance=component_data)
         form.save()
         url = reverse(course_urls.COURSE_EDIT,
-                      args=(component_data.slide.lesson.course_id,)) + "#" + course_urls.SLIDE_EDIT_CONTENT + str(
-            component_data.slide_id)
+                      args=(component_data.slide.lesson.course_id,)) + "#" + reverse(course_urls.SLIDE_EDIT_CONTENT,
+                                                                                     args=(component_data.slide_id,))
         return HttpResponseRedirect(url)
     else:
         form = ComponentForm(instance=component_data)

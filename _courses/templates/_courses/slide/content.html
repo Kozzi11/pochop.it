@@ -23,8 +23,7 @@
                     <span class="title">{{ component.get_title }}</span>
 
                         <span id="{% urls_constant '_components' 'COMPONENT_HTML' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
-                          ajax_url="{{ component.get_settings_url }}"
-                          onclick="window.location.hash = '{% urls_constant '_components' 'COMPONENT_HTML' %}{{ component.get_id }}';"></span>
+                          onclick="window.location.hash = '{{ component.get_settings_url }}';"></span>
 
                         <span onclick="
                             jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id -1 %}');

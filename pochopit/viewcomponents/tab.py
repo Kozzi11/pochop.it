@@ -1,4 +1,3 @@
-
 class Tab:
     title = ''
     url = '#'
@@ -33,8 +32,9 @@ class Tab:
             self.className = ''
         self.isActive = active
 
-    def add_action_button(self, url: str, glyphicon: str, short_name='', is_active=False, js_after=''):
+    def add_action_button(self, url: str, glyphicon: str, short_name='', is_active=False, change_content=True,
+                          js_after=''):
         self.action_buttons.append({'shortName': short_name, 'url': url,
                                     'glyphicon': 'glyphicon-' + glyphicon,
                                     'js_after': js_after,
-                                    'is_active': is_active})
+                                    'is_active': is_active, 'change_content': change_content})
