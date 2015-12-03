@@ -1,3 +1,4 @@
+import json
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
@@ -73,8 +74,8 @@ def new_course(request):
     component_data.order = 0
     component_data.save()
 
-    url = reverse(urls.COURSE_EDIT, args=(course.id,)) + "#" + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
-                                                                             args=(slide.id,))
+    url = reverse(urls.COURSE_EDIT, args=(course.id,)) + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
+                                                                       args=(slide.id,))
     return HttpResponseRedirect(url)
 
 
@@ -248,7 +249,7 @@ def slide_main_tab(request, slide_id):
 
     context_bar_items = [
         ContextBarItem(slide.lesson.title),
-        ContextBarItem(slide.title),
+        ContextBarItem(slide.title, reverse(urls.SLIDE_EDIT_CONTENT, args=(slide_id,))),
     ]
     return render(request, '_courses/slide/main.html',
                   dict(form=form, slide_id=slide_id, context_bar_items=context_bar_items))
@@ -262,8 +263,8 @@ def edit_slide_content(request, slide_id):
         components.append(ComoponentBuilder.prepare_component(component_data))
 
     context_bar_items = [
-        ContextBarItem(slide.lesson.title, ''),
-        ContextBarItem(slide.title, '#')
+        ContextBarItem(slide.lesson.title),
+        ContextBarItem(slide.title)
     ]
     return render(request, '_courses/slide/content.html',
                   {'slide_id': slide_id, 'components': components, 'context_bar_items': context_bar_items})
@@ -292,26 +293,15 @@ def component_settings_tab(request, component_id):
     return render(request, '_courses/component/settings.html', {'component_id': component_id})
 
 
-def component_change_order(request, component_data_id, step):
-    step = int(step)
-    component_data = ComponentData.objects.get(id=component_data_id)
-    old_position = component_data.order
-    new_positon = old_position + int(step)
-    count_of_components = component_data.slide.componentdata_set.count()
+def component_change_order(request, slide_id):
+    slide = Slide.objects.get(id=slide_id)
+    json_string = request.POST['data']
+    json_order_dict = json.loads(json_string)
 
-    if step > 0 and new_positon > count_of_components:
-        return HttpResponse()
-    elif step < 0 and new_positon < 0:
-        return HttpResponse()
+    for component_data in slide.componentdata_set.all():
+        component_data.order = json_order_dict[str(component_data.id)]
+        component_data.save()
 
-    for data in component_data.slide.componentdata_set.all():
-        if data.order == new_positon:
-            data.order = old_position
-            data.save()
-            break
-
-    component_data.order = new_positon
-    component_data.save()
     return HttpResponse()
 
 

@@ -2,11 +2,8 @@
 {% load url_constants %}
 
 <div class="row col-md-12">
-    <ul class="context-nav-bar pull-left">
-        {% for item in context_bar_items %}
-            <li><span>{{ item.title }}</span></li>
-        {% endfor %}
-    </ul>
+    {% include "pochopit/context_nav_bar.html" %}
+    {# todo udelat nejakej util a do toho pridat metodu changeTab() at je jasny kde se bere #}
     <button onclick="jQuery.post('{% url_from_constant "_courses" "COMPONENT_NEW" slide_id %}', null, function(){changeTab();})"
             class="btn btn-primary btn pull-right">
         <span class="glyphicon glyphicon-plus"></span> {% trans "Add component" %}
@@ -20,23 +17,19 @@
         <li class="row col-md-12" id="component-{{ component.get_id }}">
             <div class="component-frame">
                 <div class="component-top-panel">
+
                     <span class="title">{{ component.get_title }}</span>
 
-                        <span id="{% urls_constant '_components' 'COMPONENT_HTML' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
-                          onclick="window.location.hash = '{{ component.get_settings_url }}';"></span>
+                    <span id="{% urls_constant '_components' 'COMPONENT_HTML' %}{{ component.get_id }}" class="glyphicon glyphicon-pencil pull-right"
+                      onclick="window.location.hash = '{{ component.get_settings_url }}';"></span>
 
-                        <span onclick="
-                            jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id -1 %}');
-                            var row = jQuery(this).closest('.row');
-                            row.insertBefore(row.prev('.row'));
-                            "
-                          class="glyphicon glyphicon-arrow-up pull-right"></span>
+                    <span onclick="var row = jQuery(this).closest('.row');row.insertBefore(row.prev('.row')); save_comopnents_positions();"
+                      class="glyphicon glyphicon-arrow-up pull-right">
+                    </span>
 
-                        <span onclick="jQuery.post('{% url_from_constant '_courses' 'COMPONENT_CHANGE_ORDER' component.get_id 1 %}');
-                                var row = jQuery(this).closest('.row');
-                                row.insertAfter(row.next('.row'));
-                                "
-                              class="glyphicon glyphicon-arrow-down pull-right"></span>
+                    <span onclick=" var row = jQuery(this).closest('.row'); row.insertAfter(row.next('.row')); save_comopnents_positions();"
+                          class="glyphicon glyphicon-arrow-down pull-right">
+                    </span>
 
                 </div>
                 <div class="component-content">
@@ -47,12 +40,25 @@
     {% endfor %}
 </ul>
 <script>
-      $(function() {
-    $('#sortable').sortable({
-        update: function( event, ui ) {
-
-        }
-    });
-    $('#sortable').disableSelection();
+    $(function() {
+        var sortable = $('#sortable');
+        sortable.sortable({
+            placeholder: "row col-md-12 sortable-placeholder",
+            update: function( event, ui ) {
+                save_comopnents_positions();
+            }
+        });
+        sortable.disableSelection();
   });
+
+  function save_comopnents_positions() {
+      var data = {};
+      var positon = 0;
+      $('#sortable').find('li').each(function(){
+          data[this.id.replace('component-', '')] = positon;
+          positon++;
+      });
+
+      $.post('{% url_from_constant "_courses" "COMPONENT_CHANGE_ORDER" slide_id %}', {'data': JSON.stringify(data)});
+  }
 </script>

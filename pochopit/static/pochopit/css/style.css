@@ -79,7 +79,14 @@ a {
 }
 
 /* BOCNI NAVIGACNI MENU */
-
+#tab-content {
+    padding-top: 25px;
+}
+@media (min-width:992px) {
+   #tab-content {
+        padding-top: 10px;
+    }
+}
 #left-nav-tabs {
     border: none;
     border-right: 1px solid #ddd;

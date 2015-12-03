@@ -63,6 +63,6 @@ urlpatterns = [
     url(r'^component/(.*)/new$', views.new_component, name=COMPONENT_NEW),
     url(r'^component/(.*)/settings_tab$', views.component_settings_tab, name=COMPONENT_SETTINGS),
     url(r'^component/(.*)/delete$', views.delete_component, name=COMPONENT_DELETE),
-    url(r'^component/(.*)/change_order/(.*)$', views.component_change_order, name=COMPONENT_CHANGE_ORDER),
+    url(r'^component/(.*)/change_order$', views.component_change_order, name=COMPONENT_CHANGE_ORDER),
 
 ]
