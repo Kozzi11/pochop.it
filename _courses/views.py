@@ -182,7 +182,6 @@ def delete_lesson(request, lesson_id):
 def edit_lesson(request, lesson_id):
     tabs = [
         Tab(_('Main'), reverse(urls.LESSON_MAIN, args=(lesson_id,)), urls.LESSON_MAIN),
-        Tab(_('Slides'), reverse(urls.LESSON_SLIDES, args=(lesson_id,)), urls.LESSON_SLIDES, is_active=True),
     ]
 
     return render(request, '_courses/courses_base.html', {'tabs': tabs})
@@ -204,10 +203,6 @@ def lesson_main_tab(request, lesson_id):
     ]
     return render(request, '_courses/lesson/main.html',
                   dict(form=form, lesson_id=lesson_id, context_bar_items=context_bar_items))
-
-
-def lesson_slides_tab(request, lesson_id):
-    return render(request, '_courses/lesson/slides.html', {'lesson_id': lesson_id})
 
 
 def new_slide(request, lesson_id):
@@ -236,15 +231,6 @@ def delete_slide(request, slide_id):
     return HttpResponseRedirect(url)
 
 
-def edit_slide(request, slide_id):
-    tabs = [
-        Tab(_('Main'), reverse(urls.SLIDE_MAIN, args=(slide_id,)), urls.SLIDE_MAIN),
-        Tab(_('Compenents'), reverse(urls.SLIDE_COMPONENTS, args=(slide_id,)), urls.SLIDE_COMPONENTS, is_active=True),
-    ]
-
-    return render(request, '_courses/courses_base.html', {'tabs': tabs})
-
-
 def slide_main_tab(request, slide_id):
     slide = Slide.objects.get(id=slide_id)
     if request.method == 'POST':
@@ -261,10 +247,6 @@ def slide_main_tab(request, slide_id):
     ]
     return render(request, '_courses/slide/main.html',
                   dict(form=form, slide_id=slide_id, context_bar_items=context_bar_items))
-
-
-def slide_components_tab(request, slide_id):
-    return render(request, '_courses/slide/components.html', {'slide_id': slide_id})
 
 
 def edit_slide_content(request, slide_id):
@@ -299,35 +281,6 @@ def delete_component(request, component_id):
     component_data.delete()
     url = reverse(urls.COURSE_EDIT, args=(component_data.slide.lesson.course_id,))
     return HttpResponseRedirect(url)
-
-
-def edit_component(request, component_id):
-    tabs = [
-        Tab(_('Main'), reverse(urls.COMPONENT_MAIN, args=(component_id,)), urls.COMPONENT_MAIN),
-        Tab(_('Settings'), reverse(urls.COMPONENT_SETTINGS, args=(component_id,)), urls.COMPONENT_SETTINGS,
-            is_active=True),
-    ]
-    return render(request, '_courses/courses_base.html', {'tabs': tabs})
-
-
-def component_main_tab(request, component_id):
-    component = ComponentData.objects.get(id=component_id)
-    if request.method == 'POST':
-        form = ComponentForm(request.POST, instance=component)
-        form.save()
-        url = reverse(urls.COURSE_EDIT, args=(component.slide.lesson.course_id,)) + "#" + urls.SLIDE_EDIT_CONTENT + str(
-            component.slide_id)
-        return HttpResponseRedirect(url)
-    else:
-        form = ComponentForm(instance=component)
-
-    context_bar_items = [
-        ContextBarItem(component.slide.lesson.title),
-        ContextBarItem(component.slide.title),
-        ContextBarItem(component.title),
-    ]
-    return render(request, '_courses/component/main.html',
-                  dict(form=form, component_id=component_id, context_bar_items=context_bar_items))
 
 
 def component_settings_tab(request, component_id):

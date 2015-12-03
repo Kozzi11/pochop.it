@@ -1,8 +1,9 @@
-from django.forms import ModelForm
+from django import forms
+from tinymce.widgets import TinyMCE
 from _courses.models import Course, Lesson, Slide, ComponentData
 
 
-class CourseForm(ModelForm):
+class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = [
@@ -11,7 +12,7 @@ class CourseForm(ModelForm):
         ]
 
 
-class LessonForm(ModelForm):
+class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
         fields = [
@@ -20,7 +21,7 @@ class LessonForm(ModelForm):
         ]
 
 
-class SlideForm(ModelForm):
+class SlideForm(forms.ModelForm):
     class Meta:
         model = Slide
         fields = [
@@ -29,7 +30,9 @@ class SlideForm(ModelForm):
         ]
 
 
-class ComponentForm(ModelForm):
+class ComponentForm(forms.ModelForm):
+    content = forms.CharField(widget=TinyMCE(attrs={'rows': 25}))
+
     class Meta:
         model = ComponentData
         fields = [
@@ -37,4 +40,3 @@ class ComponentForm(ModelForm):
             'type',
             'order',
         ]
-

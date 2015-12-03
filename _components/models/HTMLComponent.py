@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.template import loader
 
+from _components import urls
 from _components.models.Component import Component
 from _courses.models import ComponentData
 
@@ -15,10 +16,10 @@ class HTMLComponent(Component):
 
     def render_content(self) -> str:
         content = 'Content of HMTL component'
-        return loader.render_to_string('_components/html_content.html', {'content': content})
+        return loader.render_to_string('_components/html/html_content.html', {'content': content})
 
     def get_settings_url(self) -> str:
-        return reverse('component_html', args=(self.component_data.id,))
+        return reverse(urls.COMPONENT_HTML, args=(self.component_data.id,))
 
     def get_id(self) -> str:
         return str(self.component_data.id)

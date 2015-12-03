@@ -2,6 +2,9 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load url_constants %}
+<head>
+    {{ form.media }}
+</head>
 
 <ul class="context-nav-bar pull-left">
     {% for item in context_bar_items %}
@@ -9,11 +12,11 @@
     {% endfor %}
 </ul>
 <div class="form-group text-right">
-    <a href="{% url_from_constant '_courses' 'COMPONENT_DELETE' component_id %}" class="btn btn-danger">
+    <a href="{% url_from_constant '_courses' 'COMPONENT_DELETE' component_data_id %}" class="btn btn-danger">
         {% trans "Delete" %}
     </a>
 </div>
-<form action="{% url_from_constant "_courses" "COMPONENT_MAIN" component_id %}" method="post" class="form">
+<form action="{% url_from_constant "_components" "COMPONENT_HTML" component_data_id %}" method="post" class="form">
   {% csrf_token %}
   {% bootstrap_form form %}
     <div class="form-group text-right">
