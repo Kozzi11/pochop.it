@@ -8,7 +8,7 @@ class Course(models.Model):
         on_delete=models.CASCADE,
     )
     title = models.CharField(max_length=254)
-    description = models.TextField(max_length=300)
+    description = models.TextField()
 
 
 class Lesson(models.Model):

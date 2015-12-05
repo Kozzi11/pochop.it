@@ -6,13 +6,16 @@ from django.shortcuts import render
 from django.contrib.auth import get_user
 from _components.models.ComponentBuilder import ComoponentBuilder
 from _courses import urls
-from _courses.forms import CourseForm, LessonForm, SlideForm, ComponentForm
+from _courses.forms import CourseForm, LessonForm, SlideForm
 from _courses.models import Course, Lesson, Slide, ComponentData
 from eztables.views import DatatablesView
 from pochopit.viewcomponents.context_bar_item import ContextBarItem
 from pochopit.viewcomponents.tab import Tab
 from pochopit.viewcomponents.tab_group import TabGroup
 from pochopit.viewcomponents.tabs_manager import TabsManager
+
+
+COURSE_GRID_STEP = 7
 
 
 def courses(request):
@@ -34,7 +37,7 @@ def courses(request):
 
 
 def all_courses(request):
-    return render(request, '_courses/all.html')
+    return render(request, '_courses/all.html', {'offset': COURSE_GRID_STEP})
 
 
 def in_progress_courses(request):
@@ -84,6 +87,11 @@ def delete_course(request, course_id):
     course.delete()
     url = reverse(urls.COURSES) + "#" + reverse(urls.COURSES_MY)
     return HttpResponseRedirect(url)
+
+
+def course_description(request, course_id):
+    course = Course.objects.get(id=course_id)
+    return render(request, '_courses/course/description.html', {'course': course})
 
 
 def edit_course(request, course_id):
@@ -137,7 +145,7 @@ def course_main_tab(request, course_id):
         form.save()
         return HttpResponseRedirect(reverse(urls.COURSE_EDIT, args=(course_id,)))
     else:
-        form = CourseForm(instance=course)
+        form = CourseForm(instance=course, initial={'description': course.description})
 
     context_bar_items = [
         ContextBarItem(course.title),
@@ -303,6 +311,13 @@ def component_change_order(request, slide_id):
         component_data.save()
 
     return HttpResponse()
+
+
+def grid_courses(request):
+    offset = int(request.POST['offset'])
+    course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
+
+    return render(request, '_courses/course_grid.html', {'course_list': course_list})
 
 
 class CourseDatatablesView(DatatablesView):

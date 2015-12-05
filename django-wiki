@@ -40,3 +40,6 @@ za
 		    '<li class="prev disabled"><a href="#"><span aria-hidden="true">&laquo;</span></a></li>'+
 	        '<li class="next disabled"><a href="#"><span aria-hidden="true">&raquo;</span></a></li>'+
         '</ul>'
+
+manage.py runserver
+mozno predat ip a port viz : runserver [port or address:port]

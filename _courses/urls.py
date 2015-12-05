@@ -9,11 +9,13 @@ COURSES_IN_PROGRESS = 'courses_in-progress'
 COURSES_COMPLETED = 'courses_completed'
 COURSES_MY = 'courses_my'
 COURSES_DATA = 'courses_data'
+COURSES_GRID = 'courses_grid'
 COURSE_NEW = 'course_new'
 COURSE_EDIT = 'course_edit'
 COURSE_MAIN = 'course_main'
 COURSE_LESSONS = 'course_lessons'
 COURSE_DELETE = 'course_delete'
+COURSE_DESCRIPTION = 'course_description'
 
 LESSONS_DATA = 'lessons_data'
 LESSON_NEW = 'lesson_new'
@@ -41,11 +43,13 @@ urlpatterns = [
     url(r'^courses/completed$', views.completed_courses, name=COURSES_COMPLETED),
     url(r'^courses/my$', views.my_courses, name=COURSES_MY),
     url(r'^courses/data$', CourseDatatablesView.as_view(), name=COURSES_DATA),
+    url(r'^courses/grid', views.grid_courses, name=COURSES_GRID),
     url(r'^course/new$', views.new_course, name=COURSE_NEW),
     url(r'^course/(.*)/edit$', views.edit_course, name=COURSE_EDIT),
     url(r'^course/(.*)/main_tab$', views.course_main_tab, name=COURSE_MAIN),
     url(r'^course/(.*)/lesssons_tab$', views.course_lessons_tab, name=COURSE_LESSONS),
     url(r'^course/(.*)/delete$', views.delete_course, name=COURSE_DELETE),
+    url(r'^course/(.*)/description', views.course_description, name=COURSE_DESCRIPTION),
 
     url(r'^lessons/(.*)/data$', LessonDatatablesView.as_view(), name=LESSONS_DATA),
     url(r'^lesson/(.*)/new$', views.new_lesson, name=LESSON_NEW),
