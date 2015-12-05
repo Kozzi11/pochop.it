@@ -1,31 +1,10 @@
-{% load bootstrap3 %}
-{% load staticfiles %}
-{% load i18n %}
+{% load url_constants %}
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="jumbotron">
-          <h2>Course of PHP!</h2>
-          <p>This page will grow as we add more and more components from Bootstrap...</p>
-          <a href="#" class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-search"></span> Join
-          </a>
-        </div>
+<div id="courses_container">
 
-        <div class="jumbotron">
-          <h2>Course of PHP!</h2>
-          <p>This page will grow as we add more and more components from Bootstrap...</p>
-          <a href="#" class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-search"></span> Join
-          </a>
-        </div>
-
-        <div class="jumbotron">
-          <h2>Course of PHP!</h2>
-          <p>This page will grow as we add more and more components from Bootstrap...</p>
-          <a href="#" class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-search"></span> Join
-          </a>
-        </div>
-    </div>
 </div>
+
+<script>
+    coursesOffset = 0;
+    loadNextCourses(coursesOffset, 2); // todo - predelat na nejakej util
+</script>

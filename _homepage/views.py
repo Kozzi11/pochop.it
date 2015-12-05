@@ -9,6 +9,5 @@ def homepage(request):
     return render(request, '_homepage/homepage.html')
 
 
-@login_required
 def resticted_acces(request):
     return HttpResponse("Jen pro přihlášené")
