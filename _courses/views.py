@@ -1,3 +1,4 @@
+import json
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
@@ -5,31 +6,42 @@ from django.shortcuts import render
 from django.contrib.auth import get_user
 from _components.models.ComponentBuilder import ComoponentBuilder
 from _courses import urls
-from _courses.forms import CourseForm, LessonForm, SlideForm, ComponentForm
-from _courses.models import Course, Lesson, Slide, ComponentData
+from _courses.forms import CourseForm, LessonForm, SlideForm
+from _courses.models import Course, Lesson, Slide, ComponentData, UserCourse
 from eztables.views import DatatablesView
 from pochopit.viewcomponents.context_bar_item import ContextBarItem
 from pochopit.viewcomponents.tab import Tab
 from pochopit.viewcomponents.tab_group import TabGroup
 from pochopit.viewcomponents.tabs_manager import TabsManager
 
+COURSE_GRID_STEP = 7
+
 
 def courses(request):
+    user = get_user(request)
     tabs_manager = TabsManager(request)
     tabs_manager.add_tab(
         Tab(_('All'), reverse(urls.COURSES_ALL), urls.COURSES_ALL, is_active=True)
     )
+
+    in_progress_course_count = UserCourse.objects.filter(user=user, completed=False).count()
     tabs_manager.add_tab(
-        Tab(_('In progress'), reverse(urls.COURSES_IN_PROGRESS), urls.COURSES_IN_PROGRESS, buddge_number=2)
-    )
-    tabs_manager.add_tab(
-        Tab(_('Completed'), reverse(urls.COURSES_COMPLETED), urls.COURSES_COMPLETED, buddge_number=8)
-    )
-    tabs_manager.add_tab(
-        Tab(_('My courses'), reverse(urls.COURSES_MY), urls.COURSES_MY, buddge_number=3)
+        Tab(_('In progress'), reverse(urls.COURSES_IN_PROGRESS), urls.COURSES_IN_PROGRESS,
+            buddge_number=in_progress_course_count)
     )
 
-    return render(request, '_courses/courses_base.html', {'tabs': tabs_manager.get_tabs()})
+    completed_course_count = UserCourse.objects.filter(user=user, completed=True).count()
+    tabs_manager.add_tab(
+        Tab(_('Completed'), reverse(urls.COURSES_COMPLETED), urls.COURSES_COMPLETED,
+            buddge_number=completed_course_count)
+    )
+
+    my_course_count = Course.objects.filter(author=user).count()
+    tabs_manager.add_tab(
+        Tab(_('My courses'), reverse(urls.COURSES_MY), urls.COURSES_MY, buddge_number=my_course_count)
+    )
+
+    return render(request, '_courses/courses_base.html', {'tabs': tabs_manager.get_tabs(), 'offset': COURSE_GRID_STEP})
 
 
 def all_courses(request):
@@ -73,14 +85,32 @@ def new_course(request):
     component_data.order = 0
     component_data.save()
 
-    url = reverse(urls.COURSE_EDIT, args=(course.id,)) + "#" + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
-                                                                             args=(slide.id,))
+    url = reverse(urls.COURSE_EDIT, args=(course.id,)) + "#" + reverse(urls.SLIDE_EDIT_CONTENT,
+                                                                       args=(slide.id,))
     return HttpResponseRedirect(url)
 
 
 def delete_course(request, course_id):
     course = Course.objects.get(id=course_id)
     course.delete()
+    url = reverse(urls.COURSES) + "#" + reverse(urls.COURSES_MY)
+    return HttpResponseRedirect(url)
+
+
+def course_description(request, course_id):
+    course = Course.objects.get(id=course_id)
+    return render(request, '_courses/course/description.html', {'course': course})
+
+
+def course_enrol(request, course_id):
+    course = Course.objects.get(id=course_id)
+    user = get_user(request)
+    user_course = UserCourse()
+    user_course.course = course
+    user_course.user = user
+    user_course.completed = False
+    user_course.save()
+
     url = reverse(urls.COURSES) + "#" + reverse(urls.COURSES_MY)
     return HttpResponseRedirect(url)
 
@@ -136,7 +166,7 @@ def course_main_tab(request, course_id):
         form.save()
         return HttpResponseRedirect(reverse(urls.COURSE_EDIT, args=(course_id,)))
     else:
-        form = CourseForm(instance=course)
+        form = CourseForm(instance=course, initial={'description': course.description})
 
     context_bar_items = [
         ContextBarItem(course.title),
@@ -248,7 +278,7 @@ def slide_main_tab(request, slide_id):
 
     context_bar_items = [
         ContextBarItem(slide.lesson.title),
-        ContextBarItem(slide.title),
+        ContextBarItem(slide.title, reverse(urls.SLIDE_EDIT_CONTENT, args=(slide_id,))),
     ]
     return render(request, '_courses/slide/main.html',
                   dict(form=form, slide_id=slide_id, context_bar_items=context_bar_items))
@@ -262,8 +292,8 @@ def edit_slide_content(request, slide_id):
         components.append(ComoponentBuilder.prepare_component(component_data))
 
     context_bar_items = [
-        ContextBarItem(slide.lesson.title, ''),
-        ContextBarItem(slide.title, '#')
+        ContextBarItem(slide.lesson.title),
+        ContextBarItem(slide.title)
     ]
     return render(request, '_courses/slide/content.html',
                   {'slide_id': slide_id, 'components': components, 'context_bar_items': context_bar_items})
@@ -292,27 +322,33 @@ def component_settings_tab(request, component_id):
     return render(request, '_courses/component/settings.html', {'component_id': component_id})
 
 
-def component_change_order(request, component_data_id, step):
-    step = int(step)
-    component_data = ComponentData.objects.get(id=component_data_id)
-    old_position = component_data.order
-    new_positon = old_position + int(step)
-    count_of_components = component_data.slide.componentdata_set.count()
+def component_change_order(request, slide_id):
+    slide = Slide.objects.get(id=slide_id)
+    json_string = request.POST['data']
+    json_order_dict = json.loads(json_string)
 
-    if step > 0 and new_positon > count_of_components:
-        return HttpResponse()
-    elif step < 0 and new_positon < 0:
-        return HttpResponse()
+    for component_data in slide.componentdata_set.all():
+        component_data.order = json_order_dict[str(component_data.id)]
+        component_data.save()
 
-    for data in component_data.slide.componentdata_set.all():
-        if data.order == new_positon:
-            data.order = old_position
-            data.save()
-            break
-
-    component_data.order = new_positon
-    component_data.save()
     return HttpResponse()
+
+
+def grid_courses(request):
+    offset = int(request.POST['offset'])
+    actual_tab = int(request.POST['actual_tab'])  # all=1, in_progress=2, completed=3
+    course_list = []
+
+    if actual_tab == 1:  # all
+        course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
+    elif actual_tab == 2:  # in-progress
+        user_course_list = UserCourse.objects.filter(user=get_user(request))[offset:offset + COURSE_GRID_STEP]
+        for user_course in user_course_list:
+            course_list.append(user_course.course)
+    elif actual_tab == 3:  # completed
+        course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
+
+    return render(request, '_courses/course_grid.html', {'course_list': course_list})
 
 
 class CourseDatatablesView(DatatablesView):

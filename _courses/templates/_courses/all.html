@@ -1,5 +1,10 @@
-{% load bootstrap3 %}
-{% load staticfiles %}
-{% load i18n %}
+{% load url_constants %}
 
-    Všechny kurzy
+<div id="courses_container">
+
+</div>
+
+<script>
+    coursesOffset = 0;
+    loadNextCourses(coursesOffset, 1); // todo - predelat na nejakej util
+</script>

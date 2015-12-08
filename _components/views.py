@@ -33,7 +33,7 @@ def html(request, component_data_id):
 
     context_bar_items = [
         ContextBarItem(component_data.slide.lesson.title),
-        ContextBarItem(component_data.slide.title),
+        ContextBarItem(component_data.slide.title, reverse(course_urls.SLIDE_EDIT_CONTENT, args=(component_data.slide_id,))),
         ContextBarItem(component_data.title),
     ]
     return render(request, '_components/html/html_settings.html',

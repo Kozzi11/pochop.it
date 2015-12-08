@@ -25,3 +25,7 @@
 
 10 - Na widlich je potreba jeste naistalovat getttext viz:
     htps://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows
+
+11 - spusteni severu bud pres pycharm nebo rucne
+manage.py runserver
+mozno predat ip a port viz : runserver [port or address:port]

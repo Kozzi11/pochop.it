@@ -60,7 +60,7 @@
                                                id="{{ button.url|cut:"/" }}"
                                                js_after="{{ button.js_after }}"
                                                {% if button.change_content %}
-                                                    onclick="window.location.hash = '#{{ button.url }}';"
+                                                    onclick="event.stopPropagation(); event.preventDefault(); window.location.hash = '#{{ button.url }}';"
                                                {% else%}
                                                     onclick="event.stopPropagation(); event.preventDefault(); jQuery.post('{{ button.url }}', null, function(data) {
                                                             {{ button.js_after }}
@@ -164,4 +164,6 @@
             });
         }
     </script>
+    {% block scripts %}
+    {% endblock %}
 {% endblock %}

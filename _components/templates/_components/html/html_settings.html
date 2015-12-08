@@ -6,11 +6,8 @@
     {{ form.media }}
 </head>
 
-<ul class="context-nav-bar pull-left">
-    {% for item in context_bar_items %}
-        <li><span>{{ item.title }}</span></li>
-    {% endfor %}
-</ul>
+{% include "pochopit/context_nav_bar.html" %}
+
 <div class="form-group text-right">
     <a href="{% url_from_constant '_courses' 'COMPONENT_DELETE' component_data_id %}" class="btn btn-danger">
         {% trans "Delete" %}

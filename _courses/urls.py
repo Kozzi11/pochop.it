@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from . import views
+from django.contrib.auth.decorators import login_required
 from _courses.views import CourseDatatablesView, LessonDatatablesView, SlideDatatablesView, ComponentsDatatablesView
 
 COURSES = 'courses'
@@ -9,11 +10,14 @@ COURSES_IN_PROGRESS = 'courses_in-progress'
 COURSES_COMPLETED = 'courses_completed'
 COURSES_MY = 'courses_my'
 COURSES_DATA = 'courses_data'
+COURSES_GRID = 'courses_grid'
 COURSE_NEW = 'course_new'
 COURSE_EDIT = 'course_edit'
 COURSE_MAIN = 'course_main'
 COURSE_LESSONS = 'course_lessons'
 COURSE_DELETE = 'course_delete'
+COURSE_DESCRIPTION = 'course_description'
+COURSE_ENROL = 'course_enrol'
 
 LESSONS_DATA = 'lessons_data'
 LESSON_NEW = 'lesson_new'
@@ -35,17 +39,20 @@ COMPONENT_CHANGE_ORDER = 'component_change_order'
 
 urlpatterns = [
 
-    url(r'^courses/$', views.courses, name=COURSES),
-    url(r'^courses/all$', views.all_courses, name=COURSES_ALL),
-    url(r'^courses/in_progress$', views.in_progress_courses, name=COURSES_IN_PROGRESS),
+    url(r'^courses/$', login_required(views.courses), name=COURSES),
+    url(r'^courses/all$', login_required(views.all_courses), name=COURSES_ALL),
+    url(r'^courses/in_progress$', login_required(views.in_progress_courses), name=COURSES_IN_PROGRESS),
     url(r'^courses/completed$', views.completed_courses, name=COURSES_COMPLETED),
     url(r'^courses/my$', views.my_courses, name=COURSES_MY),
     url(r'^courses/data$', CourseDatatablesView.as_view(), name=COURSES_DATA),
+    url(r'^courses/grid', views.grid_courses, name=COURSES_GRID),
     url(r'^course/new$', views.new_course, name=COURSE_NEW),
     url(r'^course/(.*)/edit$', views.edit_course, name=COURSE_EDIT),
     url(r'^course/(.*)/main_tab$', views.course_main_tab, name=COURSE_MAIN),
     url(r'^course/(.*)/lesssons_tab$', views.course_lessons_tab, name=COURSE_LESSONS),
     url(r'^course/(.*)/delete$', views.delete_course, name=COURSE_DELETE),
+    url(r'^course/(.*)/description', views.course_description, name=COURSE_DESCRIPTION),
+    url(r'^course/(.*)/enrol', views.course_enrol, name=COURSE_ENROL),
 
     url(r'^lessons/(.*)/data$', LessonDatatablesView.as_view(), name=LESSONS_DATA),
     url(r'^lesson/(.*)/new$', views.new_lesson, name=LESSON_NEW),
@@ -63,6 +70,6 @@ urlpatterns = [
     url(r'^component/(.*)/new$', views.new_component, name=COMPONENT_NEW),
     url(r'^component/(.*)/settings_tab$', views.component_settings_tab, name=COMPONENT_SETTINGS),
     url(r'^component/(.*)/delete$', views.delete_component, name=COMPONENT_DELETE),
-    url(r'^component/(.*)/change_order/(.*)$', views.component_change_order, name=COMPONENT_CHANGE_ORDER),
+    url(r'^component/(.*)/change_order$', views.component_change_order, name=COMPONENT_CHANGE_ORDER),
 
 ]

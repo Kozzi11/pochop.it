@@ -1,6 +1,32 @@
 {% extends "pochopit/base_side_panel.html" %}
 {% load staticfiles %}
+{% load url_constants %}
 
 {% block links %}
     <link rel="stylesheet" type="text/css" href="{% static "_components/css/style.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "_courses/css/style.css" %}">
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var coursesOffset = 0;
+        var actulaTab = 0; // all=1, in_progress=2, completed=3
+
+        function loadNextCourses(offset, actual_tab) {
+            var coursesContainer = $('#courses_container');
+            if (coursesContainer.length) {
+                $.post('{% url_from_constant '_courses' 'COURSES_GRID'%}', {offset: offset, actual_tab: actual_tab},
+                        function(data){
+                            coursesContainer.append(data);
+                            coursesOffset += {{ offset }};
+                        });
+            }
+        }
+
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() == $(document).height()) {
+               loadNextCourses(coursesOffset, actulaTab);
+            }
+        });
+    </script>
 {% endblock %}

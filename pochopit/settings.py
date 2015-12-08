@@ -110,9 +110,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+STATIC_ROOT = BASE_DIR + "/static/"
+
 STATIC_URL = '/static/'
 
-LOCALE_PATHS = (BASE_DIR + '/locale', )
+LOCALE_PATHS = (BASE_DIR + '/locale',)
 
 LOGIN_URL = '/login'
 
@@ -166,7 +168,7 @@ BOOTSTRAP3 = {
     'success_css_class': 'has-success',
 
     # Renderers (only set these if you have studied the source and understand the inner workings)
-    'formset_renderers':{
+    'formset_renderers': {
         'default': 'bootstrap3.renderers.FormsetRenderer',
     },
     'form_renderers': {

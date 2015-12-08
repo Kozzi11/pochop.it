@@ -1,0 +1,9 @@
+<ul class="context-nav-bar pull-left">
+    {% for item in context_bar_items %}
+        {% if item.url %}
+            <li><a href="#{{ item.url }}">{{ item.title }}</a></li>
+        {% else %}
+            <li><span>{{ item.title }}</span></li>
+        {% endif %}
+    {% endfor %}
+</ul>

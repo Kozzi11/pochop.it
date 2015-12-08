@@ -1,0 +1,9 @@
+.course-grid-item {
+    cursor: pointer;
+}
+.course-grid-item-container {
+    height: 150px;
+    background: #cdcdcd;
+    margin: 8px;
+    padding: 8px;
+}

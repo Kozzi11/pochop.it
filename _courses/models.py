@@ -8,19 +8,29 @@ class Course(models.Model):
         on_delete=models.CASCADE,
     )
     title = models.CharField(max_length=254)
-    description = models.TextField(max_length=300)
+    description = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class UserCourse(models.Model):
+    user = models.ForeignKey(User)
+    course = models.ForeignKey(Course)
+    completed = models.BooleanField()
+    created = models.DateTimeField(auto_now_add=True)
 
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course)
     title = models.CharField(max_length=254)
     order = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
 
 
 class Slide(models.Model):
     lesson = models.ForeignKey(Lesson)
     title = models.CharField(max_length=254)
     order = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
 
 
 class ComponentData(models.Model):
@@ -45,4 +55,4 @@ class ComponentConfig(models.Model):
 
     componentData = models.ForeignKey(ComponentData)
     key = models.IntegerField()
-    value = models.CharField(max_length=254)
+    value = models.TextField()

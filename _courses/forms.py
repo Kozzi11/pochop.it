@@ -4,6 +4,8 @@ from _courses.models import Course, Lesson, Slide, ComponentData
 
 
 class CourseForm(forms.ModelForm):
+    description = forms.CharField(widget=TinyMCE(attrs={'rows': 25}), required=False)
+
     class Meta:
         model = Course
         fields = [
