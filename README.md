@@ -13,6 +13,7 @@ Webove stranky spolku pochopit
 6. `pip install django-tinymce`
 7. pull projektu z [githubu](https://github.com/Kozzi11/pochop.it) 
 8. v jiz pulnutem projektu spustit v terminalu:
+  * `cp pochopit/settings.py.example pochopit/settings.py`
   * `python manage.py makemigrations`
   * `python manage.py migrate`
 9. vytvoreni super usera
