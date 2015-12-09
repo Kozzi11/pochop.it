@@ -25,7 +25,7 @@ SECRET_KEY = '*d^593=v_+df4jk$c7do%-@@8wu$zw0jr9+3)(zl^)wqjn#z59'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.pochopit.cz', 'pochopit.cz']
 
 
 # Application definition
