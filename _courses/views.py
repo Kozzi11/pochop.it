@@ -7,37 +7,45 @@ from django.contrib.auth import get_user
 from _components.models.ComponentBuilder import ComoponentBuilder
 from _courses import urls
 from _courses.forms import CourseForm, LessonForm, SlideForm
-from _courses.models import Course, Lesson, Slide, ComponentData
+from _courses.models import Course, Lesson, Slide, ComponentData, UserCourse
 from eztables.views import DatatablesView
 from pochopit.viewcomponents.context_bar_item import ContextBarItem
 from pochopit.viewcomponents.tab import Tab
 from pochopit.viewcomponents.tab_group import TabGroup
 from pochopit.viewcomponents.tabs_manager import TabsManager
 
-
 COURSE_GRID_STEP = 7
 
 
 def courses(request):
+    user = get_user(request)
     tabs_manager = TabsManager(request)
     tabs_manager.add_tab(
         Tab(_('All'), reverse(urls.COURSES_ALL), urls.COURSES_ALL, is_active=True)
     )
+
+    in_progress_course_count = UserCourse.objects.filter(user=user, completed=False).count()
     tabs_manager.add_tab(
-        Tab(_('In progress'), reverse(urls.COURSES_IN_PROGRESS), urls.COURSES_IN_PROGRESS, buddge_number=2)
-    )
-    tabs_manager.add_tab(
-        Tab(_('Completed'), reverse(urls.COURSES_COMPLETED), urls.COURSES_COMPLETED, buddge_number=8)
-    )
-    tabs_manager.add_tab(
-        Tab(_('My courses'), reverse(urls.COURSES_MY), urls.COURSES_MY, buddge_number=3)
+        Tab(_('In progress'), reverse(urls.COURSES_IN_PROGRESS), urls.COURSES_IN_PROGRESS,
+            buddge_number=in_progress_course_count)
     )
 
-    return render(request, '_courses/courses_base.html', {'tabs': tabs_manager.get_tabs()})
+    completed_course_count = UserCourse.objects.filter(user=user, completed=True).count()
+    tabs_manager.add_tab(
+        Tab(_('Completed'), reverse(urls.COURSES_COMPLETED), urls.COURSES_COMPLETED,
+            buddge_number=completed_course_count)
+    )
+
+    my_course_count = Course.objects.filter(author=user).count()
+    tabs_manager.add_tab(
+        Tab(_('My courses'), reverse(urls.COURSES_MY), urls.COURSES_MY, buddge_number=my_course_count)
+    )
+
+    return render(request, '_courses/courses_base.html', {'tabs': tabs_manager.get_tabs(), 'offset': COURSE_GRID_STEP})
 
 
 def all_courses(request):
-    return render(request, '_courses/all.html', {'offset': COURSE_GRID_STEP})
+    return render(request, '_courses/all.html')
 
 
 def in_progress_courses(request):
@@ -92,6 +100,19 @@ def delete_course(request, course_id):
 def course_description(request, course_id):
     course = Course.objects.get(id=course_id)
     return render(request, '_courses/course/description.html', {'course': course})
+
+
+def course_enrol(request, course_id):
+    course = Course.objects.get(id=course_id)
+    user = get_user(request)
+    user_course = UserCourse()
+    user_course.course = course
+    user_course.user = user
+    user_course.completed = False
+    user_course.save()
+
+    url = reverse(urls.COURSES) + "#" + reverse(urls.COURSES_MY)
+    return HttpResponseRedirect(url)
 
 
 def edit_course(request, course_id):
@@ -315,7 +336,17 @@ def component_change_order(request, slide_id):
 
 def grid_courses(request):
     offset = int(request.POST['offset'])
-    course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
+    actual_tab = int(request.POST['actual_tab'])  # all=1, in_progress=2, completed=3
+    course_list = []
+
+    if actual_tab == 1:  # all
+        course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
+    elif actual_tab == 2:  # in-progress
+        user_course_list = UserCourse.objects.filter(user=get_user(request))[offset:offset + COURSE_GRID_STEP]
+        for user_course in user_course_list:
+            course_list.append(user_course.course)
+    elif actual_tab == 3:  # completed
+        course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
 
     return render(request, '_courses/course_grid.html', {'course_list': course_list})
 

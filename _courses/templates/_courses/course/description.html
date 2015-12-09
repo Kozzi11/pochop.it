@@ -1,1 +1,14 @@
-{{ course.description |safe }}
+{% load i18n %}
+{% load url_constants %}
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="{% url_from_constant '_courses' 'COURSE_ENROL' course.id %}" class="btn btn-primary btn pull-right">
+            <span class="glyphicon glyphicon-plus"></span> {% trans "Enroll in a course" %}
+        </a>
+    </div>
+</div>
+
+<div class="row spacer">
+   {{ course.description |safe }}
+</div>

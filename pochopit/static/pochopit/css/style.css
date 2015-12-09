@@ -3,8 +3,13 @@ html {
 }
 /* MENICKO */
 .navbar-brand {
-    padding: 13px 15px;
+    padding: 10px 15px;
 }
+
+.logo {
+    height: 30px;
+}
+
 .navbar-default .navbar-nav>li>a {
     font-weight: bold;
     color: #5a5a5a;
