@@ -17,6 +17,6 @@ Webove stranky spolku pochopit
   * `python manage.py migrate`
 9. vytvoreni super usera
   * `python manage.py createsuperuser`
-10. Na widlich je potreba jeste naistalovat getttext [navod](htps://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows)
+10. Na widlich je potreba jeste naistalovat getttext [navod](htps://docs.djangoproject.com/en/1.7/topics/i18n/translation/)
 11. spusteni severu bud pres *pycharm* nebo rucne: `manage.py runserver`
   * mozno predat *ip* a *port* viz : `runserver [port or address:port]`
