@@ -2,3 +2,5 @@
 .idea
 db.sqlite3
 __pycache__
+/static
+/pochopit/settings.py
