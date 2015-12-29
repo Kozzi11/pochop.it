@@ -1,0 +1,73 @@
+{% extends "pochopit/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load url_constants %}
+
+{% block title %}PochopIT{% endblock %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <a href="{% url_from_constant '_questions' 'ASK_QUESTION' %}" class="btn btn-primary pull-right" role="button">{% trans "Ask PochopIT members" %}</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <label for="srch-term">{% trans "Please, Try find the answer first :)" %}</label>
+                <div class="input-group">
+                     <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                     <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row spacer">
+        <div class="col-md-8 col-md-offset-2">
+            <div id="questions_container"></div>
+        </div>
+    </div>
+ </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var coursesOffset = 0;
+        var actulaTab = 0; // all=1, in_progress=2, completed=3
+
+        function loadNextCourses(offset) {
+            var coursesContainer = $('#questions_container');
+            if (coursesContainer.length) {
+                $.post('{% url_from_constant '_questions' 'QUESTIONS_GRID_DATA' %}', {offset: offset},
+                        function(data){
+                            coursesContainer.append(data);
+                            coursesOffset += 3;
+                        });
+            }
+        }
+
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() == $(document).height()) {
+               loadNextCourses(coursesOffset, actulaTab);
+            }
+        });
+        $(document).ready(function() {
+            loadNextCourses(0);
+            loadNextCourses(0);
+            loadNextCourses(0);
+            loadNextCourses(0);
+            loadNextCourses(0);
+            loadNextCourses(0);
+        });
+    </script>
+{% endblock %}

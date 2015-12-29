@@ -1,0 +1,103 @@
+{% extends "pochopit/base.html" %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load url_constants %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
+{% endblock %}
+{% block content %}
+<head>
+    {{ form.media }}
+</head>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form action="{% url_from_constant "_questions" "ASK_QUESTION" %}" method="post" class="form">
+                  {% csrf_token %}
+                  {% bootstrap_form form %}
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Save" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var selectedTags = [];
+        var autoCompleteDiv = null;
+        var tagHolder = $('<div/>', {id: 'tag-holder'});
+        var tagInput;
+
+        $(document).ready(function() {
+            tagInput = $('#id_tags');
+            tagInput.before(tagHolder);
+            tagInput.on('input', function() {
+                if (this.value && this.value.length > 0) {
+                    var that = this;
+                    var selectedTagsString = '';
+                    selectedTags.forEach(function(tag) {
+                        selectedTagsString += tag.id + ';';
+                    });
+                    $.post('{% url_from_constant '_questions' 'FIND_TAGS' %}', {search: this.value, tags: selectedTagsString}, function(data) {
+                        if (data) {
+                            if (autoCompleteDiv == null) {
+                                autoCompleteDiv = $('<div/>', {id: 'tag-autocomplete'});
+                                $(that).parent().append(autoCompleteDiv);
+                                autoCompleteDiv.outerWidth($(that).outerWidth());
+                            }
+                            autoCompleteDiv.html('<ul>' + data + '</ul>');
+                        }
+                    });
+                    $(that).focusout(function() {
+                        setTimeout(function() {
+                            removeAutoCompleteDiv();
+                        }, 120);
+                    });
+                } else {
+                    removeAutoCompleteDiv();
+                }
+            })
+        });
+
+        function removeAutoCompleteDiv() {
+            if (autoCompleteDiv != null) {
+                autoCompleteDiv.remove();
+                autoCompleteDiv = null;
+            }
+        }
+
+        function addTag(tagId, title) {
+            console.log(tagId, title);
+            selectedTags.push({id: tagId, title: title});
+            var tagsString = '';
+            selectedTags.forEach(function(tag) {
+                tagsString += '<span id="tag-' + tag.id +'" class="q-tag">' + tag.title +
+                        '<span class="glyphicon glyphicon-remove" onclick="removeTag(' + tag.id + ', this)"></span>' +
+                        '</span>';
+            });
+            tagHolder.html(tagsString);
+            removeAutoCompleteDiv();
+            tagInput.val('');
+        }
+
+        function removeTag(tagId, element) {
+            $(element).parent().remove();
+            var index = 0;
+            var i = 0;
+            selectedTags.forEach(function(tag) {
+                if (tag.id == tagId) {
+                    index = i;
+                }
+                i++;
+            });
+            selectedTags.splice(index, 1);
+        }
+    </script>
+{% endblock %}

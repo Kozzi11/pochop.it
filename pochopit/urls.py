@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^', include('_auth.urls')),
     url(r'^', include('_courses.urls')),
     url(r'^', include('_components.urls')),
+    url(r'^', include('_questions.urls')),
     url('^', include('django.contrib.auth.urls')),
     url(r'^djangojs/', include('djangojs.urls')),
     url(r'^tinymce/', include('tinymce.urls')),
