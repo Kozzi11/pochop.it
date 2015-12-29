@@ -51,7 +51,7 @@
                 $.post('{% url_from_constant '_questions' 'QUESTIONS_GRID_DATA' %}', {offset: offset},
                         function(data){
                             coursesContainer.append(data);
-                            coursesOffset += 3;
+                            coursesOffset += 10;
                         });
             }
         }
@@ -62,11 +62,6 @@
             }
         });
         $(document).ready(function() {
-            loadNextCourses(0);
-            loadNextCourses(0);
-            loadNextCourses(0);
-            loadNextCourses(0);
-            loadNextCourses(0);
             loadNextCourses(0);
         });
     </script>

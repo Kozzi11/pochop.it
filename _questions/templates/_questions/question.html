@@ -1,40 +1,41 @@
 {% load url_constants %}
-<div class="grid-item">
-    <div class="grid-item-container">
-        <table>
-            <tr>
-                <td>
-                    <div class="info-container">
-                        <div class="info answers">
-                            <span class="i-value">5</span>
-                            <span class="i-label">odpovědí</span>
+{% for question in question_list %}
+    <div class="grid-item">
+        <div class="grid-item-container">
+            <table>
+                <tr>
+                    <td>
+                        <div class="info-container">
+                            <div class="info answers">
+                                <span class="i-value">5</span>
+                                <span class="i-label">odpovědí</span>
+                            </div>
+                            <div class="info votes">
+                                <span class="i-value">10</span>
+                                <span class="i-label">hlasů</span>
+                            </div>
+                            <div class="info views">
+                                <span class="i-value">36</span>
+                                <span class="i-label">shlídnutí</span>
+                            </div>
                         </div>
-                        <div class="info votes">
-                            <span class="i-value">10</span>
-                            <span class="i-label">hlasů</span>
+                    </td>
+                    <td class="q-content-td">
+                        <div>
+                            <a href="#" class="q-title">{{ question.title }}</a>
+                            <span class="q-date">Feb 12 | <a>Ankit Bhatt</a></span>
+                            <div class="q-text">
+                                {{ question.text|safe }}
+                            </div>
                         </div>
-                        <div class="info views">
-                            <span class="i-value">36</span>
-                            <span class="i-label">shlídnutí</span>
+                        <div class="q-tags-row">
+                            {% for tag in question.tag_set.all %}
+                                <span class="q-tag"><a>{{ tag.title }}</a></span>
+                            {% endfor %}
                         </div>
-                    </div>
-                </td>
-                <td class="q-content-td">
-                    <div>
-                        <a href="#" class="q-title">Titulek otázky</a>
-                        <span class="q-date">Feb 12 | <a>Ankit Bhatt</a></span>
-                        <div class="q-text">
-If user input is inserted without modification into an SQL query, then the application becomes vulnerable to SQL injection, like in the following example: $unsafe_variable = $_POST['user_input']; m …
-                        </div>
-                    </div>
-                    <div class="q-tags-row">
-                        <span class="q-tag"><a>php</a></span>
-                        <span class="q-tag"><a>encoding</a></span>
-                        <span class="q-tag"><a>mysql</a></span>
-                        <span class="q-tag"><a>memory</a></span>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-</div>
+{% endfor %}

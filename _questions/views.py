@@ -13,7 +13,9 @@ def questions(request):
 
 
 def questions_grid_data(request):
-    return render(request, '_questions/question.html')
+    offset = int(request.POST['offset'])
+    question_list = Question.objects.all()[offset:offset + 10]
+    return render(request, '_questions/question.html', {'question_list': question_list})
 
 
 def find_tags(request):
@@ -30,9 +32,10 @@ def ask_question(request):
     if request.method == 'POST':
         question = Question()
         question.user = get_user(request)
-
         form = QuestionForm(request.POST, instance=question)
         form.save()
+        added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
+        question.tag_set = Tag.objects.filter(id__in=added_tags_ids)
         question.text = form.cleaned_data['text']
         question.save()
         url = reverse(urls.QUESTIONS)

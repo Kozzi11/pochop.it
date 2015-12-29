@@ -5,7 +5,7 @@ from _questions.models import Question, Tag
 
 class QuestionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=False)
-    tags = forms.CharField()
+    tags = forms.CharField(required=False)
 
     class Meta:
         model = Question

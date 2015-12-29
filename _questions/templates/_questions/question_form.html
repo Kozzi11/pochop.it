@@ -22,6 +22,7 @@
                             {% trans "Save" %}
                         </button>
                     </div>
+                    <input type="hidden" id="added_tags" name="added_tags"/>
                 </form>
             </div>
         </div>
@@ -34,18 +35,16 @@
         var autoCompleteDiv = null;
         var tagHolder = $('<div/>', {id: 'tag-holder'});
         var tagInput;
+        var addedTagsInput;
 
         $(document).ready(function() {
+            addedTagsInput = $('#added_tags');
             tagInput = $('#id_tags');
             tagInput.before(tagHolder);
             tagInput.on('input', function() {
                 if (this.value && this.value.length > 0) {
                     var that = this;
-                    var selectedTagsString = '';
-                    selectedTags.forEach(function(tag) {
-                        selectedTagsString += tag.id + ';';
-                    });
-                    $.post('{% url_from_constant '_questions' 'FIND_TAGS' %}', {search: this.value, tags: selectedTagsString}, function(data) {
+                    $.post('{% url_from_constant '_questions' 'FIND_TAGS' %}', {search: this.value, tags: addedTagsInput.val()}, function(data) {
                         if (data) {
                             if (autoCompleteDiv == null) {
                                 autoCompleteDiv = $('<div/>', {id: 'tag-autocomplete'});
@@ -74,7 +73,6 @@
         }
 
         function addTag(tagId, title) {
-            console.log(tagId, title);
             selectedTags.push({id: tagId, title: title});
             var tagsString = '';
             selectedTags.forEach(function(tag) {
@@ -84,6 +82,7 @@
             });
             tagHolder.html(tagsString);
             removeAutoCompleteDiv();
+            updateSelectedTags();
             tagInput.val('');
         }
 
@@ -98,6 +97,15 @@
                 i++;
             });
             selectedTags.splice(index, 1);
+            updateSelectedTags();
+        }
+
+        function updateSelectedTags() {
+            var selectedTagsString = '';
+            selectedTags.forEach(function(tag) {
+                selectedTagsString += tag.id + ';';
+            });
+            addedTagsInput.val(selectedTagsString);
         }
     </script>
 {% endblock %}
