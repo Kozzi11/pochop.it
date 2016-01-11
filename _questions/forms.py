@@ -1,6 +1,6 @@
 from django import forms
 from tinymce.widgets import TinyMCE
-from _questions.models import Question, Tag
+from _questions.models import Question, Tag, Answer
 
 
 class QuestionForm(forms.ModelForm):
@@ -11,6 +11,16 @@ class QuestionForm(forms.ModelForm):
         model = Question
         fields = [
             'title',
+            'text',
+        ]
+
+
+class AnswerForm(forms.ModelForm):
+    text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=False)
+
+    class Meta:
+        model = Answer
+        fields = [
             'text',
         ]
 

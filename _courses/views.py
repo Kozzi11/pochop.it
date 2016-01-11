@@ -115,6 +115,18 @@ def course_enrol(request, course_id):
     return HttpResponseRedirect(url)
 
 
+def course_open(request, course_id):
+    course = Course.objects.get(id=course_id)
+    tabs_manager = TabsManager(request)
+
+    for lesson in course.lesson_set.all():
+        tabs_manager.add_tab(
+            Tab(lesson.title, reverse(urls.COURSES_ALL), urls.COURSES_ALL, is_active=True)
+        )
+
+    return render(request, '_courses/courses_base.html', {'tabs': tabs_manager.get_tabs()})
+
+
 def edit_course(request, course_id):
     tabs_manager = TabsManager(request)
     course = Course.objects.get(id=course_id)
@@ -348,7 +360,7 @@ def grid_courses(request):
     elif actual_tab == 3:  # completed
         course_list = Course.objects.all()[offset:offset + COURSE_GRID_STEP]
 
-    return render(request, '_courses/course_grid.html', {'course_list': course_list})
+    return render(request, '_courses/course_all_grid.html', {'course_list': course_list})
 
 
 class CourseDatatablesView(DatatablesView):

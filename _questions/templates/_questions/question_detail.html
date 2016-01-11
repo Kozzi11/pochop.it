@@ -1,0 +1,133 @@
+{% extends "pochopit/base.html" %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load url_constants %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
+{% endblock %}
+{% block content %}
+<head>
+    {{ form.media }}
+</head>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+            <h4>Otázka</h4>
+                <div id="questions_container">
+                    <div class="grid-item">
+                        <div class="grid-item-container">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="info-container">
+                                            <div class="info">
+                                                <a href="{% url_from_constant "_questions" "VOTE_UP_QUESTION" question.id %}"
+                                                   class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>
+                                                </a>
+                                            </div>
+                                            <div class="info votes">
+                                                <span class="i-value">{{ question.votes }}</span>
+                                            </div>
+                                            <div class="info">
+                                                <a href="{% url_from_constant "_questions" "VOTE_DOWN_QUESTION" question.id %}"
+                                                   class="btn btn-default"><span class="glyphicon glyphicon-minus"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="q-content-td">
+                                        <div>
+                                            <span class="q-title">{{ question.title }}</span>
+                                            <span class="q-date">{{ question.created|date:"M j" }} | <a>Ankit Bhatt</a></span>
+                                            <div class="q-text">
+                                                {{ question.text|safe }}
+                                            </div>
+                                        </div>
+                                        <div class="q-tags-row">
+                                            {% for tag in question.tag_set.all %}
+                                                <span class="q-tag"><a>{{ tag.title }}</a></span>
+                                            {% endfor %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="comment_container">
+                    {% for comment in question.questioncomment_set.all %}
+                        <div class="comment">
+                            {{ comment.text }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+            <div class="row spacer">
+                <div class="col-md-8 col-md-offset-2">
+                    <h4>Odpovědi</h4>
+                    {% for answer in question.answer_set.all %}
+                        <div id="questions_container">
+                            <div class="grid-item">
+                                <div class="grid-item-container">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="info-container">
+                                                    <div class="info">
+                                                        <a href="{% url_from_constant "_questions" "VOTE_UP_ANSWER" answer.id %}"
+                                                           class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="info votes">
+                                                        <span class="i-value">{{ answer.votes }}</span>
+                                                    </div>
+                                                    <div class="info">
+                                                        <a href="{% url_from_constant "_questions" "VOTE_DOWN_ANSWER" answer.id %}"
+                                                           class="btn btn-default"><span class="glyphicon glyphicon-minus"></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="q-content-td">
+                                                <div>
+                                                    <span class="q-date">{{ answer.created|date:"M j" }} | <a>Ankit Bhatt</a></span>
+                                                    <div class="q-text">
+                                                        {{ answer.text|safe }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="comment_container">
+                            {% for comment in answer.answercomment_set.all %}
+                                <div class="comment">
+                                    {{ comment.text }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% if not user_aleready_aswered %}
+            <div class="row spacer">
+                <div class="col-md-8 col-md-offset-2">
+                    <form action="{% url_from_constant "_questions" "VIEW_QUESTION" question.id %}" method="post" class="form">
+                      {% csrf_token %}
+                      {% bootstrap_form form %}
+                        <div class="form-group text-right">
+                            <button type="submit" class="btn btn-primary">
+                                {% trans "Save" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -57,7 +57,7 @@
                     $(that).focusout(function() {
                         setTimeout(function() {
                             removeAutoCompleteDiv();
-                        }, 120);
+                        }, 500); //todo - vymyslet jinak
                     });
                 } else {
                     removeAutoCompleteDiv();
@@ -73,6 +73,7 @@
         }
 
         function addTag(tagId, title) {
+            console.log(tagId, title);
             selectedTags.push({id: tagId, title: title});
             var tagsString = '';
             selectedTags.forEach(function(tag) {

@@ -4,7 +4,7 @@
 .grid-item-container {
     min-height: 150px;
     margin: 8px 0;
-    padding: 8px;
+    padding: 8px 0;
 }
 .grid-item table {
     width: 100%;

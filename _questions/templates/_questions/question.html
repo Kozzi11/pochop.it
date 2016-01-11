@@ -7,23 +7,23 @@
                     <td>
                         <div class="info-container">
                             <div class="info answers">
-                                <span class="i-value">5</span>
+                                <span class="i-value">{{ question.answer_set.count }}</span>
                                 <span class="i-label">odpovědí</span>
                             </div>
                             <div class="info votes">
-                                <span class="i-value">10</span>
+                                <span class="i-value">{{ question.votes }}</span>
                                 <span class="i-label">hlasů</span>
                             </div>
                             <div class="info views">
-                                <span class="i-value">36</span>
-                                <span class="i-label">shlídnutí</span>
+                                <span class="i-value">{{ question.views }}</span>
+                                <span class="i-label">zobrazeno</span>
                             </div>
                         </div>
                     </td>
                     <td class="q-content-td">
                         <div>
-                            <a href="#" class="q-title">{{ question.title }}</a>
-                            <span class="q-date">Feb 12 | <a>Ankit Bhatt</a></span>
+                            <a href="{% url_from_constant "_questions" "VIEW_QUESTION" question.id  %}" class="q-title">{{ question.title }}</a>
+                            <span class="q-date">{{ question.created|date:"M j" }} | <a>{{ user.first_name }} {{ user.last_name }}</a></span>
                             <div class="q-text">
                                 {{ question.text|safe }}
                             </div>

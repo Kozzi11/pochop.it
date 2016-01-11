@@ -18,6 +18,7 @@ COURSE_LESSONS = 'course_lessons'
 COURSE_DELETE = 'course_delete'
 COURSE_DESCRIPTION = 'course_description'
 COURSE_ENROL = 'course_enrol'
+COURSE_OPEN = 'course_open'
 
 LESSONS_DATA = 'lessons_data'
 LESSON_NEW = 'lesson_new'
@@ -53,6 +54,7 @@ urlpatterns = [
     url(r'^course/(.*)/delete$', views.delete_course, name=COURSE_DELETE),
     url(r'^course/(.*)/description', views.course_description, name=COURSE_DESCRIPTION),
     url(r'^course/(.*)/enrol', views.course_enrol, name=COURSE_ENROL),
+    url(r'^course/(.*)/open', views.course_open, name=COURSE_OPEN),
 
     url(r'^lessons/(.*)/data$', LessonDatatablesView.as_view(), name=LESSONS_DATA),
     url(r'^lesson/(.*)/new$', views.new_lesson, name=LESSON_NEW),

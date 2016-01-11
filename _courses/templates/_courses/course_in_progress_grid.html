@@ -1,0 +1,10 @@
+{% load url_constants %}
+{% for course in course_list %}
+    <div class="row col-md-6">
+        <a class="course-grid-item" href="#{% url_from_constant '_courses' 'COURSE_OPEN' course.id%}">
+            <div class="course-grid-item-container">
+                {{ course.title }}
+            </div>
+        </a>
+    </div>
+{% endfor %}
