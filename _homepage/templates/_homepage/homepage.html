@@ -7,12 +7,22 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
+    <div id="motto-c" class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h1 class="text-center" style="color:#525252;">
-                „Pochop IT, pochop budoucnost.“<br>
+            <h1 id="motto" class="text-center" style="color:#ffffff;line-height: 57px;">
+                 Nebuď jen konzumentem moderních technologíí
+                <br>
+                <span style="color:#69BF10">TVOŘ JE</span>
             </h1>
         </div>
     </div>
  </div>
+<script>
+$(document).ready(function() {
+    var motto = $('#motto');
+    var marginTop = (($(document).outerHeight() - 100) / 2) - motto.outerHeight();
+    $('#motto-c').css({marginTop: marginTop});
+    motto.css({color: '#525252'});
+});
+</script>
 {% endblock %}

@@ -14,17 +14,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-            <h4>Otázka</h4>
+            <h4>{% trans "Question" %}</h4>
                 <div id="questions_container">
                     <div class="grid-item">
                         <div class="grid-item-container">
                             <table>
                                 <tr>
-                                    <td>
+                                    <td style="vertical-align: top;">
                                         <div class="info-container">
                                             <div class="info">
                                                 <a href="{% url_from_constant "_questions" "VOTE_UP_QUESTION" question.id %}"
-                                                   class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>
+                                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-up"></span>
                                                 </a>
                                             </div>
                                             <div class="info votes">
@@ -32,7 +32,7 @@
                                             </div>
                                             <div class="info">
                                                 <a href="{% url_from_constant "_questions" "VOTE_DOWN_QUESTION" question.id %}"
-                                                   class="btn btn-default"><span class="glyphicon glyphicon-minus"></span>
+                                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span>
                                                 </a>
                                             </div>
                                         </div>
@@ -40,7 +40,7 @@
                                     <td class="q-content-td">
                                         <div>
                                             <span class="q-title">{{ question.title }}</span>
-                                            <span class="q-date">{{ question.created|date:"M j" }} | <a>Ankit Bhatt</a></span>
+                                            <span class="q-date">{{ question.created|date:"j. M" }} | <a href="#">{{ user.first_name }} {{ user.last_name }}</a></span>
                                             <div class="q-text">
                                                 {{ question.text|safe }}
                                             </div>
@@ -67,18 +67,20 @@
         </div>
             <div class="row spacer">
                 <div class="col-md-8 col-md-offset-2">
-                    <h4>Odpovědi</h4>
+                {% if question.answer_set.count %}
+                    <h4>{% trans "Answers" %}</h4>
+                {% endif %}
                     {% for answer in question.answer_set.all %}
                         <div id="questions_container">
                             <div class="grid-item">
                                 <div class="grid-item-container">
                                     <table>
                                         <tr>
-                                            <td>
+                                            <td style="vertical-align: top;">
                                                 <div class="info-container">
                                                     <div class="info">
                                                         <a href="{% url_from_constant "_questions" "VOTE_UP_ANSWER" answer.id %}"
-                                                           class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>
+                                                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-up"></span>
                                                         </a>
                                                     </div>
                                                     <div class="info votes">
@@ -86,14 +88,14 @@
                                                     </div>
                                                     <div class="info">
                                                         <a href="{% url_from_constant "_questions" "VOTE_DOWN_ANSWER" answer.id %}"
-                                                           class="btn btn-default"><span class="glyphicon glyphicon-minus"></span>
+                                                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="q-content-td">
                                                 <div>
-                                                    <span class="q-date">{{ answer.created|date:"M j" }} | <a>Ankit Bhatt</a></span>
+                                                    <span class="q-date">{{ answer.created|date:"j. M" }} | <a href="#">{{ answer.user.first_name }} {{ answer.user.last_name }}</a></span>
                                                     <div class="q-text">
                                                         {{ answer.text|safe }}
                                                     </div>

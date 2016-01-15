@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-08 14:43+0100\n"
+"POT-Creation-Date: 2016-01-14 22:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,6 +70,9 @@ msgstr "Smazat"
 #: .\_courses\templates\_courses\course\main.html:22
 #: .\_courses\templates\_courses\lesson\main.html:18
 #: .\_courses\templates\_courses\slide\main.html:18
+#: .\_questions\templates\_questions\question_detail.html:127
+#: .\_questions\templates\_questions\question_form.html:22
+#: .\_questions\templates\_questions\tag_form.html:22
 msgid "Save"
 msgstr "Uložit"
 
@@ -82,7 +85,7 @@ msgid "Add new lesson"
 msgstr "Přidat novou lekci"
 
 #: .\_courses\templates\_courses\course\lessons.html:16 .\_courses\views.py:70
-#: .\_courses\views.py:188
+#: .\_courses\views.py:200
 msgid "Lesson"
 msgstr "Lekce"
 
@@ -122,51 +125,90 @@ msgstr "Mé kurzy"
 msgid "New course"
 msgstr "Mé kurzy"
 
-#: .\_courses\views.py:77 .\_courses\views.py:195 .\_courses\views.py:248
+#: .\_courses\views.py:77 .\_courses\views.py:207 .\_courses\views.py:260
 msgid "Slide"
 msgstr "Slide"
 
-#: .\_courses\views.py:82 .\_courses\views.py:200 .\_courses\views.py:253
-#: .\_courses\views.py:306
+#: .\_courses\views.py:82 .\_courses\views.py:212 .\_courses\views.py:265
+#: .\_courses\views.py:318
 msgid "Component"
 msgstr "Komponenta"
 
-#: .\_courses\views.py:217
+#: .\_courses\views.py:229
 msgid "Main"
 msgstr "Obecné"
 
-#: .\_homepage\views.py:8
-msgid "test prekladu"
-msgstr ""
+#: .\_questions\forms.py:9
+msgid "Concise description of the problem"
+msgstr "Stručný ale výstižný popis problému"
 
-#: .\pochopit\templates\pochopit\base.html:64
-msgid "Courses"
-msgstr "Kurzy"
+#: .\_questions\forms.py:11
+msgid "Tags"
+msgstr "Tagy"
 
-#: .\pochopit\templates\pochopit\base.html:69
+#: .\_questions\forms.py:20
+msgid "Question heading"
+msgstr "Nadpis otázky"
+
+#: .\_questions\forms.py:26
+msgid "Your answer"
+msgstr "Tvoje odpověď"
+
+#: .\_questions\templates\_questions\question_detail.html:17
+msgid "Question"
+msgstr "Otázka"
+
+#: .\_questions\templates\_questions\question_detail.html:71
+msgid "Answers"
+msgstr "Odpovědi"
+
+#: .\_questions\templates\_questions\questions.html:18
+msgid "Ask PochopIT members"
+msgstr "Polož otázku"
+
+#: .\_questions\templates\_questions\questions.html:25
+msgid "Please, Try find the answer first :)"
+msgstr "Pokus se najít odpověď"
+
+#: .\_questions\templates\_questions\questions.html:27
+msgid "Search"
+msgstr "Hledat"
+
+#: .\_questions\views.py:46
+msgid "Concise description of the problem must be specified"
+msgstr "Stručný popis problému musí být vyplněn"
+
+#: .\pochopit\templates\pochopit\base.html:65
+msgid "About"
+msgstr "Kdo jsme"
+
+#: .\pochopit\templates\pochopit\base.html:66
+#: .\pochopit\templates\pochopit\base.html:82
+msgid "Questions"
+msgstr "Poraď"
+
+#: .\pochopit\templates\pochopit\base.html:71
 msgid "Settings"
 msgstr "Nastavení"
 
-#: .\pochopit\templates\pochopit\base.html:73
+#: .\pochopit\templates\pochopit\base.html:75
 msgid "My account"
 msgstr "Můj účet"
 
-#: .\pochopit\templates\pochopit\base.html:74
+#: .\pochopit\templates\pochopit\base.html:76
 msgid "Sign out"
 msgstr "Odhlásit"
 
-#: .\pochopit\templates\pochopit\base.html:80
-msgid "About"
-msgstr "O nás"
-
-#: .\pochopit\templates\pochopit\base.html:81
-msgid "Contact"
-msgstr "Kontakt"
-
-#: .\pochopit\templates\pochopit\base.html:85
+#: .\pochopit\templates\pochopit\base.html:86
 msgid "Sign up"
 msgstr "Registrovat"
 
-#: .\pochopit\templates\pochopit\base.html:88
+#: .\pochopit\templates\pochopit\base.html:89
 msgid "Sign in"
 msgstr "Přihlásit"
+
+#~ msgid "Courses"
+#~ msgstr "Kurzy"
+
+#~ msgid "Contact"
+#~ msgstr "Kontakt"

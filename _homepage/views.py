@@ -5,8 +5,11 @@ from django.contrib.auth.decorators import login_required
 
 
 def homepage(request):
-    _("test prekladu")
     return render(request, '_homepage/homepage.html')
+
+
+def about(request):
+    return render(request, '_homepage/about.html')
 
 
 def resticted_acces(request):

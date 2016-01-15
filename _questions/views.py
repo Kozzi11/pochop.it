@@ -6,6 +6,7 @@ from django.shortcuts import render
 from _questions import urls
 from _questions.forms import QuestionForm, TagForm, AnswerForm
 from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer
+from django.utils.translation import ugettext as _
 
 
 def questions(request):
@@ -33,13 +34,16 @@ def ask_question(request):
         question = Question()
         question.user = get_user(request)
         form = QuestionForm(request.POST, instance=question)
-        form.save()
-        added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
-        question.tag_set = Tag.objects.filter(id__in=added_tags_ids)
-        question.text = form.cleaned_data['text']
-        question.save()
-        url = reverse(urls.QUESTIONS)
-        return HttpResponseRedirect(url)
+        if request.POST['text']:
+            form.save()
+            added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
+            question.tag_set = Tag.objects.filter(id__in=added_tags_ids)
+            question.text = form.cleaned_data['text']
+            question.save()
+            url = reverse(urls.QUESTIONS)
+            return HttpResponseRedirect(url)
+        else:
+            form.add_error('text', _("Concise description of the problem must be specified"))
     else:
         form = QuestionForm()
 
@@ -54,10 +58,13 @@ def view_question(request, question_id):
         answer.user = user
         answer.question = question
         form = AnswerForm(request.POST, instance=answer)
-        form.save()
-        # answer.text = form.cleaned_data['text']
-        url = reverse(urls.VIEW_QUESTION, args=(question.id,))
-        return HttpResponseRedirect(url)
+        if request.POST['text']:
+            form.save()
+            # answer.text = form.cleaned_data['text']
+            url = reverse(urls.VIEW_QUESTION, args=(question.id,))
+            return HttpResponseRedirect(url)
+        else:
+            form.add_error('text', _("Answer was not filed"))
     else:
         question.views += 1
         question.save()
