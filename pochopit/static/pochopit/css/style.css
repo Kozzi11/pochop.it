@@ -183,3 +183,17 @@ ul.context-nav-bar {
 .context-nav-bar li a {
     cursor: pointer;
 }
+
+/* Notifikace */
+
+#notif-counter {
+    background-color: #cc1f24;
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    min-width: 12px;
+    text-align: center;
+    top: 3px;
+    margin-left: 28px;
+    font-size: 10px;
+}

@@ -1,6 +1,7 @@
 from django import template
 from django.core.urlresolvers import reverse
 
+
 register = template.Library()
 
 
@@ -14,3 +15,4 @@ def url_from_constant(app, constant_name, *args):
 def urls_constant(app, constant_name):
     mod = __import__(app)
     return getattr(mod.urls, constant_name)
+

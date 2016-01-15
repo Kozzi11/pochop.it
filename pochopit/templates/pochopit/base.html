@@ -30,7 +30,6 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <title>{% block title %}PochopIT{% endblock %}</title>
     <script type="text/javascript" src="{% static "pochopit/js/jquery-1.11.3.min.js" %}" ></script>
     <script type="text/javascript" src="{% static "pochopit/js/jquery.bootstrap-autohidingnavbar.min.js" %}" ></script>
     <script src="{% static "pochopit/js/jquery-ui.min.js" %}"></script>
@@ -41,6 +40,7 @@
     {% datatables_js %}
     {% datatables_bootstrap_js %}
     <link rel="stylesheet" type="text/css" href="{% static "pochopit/css/style.css" %}">
+    <title>{% block title %}PochopIT{% endblock %}</title>
     {% block links %}{% endblock %}
 </head>
 
@@ -65,6 +65,17 @@
                   <li><a href="{% url_from_constant '_questions' 'QUESTIONS' %}">{% trans "Questions" %}</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" onclick="loadMessages(this)">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-bell"></span>
+                    </a>
+                    {% if count_off_unseen_messages %}
+                        <div id="notif-counter">{{ count_off_unseen_messages }}</div>
+                    {% endif %}
+                    <ul class="dropdown-menu">
+                        <li><a href="#">{% trans "Show all messages" %}</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {% trans "Settings" %}
@@ -101,6 +112,11 @@
 <script>
 {#    $(".navbar-fixed-top").autoHidingNavbar();#}
     Django.jquery_csrf();
+    function loadMessages(element) {
+        if (!$(element).hasClass('open')) {
+            console.log(jQuery(element).find('.dropdown-menu').append('<li><a href="#">Test</a></li>'));
+        }
+    }
 </script>
 {% block scripts %}
 {% endblock %}

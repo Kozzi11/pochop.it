@@ -1,20 +1,33 @@
+from functools import reduce
+
 from django.contrib.auth import get_user
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-
 from _questions import urls
 from _questions.forms import QuestionForm, TagForm, AnswerForm
 from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer
 
 
 def questions(request):
-    return render(request, '_questions/questions.html')
+    if 'q' in request.GET:
+        search_query = request.GET['q']
+    else:
+        search_query = None
+    return render(request, '_questions/questions.html', {'search_query': search_query})
 
 
 def questions_grid_data(request):
+    # todo vyladit dotaz tak, aby skutecne vracel relevanti vysledky
     offset = int(request.POST['offset'])
-    question_list = Question.objects.all()[offset:offset + 10]
+    if 'q' in request.GET:
+        search_list = request.POST['s'].split(' ')
+        question_list = Question.objects.filter(
+            reduce(lambda x, y: x | y, [Q(title__contains=item) for item in search_list]))[offset:offset + 10]
+    else:
+        question_list = Question.objects.all()[offset:offset + 10]
+
     return render(request, '_questions/question.html', {'question_list': question_list})
 
 
