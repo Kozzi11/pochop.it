@@ -1,0 +1,5 @@
+
+
+class URLS:
+    ABOUT = 'about'
+

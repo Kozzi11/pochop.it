@@ -1,0 +1,7 @@
+{% for notification in notifications %}
+    <li class="notification">
+        <a href="{{ notification.get_url }}">
+            {{ notification.get_notification_text|safe }}
+        </a>
+    </li>
+{% endfor %}

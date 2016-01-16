@@ -13,17 +13,56 @@
 </head>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <form action="{% url_from_constant "_questions" "ASK_QUESTION" %}"
-                  method="post" class="form">
+            <div class="col-md-6">
+                <h3> {% trans 'Original version' %} </h3>
+                <div class="form-group">
+                    <label class="control-label" for="id_title">Nadpis otázky</label>
+                    <input class="form-control" disabled="disabled" name="title" placeholder="{% trans 'Question heading' %}"
+                           required="required" title="" type="text" value="{{ question.title }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="id_text">{% trans 'Concise description of the problem' %}</label>
+                    <div style="height: 318px;border: 1px solid #CCCCCC;padding: 8px;">{{ question.text|safe }}</div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="id_tags">Tagy</label>
+                    <div id="tag-holder">
+                        {% for tag in question.tag_set.all %}
+                            <span id="tag-2" class="q-tag">
+                                {{ tag.title }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if revision %}
+                    <div class="form-group">
+                        <label class="control-label" style="margin-top: 34px;">{% trans 'Editor comment' %}</label>
+                        <textarea class="form-control" cols="40" disabled="disabled" placeholder="{% trans 'Editor comment' %}"
+                                  rows="4" title="">{{ revision.editor_comment }}</textarea>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h3> {% trans 'Edited version' %} </h3>
+                <form action="
+                {% if revision %}
+                    {% url_from_constant "_questions" "REVISION_QUESTION" question.id %}
+                {% else %}
+                    {% url_from_constant "_questions" "EDIT_QUESTION" question.id %}
+                {% endif %}" method="post" class="form">
                   {% csrf_token %}
-                  {% bootstrap_form form %}
+                  {% bootstrap_form form%}
                     <div class="form-group text-right">
                         <button type="submit" class="btn btn-primary">
-                            {% trans "Save" %}
+                            {% if revision %}
+                                {% trans "Approve" %}
+                            {% else %}
+                                {% trans "Submit for approval" %}
+                            {% endif %}
                         </button>
                     </div>
                     <input type="hidden" id="added_tags" name="added_tags"/>
+                    <input type="hidden" id="revision_id" name="revision_id" value="{{ revision.id }}"/>
                 </form>
             </div>
         </div>
@@ -40,8 +79,7 @@
 
         tagInput.val('');
         $(document).ready(function() {
-            addedTagsInput = $('#added_tags');
-            tagInput = $('#id_tags');
+            tagInput.val('');
             tagInput.before(tagHolder);
             {% for tag in tags %}
                 addTag({{ tag.id }}, '{{ tag.title }}');

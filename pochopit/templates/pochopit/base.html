@@ -74,7 +74,8 @@
                         <div id="notif-counter">{{ count_off_unseen_messages }}</div>
                     {% endif %}
                     <ul class="dropdown-menu">
-                        <li><a href="#">{% trans "Show all messages" %}</a></li>
+{#                        <li><a href="#">{% trans "Show all messages" %}</a></li> TODO - dodelat#}
+                        <li id="notif-loading">{% trans 'Loading...' %}</li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -104,8 +105,10 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    {% bootstrap_messages %}
     <div id="content">
+        <div class="container">
+            {% bootstrap_messages %}
+        </div>
         {% block content %}{% endblock %}
     </div>
 </body>
@@ -115,7 +118,14 @@
     Django.jquery_csrf();
     function loadMessages(element) {
         if (!$(element).hasClass('open')) {
-            console.log(jQuery(element).find('.dropdown-menu').append('<li><a href="#">Test</a></li>'));
+            $(element).find('.notification').remove();
+            var loadingHolder = $('#notif-loading');
+            loadingHolder.show();
+            $.post('{% url_from_constant '_messages' 'NOTIFICATION_LIST' %}', null, function(response) {
+                loadingHolder.hide();
+                $('#notif-counter').hide();
+                $(element).find('.dropdown-menu').append(response);
+            });
         }
     }
 </script>

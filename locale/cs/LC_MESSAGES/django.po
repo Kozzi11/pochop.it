@@ -185,7 +185,7 @@ msgstr "Kdo jsme"
 #: .\pochopit\templates\pochopit\base.html:66
 #: .\pochopit\templates\pochopit\base.html:82
 msgid "Questions"
-msgstr "Poraď"
+msgstr "Poradit"
 
 #: .\pochopit\templates\pochopit\base.html:71
 msgid "Settings"

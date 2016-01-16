@@ -1,0 +1,60 @@
+{% extends "pochopit/base.html" %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load url_constants %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
+{% endblock %}
+{% block content %}
+<head>
+    {{ form.media }}
+</head>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="q-title">{{ question.title }}</span>
+                <div style="margin-top: 12px;">{{ question.text|safe }}</div>
+            </div>
+        </div>
+        <div class="row spacer">
+            <div class="col-md-6">
+                <h3> {% trans 'Original answer' %} </h3>
+                <div class="form-group">
+                    <label class="control-label" for="id_text">{% trans 'Answer' %}</label>
+                    <div style="height: 318px;border: 1px solid #CCCCCC;padding: 8px;">{{ answer.text|safe }}</div>
+                </div>
+                {% if revision %}
+                    <div class="form-group">
+                        <label class="control-label">{% trans 'Editor comment' %}</label>
+                        <textarea class="form-control" cols="40" disabled="disabled" placeholder="{% trans 'Editor comment' %}"
+                                  rows="4" title="">{{ revision.editor_comment }}</textarea>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h3> {% trans 'Edited answer' %} </h3>
+                <form action="
+                {% if revision %}
+                    {% url_from_constant "_questions" "REVISION_ANSWER" answer.id %}
+                {% else %}
+                    {% url_from_constant "_questions" "EDIT_ANSWER" answer.id %}
+                {% endif %}" method="post" class="form">
+                  {% csrf_token %}
+                  {% bootstrap_form form%}
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary">
+                            {% if revision %}
+                                {% trans "Approve" %}
+                            {% else %}
+                                {% trans "Submit for approval" %}
+                            {% endif %}
+                        </button>
+                    </div>
+                    <input type="hidden" id="revision_id" name="revision_id" value="{{ revision.id }}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

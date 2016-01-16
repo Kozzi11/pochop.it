@@ -24,7 +24,7 @@
                                         <div class="info-container">
                                             <div class="info">
                                                 <a href="{% url_from_constant "_questions" "VOTE_UP_QUESTION" question.id %}"
-                                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-up"></span>
+                                                   class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up"></span>
                                                 </a>
                                             </div>
                                             <div class="info votes">
@@ -32,7 +32,7 @@
                                             </div>
                                             <div class="info">
                                                 <a href="{% url_from_constant "_questions" "VOTE_DOWN_QUESTION" question.id %}"
-                                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span>
+                                                   class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down"></span>
                                                 </a>
                                             </div>
                                         </div>
@@ -53,6 +53,19 @@
                                     </td>
                                 </tr>
                             </table>
+                            <div class="q-action-bar">
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                </a>
+                                <a href="{% url_from_constant '_questions' 'EDIT_QUESTION' question.id %}">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                                {% if question.has_active_revision %}
+                                    <a href="{% url_from_constant '_questions' 'REVISION_QUESTION' question.id %}">
+                                        <span class="glyphicon glyphicon-sunglasses"></span>
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,7 +93,7 @@
                                                 <div class="info-container">
                                                     <div class="info">
                                                         <a href="{% url_from_constant "_questions" "VOTE_UP_ANSWER" answer.id %}"
-                                                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-up"></span>
+                                                           class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up"></span>
                                                         </a>
                                                     </div>
                                                     <div class="info votes">
@@ -88,7 +101,7 @@
                                                     </div>
                                                     <div class="info">
                                                         <a href="{% url_from_constant "_questions" "VOTE_DOWN_ANSWER" answer.id %}"
-                                                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span>
+                                                           class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down"></span>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -103,6 +116,19 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <div class="q-action-bar">
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-comment"></span>
+                                        </a>
+                                        <a href="{% url_from_constant '_questions' 'EDIT_ANSWER' answer.id %}">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                        {% if answer.has_active_revision %}
+                                            <a href="{% url_from_constant '_questions' 'REVISION_ANSWER' answer.id %}">
+                                                <span class="glyphicon glyphicon-sunglasses"></span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +145,7 @@
         {% if not user_aleready_aswered %}
             <div class="row spacer">
                 <div class="col-md-8 col-md-offset-2">
-                    <form action="{% url_from_constant "_questions" "VIEW_QUESTION" question.id %}" method="post" class="form">
+                    <form action="{% url_from_constant "_questions" "VIEW_QUESTION" question.id question.title.split|join:"-"%}" method="post" class="form">
                       {% csrf_token %}
                       {% bootstrap_form form %}
                         <div class="form-group text-right">

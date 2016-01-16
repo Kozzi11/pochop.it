@@ -1,6 +1,6 @@
 from django import forms
 from tinymce.widgets import TinyMCE
-from _questions.models import Question, Tag, Answer
+from _questions.models import Question, Tag, Answer, QuestionRevision, AnswerRevision
 from django.utils.translation import ugettext as _
 
 
@@ -21,6 +21,34 @@ class QuestionForm(forms.ModelForm):
         }
 
 
+class QuestionRevisionForm(forms.ModelForm):
+    text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
+                           label=_("Concise description of the problem"), required=False)
+
+    tags = forms.CharField(required=False, label=_("Tags"))
+
+    editor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+
+    class Meta:
+        model = QuestionRevision
+        fields = [
+            'title',
+            'text',
+            'tags',
+        ]
+        labels = {
+            'title': _("Question heading")
+        }
+
+
+class QuestionSupervisorRevisionForm(QuestionRevisionForm):
+    supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionSupervisorRevisionForm, self).__init__(*args, **kwargs)
+        del self.fields['editor_comment']
+
+
 class AnswerForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=False,
                            label=_("Your answer"))
@@ -30,6 +58,28 @@ class AnswerForm(forms.ModelForm):
         fields = [
             'text',
         ]
+
+
+class AnswerRevisionForm(forms.ModelForm):
+    text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
+                           label=_("Answer"), required=False)
+
+    editor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+
+    class Meta:
+        model = AnswerRevision
+        fields = [
+            'text',
+            'editor_comment',
+        ]
+
+
+class AnswerSupervisorRevisionForm(AnswerRevisionForm):
+    supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(AnswerSupervisorRevisionForm, self).__init__(*args, **kwargs)
+        del self.fields['editor_comment']
 
 
 class TagForm(forms.ModelForm):

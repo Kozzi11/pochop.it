@@ -197,3 +197,10 @@ ul.context-nav-bar {
     margin-left: 28px;
     font-size: 10px;
 }
+#notif-loading {
+    text-align: center;
+}
+.alert {
+    margin-top: 0;
+    text-align: center;
+}

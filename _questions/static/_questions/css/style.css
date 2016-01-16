@@ -3,7 +3,7 @@
 }
 .grid-item-container {
     min-height: 150px;
-    margin: 8px 0;
+    margin: 8px 0 0 0;
     padding: 8px 0;
 }
 .grid-item table {
@@ -52,6 +52,12 @@
 .q-tag a:hover {
     text-decoration: none;
     color: inherit;
+}
+.q-action-bar {
+    text-align: right;
+}
+.q-action-bar a{
+    padding: 4px; 
 }
 #tag-autocomplete {
     position: absolute;

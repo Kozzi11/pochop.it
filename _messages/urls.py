@@ -1,9 +1,8 @@
 from django.conf.urls import url
 
 from . import views
-
-QUESTIONS = 'questions'
+from _messages.constants import URLS
 
 urlpatterns = [
-    # url(r'^questions/$', views.questions, name=QUESTIONS),
+    url(r'^messages/notif$', views.get_notification_list, name=URLS.NOTIFICATION_LIST),
 ]
