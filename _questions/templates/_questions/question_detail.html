@@ -75,9 +75,11 @@
                                                 </div>
                                             {% endfor %}
                                         </div>
-                                        <span class="contain-glyphicon" onclick="$('#textarea-question' + {{ question.id }}).toggle()">
-                                            <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans 'add comment' %}
-                                        </span>
+                                        {% if user.is_authenticated %}
+                                            <span class="contain-glyphicon" onclick="$('#textarea-question' + {{ question.id }}).toggle()">
+                                                <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans 'add comment' %}
+                                            </span>
+                                        {% endif %}
                                         <div id="textarea-question{{ question.id }}" class="comment_input_container">
                                             <textarea id="comment-question-input{{ question.id }}" placeholder="{% trans 'Type your additional question' %}"></textarea>
                                             <button class="btn btn-primary btn-sm pull-right" role="button"
@@ -172,7 +174,7 @@
                     {% endfor %}
                 </div>
             </div>
-        {% if not user_aleready_aswered %}
+        {% if show_answer_input %}
             <div class="row spacer">
                 <div class="col-md-8 col-md-offset-2">
                     <form action="{% url_from_constant "_questions" "VIEW_QUESTION" question.id question.title.split|join:"-"%}" method="post" class="form">

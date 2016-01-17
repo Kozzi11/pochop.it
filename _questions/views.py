@@ -1,4 +1,5 @@
 from functools import reduce
+import datetime
 from django.contrib import messages
 
 from django.contrib.auth import get_user
@@ -66,14 +67,17 @@ def ask_question(request):
 def view_question(request, question_id, question_title):
     question = Question.objects.get(id=question_id)
     user = get_user(request)
+    show_answer_input = False
 
-    user_aleready_aswered = question.answer_set.filter(user=user).count() > 0
-    if request.method == 'POST':
+    if request.user.is_authenticated():
+        show_answer_input = question.user_id != user.id and question.answer_set.filter(user=user).count() == 0
+
+    if request.user.is_authenticated() and request.method == 'POST':
         answer = Answer()
         answer.user = user
         answer.question = question
         form = AnswerForm(request.POST, instance=answer)
-        if user_aleready_aswered:
+        if show_answer_input is False:
             messages.add_message(request, messages.ERROR, _('You can add only one answer to question!'))
         else:
             if request.POST['text']:
@@ -95,7 +99,7 @@ def view_question(request, question_id, question_title):
         form = AnswerForm()
 
     return render(request, '_questions/question_detail.html',
-                  {'question': question, 'form': form, 'user_aleready_aswered': user_aleready_aswered})
+                  {'question': question, 'form': form, 'show_answer_input': show_answer_input})
 
 
 def edit_question(request, question_id):
@@ -272,53 +276,85 @@ def answer_add_comment(request):
 def vote_up_question(request, question_id):
     user = get_user(request)
     question = Question.objects.get(id=question_id)
-    user_not_voted = question.votequestion_set.filter(user=user).count() == 0
-    if user_not_voted:
-        vote = VoteQuestion()
-        vote.user = user
-        vote.up = True
-        vote.question = question
-
-        votequestion_set = question.votequestion_set.filter(minutes__lt=MinuteTransaction.MAX_AMOUNT_VOTE_QUESTION)
-        for votequestion in votequestion_set:
-            user_from = AppUtil.get_system_user()
-            user_to = votequestion.user
-            votequestion.minutes += MinuteTransaction.AMOUNT_VOTE_QUESTION
-            context_info = 'question_id:' + str(question.id) + ';' + 'vote_id:' + str(vote.id)
-            AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                        amount=MinuteTransaction.AMOUNT_VOTE_QUESTION,
-                                        trans_type=MinuteTransaction.TYPE_VOTE_QUESTION, context_info=context_info)
-            votequestion.save()
-
-        vote.save()
-        question.votes += 1
-        if question.paid is False and question.votes == MinuteTransaction.VOTE_COUNT_ADD_QUESTION:
-            user_from = AppUtil.get_system_user()
-            user_to = question.user
-            question.paid = True
-            context_info = 'question_id:' + str(question.id) + ';' + 'vote_id:' + str(vote.id)
-            AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                        amount=MinuteTransaction.AMOUNT_ADD_QUESTION,
-                                        trans_type=MinuteTransaction.TYPE_ADD_QUESTION, context_info=context_info)
-        question.save()
-
+    user_already_voted = question.votequestion_set.filter(user=user).count() != 0
+    count_of_vote_in_day = VoteQuestion.objects.filter(user=user,
+                                                       created__gt=datetime.datetime.today() - datetime.timedelta(
+                                                           days=1)).count()
     url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+
+    if user.id == question.user_id:
+        messages.add_message(request, messages.WARNING, _('You can not vote for your question!'))
+        return HttpResponseRedirect(url)
+
+    if user_already_voted:
+        messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
+        return HttpResponseRedirect(url)
+
+    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+        messages.add_message(request, messages.WARNING, _(
+            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        return HttpResponseRedirect(url)
+
+    vote = VoteQuestion()
+    vote.user = user
+    vote.up = True
+    vote.question = question
+
+    votequestion_set = question.votequestion_set.filter(
+        Q(minutes__lt=MinuteTransaction.MAX_AMOUNT_VOTE_QUESTION) & Q(up=True))
+    for votequestion in votequestion_set:
+        user_from = AppUtil.get_system_user()
+        user_to = votequestion.user
+        votequestion.minutes += MinuteTransaction.AMOUNT_VOTE_QUESTION
+        context_info = 'question_id:' + str(question.id) + ';' + 'vote_id:' + str(vote.id)
+        AppUtil.process_transaction(user_from=user_from, user_to=user_to,
+                                    amount=MinuteTransaction.AMOUNT_VOTE_QUESTION,
+                                    trans_type=MinuteTransaction.TYPE_VOTE_QUESTION, context_info=context_info)
+        votequestion.save()
+
+    vote.save()
+    question.votes += 1
+    if question.paid is False and question.votes == MinuteTransaction.VOTE_COUNT_ADD_QUESTION:
+        user_from = AppUtil.get_system_user()
+        user_to = question.user
+        question.paid = True
+        context_info = 'question_id:' + str(question.id) + ';' + 'vote_id:' + str(vote.id)
+        AppUtil.process_transaction(user_from=user_from, user_to=user_to,
+                                    amount=MinuteTransaction.AMOUNT_ADD_QUESTION,
+                                    trans_type=MinuteTransaction.TYPE_ADD_QUESTION, context_info=context_info)
+    question.save()
     return HttpResponseRedirect(url)
 
 
 def vote_down_question(request, question_id):
     user = get_user(request)
     question = Question.objects.get(id=question_id)
-    user_not_voted = question.votequestion_set.filter(user=user).count() == 0
-    if user_not_voted:
-        vote = VoteQuestion()
-        vote.user = user
-        vote.question = question
-        vote.up = False
-        vote.save()
-        question.votes -= 1
-        question.save()
+    user_already_voted = question.votequestion_set.filter(user=user).count() != 0
+    count_of_vote_in_day = VoteQuestion.objects.filter(user=user,
+                                                       created__gt=datetime.datetime.today() - datetime.timedelta(
+                                                           days=1)).count()
     url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+
+    if user.id == question.user_id:
+        messages.add_message(request, messages.WARNING, _('You can not vote for your question!'))
+        return HttpResponseRedirect(url)
+
+    if user_already_voted:
+        messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
+        return HttpResponseRedirect(url)
+
+    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+        messages.add_message(request, messages.WARNING, _(
+            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        return HttpResponseRedirect(url)
+
+    vote = VoteQuestion()
+    vote.user = user
+    vote.question = question
+    vote.up = False
+    vote.save()
+    question.votes -= 1
+    question.save()
     return HttpResponseRedirect(url)
 
 
@@ -326,38 +362,54 @@ def vote_up_answer(request, answer_id):
     user = get_user(request)
     answer = Answer.objects.get(id=answer_id)
     question = answer.question
-
-    user_not_voted = VoteAnswer.objects.filter(user=user, answer__in=question.answer_set.all()).count() == 0
-    if user_not_voted:
-        vote = VoteAnswer()
-        vote.user = user
-        vote.answer = answer
-        vote.up = True
-
-        voteanser_set = answer.voteanswer_set.filter(minutes__lt=MinuteTransaction.MAX_AMOUNT_VOTE_ANSWER)
-        for voteanswer in voteanser_set:
-            user_from = AppUtil.get_system_user()
-            user_to = voteanswer.user
-            voteanswer.minutes += MinuteTransaction.AMOUNT_VOTE_ANSWER
-            context_info = 'answer_id:' + str(answer.id) + ';' + 'vote_id:' + str(vote.id)
-            AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                        amount=MinuteTransaction.AMOUNT_VOTE_ANSWER,
-                                        trans_type=MinuteTransaction.TYPE_VOTE_ANSWER, context_info=context_info)
-            voteanswer.save()
-
-        vote.save()
-        answer.votes += 1
-        if answer.paid is False and answer.votes == MinuteTransaction.VOTE_COUNT_ADD_ANSWR:
-            user_from = AppUtil.get_system_user()
-            user_to = answer.user
-            answer.paid = True
-            context_info = 'answer_id:' + str(answer.id) + ';' + 'vote_id:' + str(vote.id)
-            AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                        amount=MinuteTransaction.AMOUNT_ADD_ANSWER,
-                                        trans_type=MinuteTransaction.TYPE_ADD_ANSWER, context_info=context_info)
-        answer.save()
-
     url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+
+    user_already_voted = answer.voteanswer_set.filter(user=user).count() != 0
+    count_of_vote_in_day = VoteAnswer.objects.filter(user=user,
+                                                     created__gt=datetime.datetime.today() - datetime.timedelta(
+                                                           days=1)).count()
+
+    if user.id == question.user_id:
+        messages.add_message(request, messages.WARNING, _('You can not vote for your answer!'))
+        return HttpResponseRedirect(url)
+
+    if user_already_voted:
+        messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
+        return HttpResponseRedirect(url)
+
+    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+        messages.add_message(request, messages.WARNING, _(
+            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        return HttpResponseRedirect(url)
+
+    vote = VoteAnswer()
+    vote.user = user
+    vote.answer = answer
+    vote.up = True
+
+    voteanser_set = answer.voteanswer_set.filter(
+        Q(minutes__lt=MinuteTransaction.MAX_AMOUNT_VOTE_ANSWER) & Q(up=True))
+    for voteanswer in voteanser_set:
+        user_from = AppUtil.get_system_user()
+        user_to = voteanswer.user
+        voteanswer.minutes += MinuteTransaction.AMOUNT_VOTE_ANSWER
+        context_info = 'answer_id:' + str(answer.id) + ';' + 'vote_id:' + str(vote.id)
+        AppUtil.process_transaction(user_from=user_from, user_to=user_to,
+                                    amount=MinuteTransaction.AMOUNT_VOTE_ANSWER,
+                                    trans_type=MinuteTransaction.TYPE_VOTE_ANSWER, context_info=context_info)
+        voteanswer.save()
+
+    vote.save()
+    answer.votes += 1
+    if answer.paid is False and answer.votes == MinuteTransaction.VOTE_COUNT_ADD_ANSWR:
+        user_from = AppUtil.get_system_user()
+        user_to = answer.user
+        answer.paid = True
+        context_info = 'answer_id:' + str(answer.id) + ';' + 'vote_id:' + str(vote.id)
+        AppUtil.process_transaction(user_from=user_from, user_to=user_to,
+                                    amount=MinuteTransaction.AMOUNT_ADD_ANSWER,
+                                    trans_type=MinuteTransaction.TYPE_ADD_ANSWER, context_info=context_info)
+    answer.save()
     return HttpResponseRedirect(url)
 
 
@@ -365,18 +417,33 @@ def vote_down_answer(request, answer_id):
     user = get_user(request)
     answer = Answer.objects.get(id=answer_id)
     question = answer.question
-
-    user_not_voted = VoteAnswer.objects.filter(user=user, answer__in=question.answer_set.all()).count() == 0
-    if user_not_voted:
-        vote = VoteAnswer()
-        vote.user = user
-        vote.answer = answer
-        vote.up = False
-        vote.save()
-        answer.votes -= 1
-        answer.save()
-
     url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+
+    user_already_voted = answer.voteanswer_set.filter(user=user).count() != 0
+    count_of_vote_in_day = VoteAnswer.objects.filter(user=user,
+                                                     created__gt=datetime.datetime.today() - datetime.timedelta(
+                                                           days=1)).count()
+
+    if user.id == question.user_id:
+        messages.add_message(request, messages.WARNING, _('You can not vote for your answer!'))
+        return HttpResponseRedirect(url)
+
+    if user_already_voted:
+        messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
+        return HttpResponseRedirect(url)
+
+    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+        messages.add_message(request, messages.WARNING, _(
+            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        return HttpResponseRedirect(url)
+
+    vote = VoteAnswer()
+    vote.user = user
+    vote.answer = answer
+    vote.up = False
+    vote.save()
+    answer.votes -= 1
+    answer.save()
     return HttpResponseRedirect(url)
 
 

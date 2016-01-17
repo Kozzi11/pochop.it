@@ -28,6 +28,7 @@ class MinuteTransaction(models.Model):
     AMOUNT_VOTE_ANSWER = 2  # odmena za hlasovani
     MAX_AMOUNT_VOTE_QUESTION = 20  # maximalni odmena za hlasovani k jedne otazce
     MAX_AMOUNT_VOTE_ANSWER = 20  # maximalni odmena za hlasovani k jedne odpovedi
+    DAY_VOTE_LIMIT = 10  # denní limit hlasování
 
     AMOUNT_EDIT_QUESTION_SMALL = 10  # mala odmena za editaci otazky
     AMOUNT_EDIT_QUESTION_MIDDLE = 30  # strendni odmena za editaci otazky

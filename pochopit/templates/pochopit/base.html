@@ -59,12 +59,12 @@
           </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+{#              <li><a href="{% url_from_constant '_courses' 'COURSES'%} ">{% trans "Courses" %}</a></li>#}
+                <li><a href="{% url_from_constant '_homepage' 'ABOUT' %}">{% trans "About" %}</a></li>
+                <li><a href="{% url_from_constant '_questions' 'QUESTIONS' %}">{% trans "Questions" %}</a></li>
+            </ul>
           {% if user.is_authenticated %}
-              <ul class="nav navbar-nav">
-{#                    <li><a href="{% url_from_constant '_courses' 'COURSES'%} ">{% trans "Courses" %}</a></li>#}
-                  <li><a href="{% url_from_constant '_homepage' 'ABOUT' %}">{% trans "About" %}</a></li>
-                  <li><a href="{% url_from_constant '_questions' 'QUESTIONS' %}">{% trans "Questions" %}</a></li>
-              </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="#">{{ user_minutes }}&nbsp;<span class="glyphicon glyphicon-hourglass"></span></a>
@@ -93,9 +93,6 @@
                 </li>
               </ul>
           {% else %}
-              <ul class="nav navbar-nav">
-                    <li><a href="{% url_from_constant '_questions' 'QUESTIONS' %}">{% trans "Questions" %}</a></li>
-              </ul>
               <ul class="nav navbar-nav navbar-right">
                   <li>
                     <a href="{% url 'sign_up' %}">{% trans "Sign up" %}</a>
