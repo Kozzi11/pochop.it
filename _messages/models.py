@@ -25,7 +25,7 @@ class Message(models.Model):
         if self.type == self.TYPE_QUESTION:
             question_id = self.params
             question = Question.objects.get(id=question_id)
-            text = 'Nová reakce na tvůj dotaz:<br>' + question.title
+            text = '<span style="font-weight:bold">Nová reakce na tvůj dotaz:</span><br>' + question.title
 
         return text
 

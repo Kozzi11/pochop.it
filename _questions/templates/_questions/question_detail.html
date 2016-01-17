@@ -18,6 +18,16 @@
                 <div id="questions_container">
                     <div class="grid-item">
                         <div class="grid-item-container">
+                            <div class="q-action-bar">
+                                <a href="{% url_from_constant '_questions' 'EDIT_QUESTION' question.id %}">
+                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit' %}
+                                </a>
+                                {% if question.has_active_revision %}
+                                    |<a href="{% url_from_constant '_questions' 'REVISION_QUESTION' question.id %}">
+                                        <span class="glyphicon glyphicon-sunglasses"></span>&nbsp{% trans 'changes' %}
+                                    </a>
+                                {% endif %}
+                            </div>
                             <table>
                                 <tr>
                                     <td style="vertical-align: top;">
@@ -52,29 +62,34 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div class="comment_container">
+                                            {% for comment in question.questioncomment_set.all %}
+                                                <div class="comment">
+                                                   <div class="q-text">
+                                                            {{ comment.text }}&nbsp;&nbsp;<span class="comment-tail">(<a href="#" class="user-name">{{ question.user.first_name }} {{ question.user.last_name }}</a>
+                                                       <span class="date">{{ question.created|date:"j. M o H:i" }}</span>)</span>
+                                                   </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <span class="contain-glyphicon" onclick="$('#textarea-question' + {{ question.id }}).toggle()">
+                                            <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans 'add comment' %}
+                                        </span>
+                                        <div id="textarea-question{{ question.id }}" class="comment_input_container">
+                                            <textarea id="comment-question-input{{ question.id }}" placeholder="{% trans 'Type your additional question' %}"></textarea>
+                                            <button class="btn btn-primary btn-sm pull-right" role="button"
+                                                    onclick="sendComment({{ question.id }}, 1);">
+                                                <span class="glyphicon glyphicon-send"></span>&nbsp;{% trans 'Send' %}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
                             </table>
-                            <div class="q-action-bar">
-                                <a href="#">
-                                    <span class="glyphicon glyphicon-comment"></span>
-                                </a>
-                                <a href="{% url_from_constant '_questions' 'EDIT_QUESTION' question.id %}">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </a>
-                                {% if question.has_active_revision %}
-                                    <a href="{% url_from_constant '_questions' 'REVISION_QUESTION' question.id %}">
-                                        <span class="glyphicon glyphicon-sunglasses"></span>
-                                    </a>
-                                {% endif %}
-                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="comment_container">
-                    {% for comment in question.questioncomment_set.all %}
-                        <div class="comment">
-                            {{ comment.text }}
-                        </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -87,6 +102,16 @@
                         <div id="questions_container">
                             <div class="grid-item">
                                 <div class="grid-item-container">
+                                    <div class="q-action-bar">
+                                        <a href="{% url_from_constant '_questions' 'EDIT_ANSWER' answer.id %}">
+                                            <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit' %}
+                                        </a>
+                                        {% if question.has_active_revision %}
+                                            |<a href="{% url_from_constant '_questions' 'REVISION_ANSWER' answer.id %}">
+                                                <span class="glyphicon glyphicon-sunglasses"></span>&nbsp{% trans 'changes' %}
+                                            </a>
+                                        {% endif %}
+                                    </div>
                                     <table>
                                         <tr>
                                             <td style="vertical-align: top;">
@@ -115,29 +140,34 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <div class="comment_container">
+                                                    {% for comment in answer.answercomment_set.all %}
+                                                        <div class="comment">
+                                                           <div class="q-text">
+                                                                    {{ comment.text }}&nbsp;&nbsp;<span class="comment-tail">(<a href="#" class="user-name">{{ answer.user.first_name }} {{ answer.user.last_name }}</a>
+                                                               <span class="date">{{ answer.created|date:"j. M o H:i" }}</span>)</span>
+                                                           </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <span class="contain-glyphicon" onclick="$('#textarea-answer' + {{ answer.id }}).toggle()">
+                                                    <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans 'add comment' %}
+                                                </span>
+                                                <div id="textarea-answer{{ answer.id }}" class="comment_input_container">
+                                                    <textarea id="comment-answer-input{{ answer.id }}" placeholder="{% trans 'Type your additional question' %}"></textarea>
+                                                    <button class="btn btn-primary btn-sm pull-right" role="button"
+                                                            onclick="sendComment({{ answer.id }}, 2);">
+                                                        <span class="glyphicon glyphicon-send"></span>&nbsp;{% trans 'Send' %}
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     </table>
-                                    <div class="q-action-bar">
-                                        <a href="#">
-                                            <span class="glyphicon glyphicon-comment"></span>
-                                        </a>
-                                        <a href="{% url_from_constant '_questions' 'EDIT_ANSWER' answer.id %}">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </a>
-                                        {% if answer.has_active_revision %}
-                                            <a href="{% url_from_constant '_questions' 'REVISION_ANSWER' answer.id %}">
-                                                <span class="glyphicon glyphicon-sunglasses"></span>
-                                            </a>
-                                        {% endif %}
-                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="comment_container">
-                            {% for comment in answer.answercomment_set.all %}
-                                <div class="comment">
-                                    {{ comment.text }}
-                                </div>
-                            {% endfor %}
                         </div>
                     {% endfor %}
                 </div>
@@ -158,4 +188,33 @@
             </div>
         {% endif %}
     </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    function sendComment(id, type) {
+        var comment;
+        var input;
+        if (type == 1) {
+            // questions
+            input = jQuery('#comment-question-input' + id);
+            comment = input.val().trim();
+            if (comment) {
+                $.post('{% url_from_constant '_questions' "COMMENT_QUESTION" %}', {id: id, comment: comment});
+                $('#textarea-question' + id).siblings('.comment_container').append('<div class="comment">'+comment+'</div>');
+                input.val('');
+                input.parent().hide();
+            }
+        } else {
+            // asnwers
+            input = jQuery('#comment-answer-input' + id);
+            comment = input.val().trim();
+            if (comment) {
+                $.post('{% url_from_constant '_questions' "COMMENT_ANSWER" %}', {id: id, comment: comment});
+                $('#textarea-answer' + id).siblings('.comment_container').append('<div class="comment">'+comment+'</div>');
+                input.val('');
+                input.parent().hide();
+            }
+        }
+    }
+</script>
 {% endblock %}

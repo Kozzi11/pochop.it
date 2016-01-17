@@ -66,6 +66,9 @@
                   <li><a href="{% url_from_constant '_questions' 'QUESTIONS' %}">{% trans "Questions" %}</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">{{ user_minutes }}&nbsp;<span class="glyphicon glyphicon-hourglass"></span></a>
+                </li>
                 <li class="dropdown" onclick="loadMessages(this)">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-bell"></span>
@@ -73,7 +76,7 @@
                     {% if count_off_unseen_messages %}
                         <div id="notif-counter">{{ count_off_unseen_messages }}</div>
                     {% endif %}
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu notif">
 {#                        <li><a href="#">{% trans "Show all messages" %}</a></li> TODO - dodelat#}
                         <li id="notif-loading">{% trans 'Loading...' %}</li>
                     </ul>

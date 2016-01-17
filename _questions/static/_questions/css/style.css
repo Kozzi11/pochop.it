@@ -40,6 +40,9 @@
 .q-text {
     padding-top: 6px;
 }
+.q-text .date {
+
+}
 .q-date {
     float: right;
     /*color: #cdcdcd;*/
@@ -55,9 +58,37 @@
 }
 .q-action-bar {
     text-align: right;
+    margin-top: -8px;
 }
 .q-action-bar a{
     padding: 4px; 
+}
+.q-action-bar a:hover{
+    text-decoration: none;
+}
+.comment {
+    padding: 4px 4px 4px 18px;
+    border-top: 1px solid #E7E7E7;
+}
+.comment_container {
+    padding-bottom: 8px;
+}
+.comment_input_container {
+    display: none;
+    margin-top: 8px;
+}
+.comment_input_container textarea {
+    padding-left: 4px;
+    width: 100%;
+}
+.comment-tail {
+    color: #9c9c9c;
+    font-style: italic;
+    font-size: 12px;
+}
+.user-name {
+    color: #9c9c9c;
+    text-decoration: underline;
 }
 #tag-autocomplete {
     position: absolute;

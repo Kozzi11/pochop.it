@@ -5,6 +5,8 @@ class URLS:
     QUESTIONS_GRID_DATA = 'questions_grid_data'
     ASK_QUESTION = 'ask_question'
     EDIT_QUESTION = 'edit_question'
+    COMMENT_QUESTION = 'comment_question'
+    COMMENT_ANSWER = 'comment_answer'
     EDIT_ANSWER = 'edit_answer'
     VIEW_QUESTION = 'view_question'
     REVISION_QUESTION = 'revision_question'

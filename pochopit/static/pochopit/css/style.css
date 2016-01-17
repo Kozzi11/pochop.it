@@ -183,7 +183,14 @@ ul.context-nav-bar {
 .context-nav-bar li a {
     cursor: pointer;
 }
-
+ul.dropdown-menu.notif li{
+    border-bottom: 1px solid #cdcdcd;
+}
+ul.dropdown-menu.notif li:last-child {
+    border-bottom: none;
+}
+.notification {
+}
 /* Notifikace */
 
 #notif-counter {
@@ -203,4 +210,10 @@ ul.context-nav-bar {
 .alert {
     margin-top: 0;
     text-align: center;
+}
+.contain-glyphicon {
+    cursor: pointer;
+}
+.contain-glyphicon:hover {
+    color: #69BF10;
 }

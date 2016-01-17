@@ -11,6 +11,7 @@ class Question(models.Model):
     text = models.TextField()
     votes = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
+    paid = models.BooleanField(default=False)
     status = models.IntegerField(default=STATUS_ACTIVE)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -47,6 +48,7 @@ class Answer(models.Model):
     user = models.ForeignKey(User)
     text = models.TextField()
     votes = models.IntegerField(default=0)
+    paid = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
     def has_active_revision(self):
@@ -86,6 +88,7 @@ class VoteQuestion(models.Model):
     question = models.ForeignKey(Question)
     user = models.ForeignKey(User)
     up = models.BooleanField()
+    minutes = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
 
@@ -93,4 +96,5 @@ class VoteAnswer(models.Model):
     answer = models.ForeignKey(Answer)
     user = models.ForeignKey(User)
     up = models.BooleanField()
+    minutes = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
