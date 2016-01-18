@@ -9,11 +9,16 @@ class URLS:
     COMMENT_ANSWER = 'comment_answer'
     EDIT_ANSWER = 'edit_answer'
     VIEW_QUESTION = 'view_question'
-    REVISION_QUESTION = 'revision_question'
-    REVISION_ANSWER = 'revision_answer'
+    AUTHORIZE_QUESTION_EDIT = 'auth_questino_edit'
+    AUTHORIZE_ANSWER_EDIT = 'auth_answer_edit'
     FIND_TAGS = 'find_tags'
     CREATE_TAG = 'create_tag'
     VOTE_UP_QUESTION = 'vote_up_question'
     VOTE_DOWN_QUESTION = 'vote_down_question'
     VOTE_UP_ANSWER = 'vote_up_answer'
     VOTE_DOWN_ANSWER = 'vote_down_answer'
+
+
+class PERMISSION:
+    AUTHORIZE_QUESTION_EDIT = '_questions.change_questionrevision'
+    AUTHORIZE_ANSWER_EDIT = '_questions.change_answerrevision'

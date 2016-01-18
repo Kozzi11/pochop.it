@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 {% load i18n %}
-{% load url_constants %}
+{% load pochopit_tags %}
 {% block links %}
     <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
 {% endblock %}
@@ -37,7 +37,7 @@
                 <h3> {% trans 'Edited answer' %} </h3>
                 <form action="
                 {% if revision %}
-                    {% url_from_constant "_questions" "REVISION_ANSWER" answer.id %}
+                    {% url_from_constant "_questions" "AUTHORIZE_ANSWER_EDIT" answer.id %}
                 {% else %}
                     {% url_from_constant "_questions" "EDIT_ANSWER" answer.id %}
                 {% endif %}" method="post" class="form">

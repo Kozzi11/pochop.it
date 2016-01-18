@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from _messages.models import Message
 
 
+@login_required
 def get_notification_list(request):
     user = get_user(request)
     notifications = Message.objects.filter(user=user).order_by('-created')

@@ -1,4 +1,5 @@
 import json
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
@@ -17,6 +18,7 @@ from pochopit.viewcomponents.tabs_manager import TabsManager
 COURSE_GRID_STEP = 7
 
 
+@login_required
 def courses(request):
     user = get_user(request)
     tabs_manager = TabsManager(request)
@@ -44,10 +46,12 @@ def courses(request):
     return render(request, '_courses/courses_base.html', {'tabs': tabs_manager.get_tabs(), 'offset': COURSE_GRID_STEP})
 
 
+@login_required
 def all_courses(request):
     return render(request, '_courses/all.html')
 
 
+@login_required
 def in_progress_courses(request):
     return render(request, '_courses/in_progress.html')
 

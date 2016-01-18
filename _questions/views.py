@@ -3,12 +3,15 @@ import datetime
 from django.contrib import messages
 
 from django.contrib.auth import get_user
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from _messages.models import Message
-from _questions.constants import URLS
+from _messages.utils import MessageUtil
+from _questions.constants import URLS, PERMISSION
 from _questions.forms import QuestionForm, TagForm, AnswerForm, QuestionRevisionForm, AnswerRevisionForm, \
     QuestionSupervisorRevisionForm, AnswerSupervisorRevisionForm
 from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer, QuestionRevision, AnswerRevision, \
@@ -40,6 +43,7 @@ def questions_grid_data(request):
     return render(request, '_questions/question.html', {'question_list': question_list})
 
 
+@login_required
 def ask_question(request):
     tags = []
     if request.method == 'POST':
@@ -82,13 +86,7 @@ def view_question(request, question_id, question_title):
         else:
             if request.POST['text']:
                 form.save()
-                message = Message()
-                message.user = question.user
-                message.sender = user
-                message.status = 0
-                message.params = question.id
-                message.type = Message.TYPE_QUESTION
-                message.save()
+                MessageUtil.send_message(user, question.user, Message.TYPE_NEW_ANSWER, question.id)
                 url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
                 return HttpResponseRedirect(url)
             else:
@@ -98,10 +96,14 @@ def view_question(request, question_id, question_title):
         question.save()
         form = AnswerForm()
 
+    auth_question_edit = user.has_perm(PERMISSION.AUTHORIZE_QUESTION_EDIT)
+    auth_answer_edit = user.has_perm(PERMISSION.AUTHORIZE_ANSWER_EDIT)
     return render(request, '_questions/question_detail.html',
-                  {'question': question, 'form': form, 'show_answer_input': show_answer_input})
+                  {'question': question, 'form': form, 'show_answer_input': show_answer_input,
+                   'authorize_question_edit': auth_question_edit, 'authorize_answer_edit': auth_answer_edit})
 
 
+@login_required
 def edit_question(request, question_id):
     question = Question.objects.get(id=question_id)
     tags = question.tag_set.all()
@@ -130,14 +132,21 @@ def edit_question(request, question_id):
                   {'form': form, 'tags': tags, 'question': question})
 
 
-def check_question_revision(request, question_id):
+@login_required
+@permission_required(PERMISSION.AUTHORIZE_QUESTION_EDIT)
+def authorize_question_edit(request, question_id):
     question = Question.objects.get(id=question_id)
-    revision = question.questionrevision_set.filter(status=QuestionRevision.STATUS_AWATING_APPROVAL).order_by(
-        'created')[:1][0]
+    supervisor = get_user(request)
+    revision = question.questionrevision_set.filter(status=QuestionRevision.STATUS_AWATING_APPROVAL).exclude(
+        editor=supervisor).order_by('created')[:1][0]
+
+    if not revision:
+        messages.add_message(request, messages.WARNING, _('Nothing to review!'))
+        return HttpResponseRedirect(URLS.QUESTIONS)
+
     if request.method == 'POST':
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
-            supervisor = get_user(request)
             revision.status = QuestionRevision.STATUS_APPROVED
             revision.supervisor = supervisor
             question.title = revision.title
@@ -168,6 +177,9 @@ def check_question_revision(request, question_id):
                                         amount=amount,
                                         trans_type=MinuteTransaction.TYPE_EDIT_QUESTION,
                                         context_info=context_info)
+
+            MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_AUTHORIZED, revision.id)
+
             url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
         else:
@@ -180,19 +192,29 @@ def check_question_revision(request, question_id):
                   {'question': question, 'revision': revision, 'form': revision_form, 'tags': tags})
 
 
+@login_required
 def question_add_comment(request):
     question_id = request.POST['id']
     commnet_text = request.POST['comment']
     question = Question.objects.get(id=question_id)
 
+    user = get_user(request)
     comment = QuestionComment()
-    comment.user = get_user(request)
+    comment.user = user
     comment.text = commnet_text
     comment.question = question
     comment.save()
+
+    if user.id == question.user_id:
+        for question_comment in question.questioncomment_set.exclude(user=user):
+            MessageUtil.send_message(user, question_comment.user, Message.TYPE_NEW_QUESTION_COMMENT, question.id)
+    else:
+        MessageUtil.send_message(user, question.user, Message.TYPE_NEW_QUESTION_COMMENT, question.id)
+
     return HttpResponse('')
 
 
+@login_required
 def edit_answer(request, answer_id):
     answer = Answer.objects.get(id=answer_id)
     question = answer.question
@@ -217,14 +239,21 @@ def edit_answer(request, answer_id):
     return render(request, '_questions/answer_revision.html', {'form': form, 'question': question, 'answer': answer})
 
 
-def check_answer_revision(request, answer_id):
+@login_required
+@permission_required(PERMISSION.AUTHORIZE_ANSWER_EDIT)
+def authorize_answer_edit(request, answer_id):
     answer = Answer.objects.get(id=answer_id)
-    revision = answer.answerrevision_set.filter(status=AnswerRevision.STATUS_AWATING_APPROVAL).order_by(
-        'created')[:1][0]
+    supervisor = get_user(request)
+    revision = answer.answerrevision_set.filter(status=AnswerRevision.STATUS_AWATING_APPROVAL).exclude(
+        editor=supervisor).order_by('created')[:1][0]
+
+    if not revision:
+        messages.add_message(request, messages.WARNING, _('Nothing to review!'))
+        return HttpResponseRedirect(URLS.QUESTIONS)
+
     if request.method == 'POST':
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
-            supervisor = get_user(request)
             revision.status = AnswerRevision.STATUS_APPROVED
             revision.supervisor = supervisor
             answer.text = revision.text
@@ -250,6 +279,9 @@ def check_answer_revision(request, answer_id):
                                         amount=amount,
                                         trans_type=MinuteTransaction.TYPE_EDIT_ANSWER,
                                         context_info=context_info)
+
+            MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_AUTHORIZED, revision.id)
+
             url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
         else:
@@ -260,6 +292,7 @@ def check_answer_revision(request, answer_id):
                   {'question': answer.question, 'answer': answer, 'revision': revision, 'form': form})
 
 
+@login_required
 def answer_add_comment(request):
     answer_id = request.POST['id']
     commnet_text = request.POST['comment']
@@ -270,9 +303,18 @@ def answer_add_comment(request):
     comment.text = commnet_text
     comment.answer = answer
     comment.save()
+
+    user = get_user(request)
+
+    if user.id == answer.user_id:
+        for answer_comment in answer.answercomment_set.exclude(user=user):
+            MessageUtil.send_message(user, answer_comment.user, Message.TYPE_NEW_ANSWER_COMMENT, answer.id)
+    else:
+        MessageUtil.send_message(user, answer.user, Message.TYPE_NEW_ANSWER_COMMENT, answer.id)
     return HttpResponse('')
 
 
+@login_required
 def vote_up_question(request, question_id):
     user = get_user(request)
     question = Question.objects.get(id=question_id)
@@ -326,6 +368,7 @@ def vote_up_question(request, question_id):
     return HttpResponseRedirect(url)
 
 
+@login_required
 def vote_down_question(request, question_id):
     user = get_user(request)
     question = Question.objects.get(id=question_id)
@@ -358,6 +401,7 @@ def vote_down_question(request, question_id):
     return HttpResponseRedirect(url)
 
 
+@login_required
 def vote_up_answer(request, answer_id):
     user = get_user(request)
     answer = Answer.objects.get(id=answer_id)
@@ -367,9 +411,9 @@ def vote_up_answer(request, answer_id):
     user_already_voted = answer.voteanswer_set.filter(user=user).count() != 0
     count_of_vote_in_day = VoteAnswer.objects.filter(user=user,
                                                      created__gt=datetime.datetime.today() - datetime.timedelta(
-                                                           days=1)).count()
+                                                         days=1)).count()
 
-    if user.id == question.user_id:
+    if user.id == answer.user_id:
         messages.add_message(request, messages.WARNING, _('You can not vote for your answer!'))
         return HttpResponseRedirect(url)
 
@@ -413,6 +457,7 @@ def vote_up_answer(request, answer_id):
     return HttpResponseRedirect(url)
 
 
+@login_required
 def vote_down_answer(request, answer_id):
     user = get_user(request)
     answer = Answer.objects.get(id=answer_id)
@@ -422,9 +467,9 @@ def vote_down_answer(request, answer_id):
     user_already_voted = answer.voteanswer_set.filter(user=user).count() != 0
     count_of_vote_in_day = VoteAnswer.objects.filter(user=user,
                                                      created__gt=datetime.datetime.today() - datetime.timedelta(
-                                                           days=1)).count()
+                                                         days=1)).count()
 
-    if user.id == question.user_id:
+    if user.id == answer.user_id:
         messages.add_message(request, messages.WARNING, _('You can not vote for your answer!'))
         return HttpResponseRedirect(url)
 
@@ -447,6 +492,7 @@ def vote_down_answer(request, answer_id):
     return HttpResponseRedirect(url)
 
 
+@login_required
 def create_tag(request):
     if request.method == 'POST':
         tag = Tag()
@@ -461,6 +507,7 @@ def create_tag(request):
     return render(request, '_questions/tag_form.html', {'form': form})
 
 
+@login_required
 def find_tags(request):
     search = request.POST['search']
     tags_alredy_added = filter(None, request.POST['tags'].split(';'))

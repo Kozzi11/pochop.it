@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
+from _homepage.constants import URLS
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': '_auth/login.html'}),
-    url(r'^logout/$', auth_views.logout),
+    url(r'^logout/$', auth_views.logout, {'next_page': URLS.HOMEPAGE}),
     url(r'^sing_up/$', views.sign_up, name='sign_up')
 ]

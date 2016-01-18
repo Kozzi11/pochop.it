@@ -16,3 +16,8 @@ def urls_constant(app, constant_name):
     mod = __import__(app)
     return getattr(mod.constants.URLS, constant_name)
 
+
+@register.simple_tag
+def has_permission(user, app, permission):
+    mod = __import__(app)
+    return user.has_permission(getattr(mod.constants.PERMISSION, permission))

@@ -1,7 +1,6 @@
 from django.conf.urls import url
 
 from . import views
-from django.contrib.auth.decorators import login_required
 from _courses.views import CourseDatatablesView, LessonDatatablesView, SlideDatatablesView, ComponentsDatatablesView
 
 COURSES = 'courses'
@@ -40,9 +39,9 @@ COMPONENT_CHANGE_ORDER = 'component_change_order'
 
 urlpatterns = [
 
-    url(r'^courses/$', login_required(views.courses), name=COURSES),
-    url(r'^courses/all$', login_required(views.all_courses), name=COURSES_ALL),
-    url(r'^courses/in_progress$', login_required(views.in_progress_courses), name=COURSES_IN_PROGRESS),
+    url(r'^courses/$', views.courses, name=COURSES),
+    url(r'^courses/all$', views.all_courses, name=COURSES_ALL),
+    url(r'^courses/in_progress$', views.in_progress_courses, name=COURSES_IN_PROGRESS),
     url(r'^courses/completed$', views.completed_courses, name=COURSES_COMPLETED),
     url(r'^courses/my$', views.my_courses, name=COURSES_MY),
     url(r'^courses/data$', CourseDatatablesView.as_view(), name=COURSES_DATA),

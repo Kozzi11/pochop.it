@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from _questions.constants import URLS
-from _questions.models import Question
+from _questions.models import Question, Answer, QuestionRevision, AnswerRevision
 
 
 class Message(models.Model):
@@ -10,7 +10,11 @@ class Message(models.Model):
     STATUS_SEEN = 1
     STATUS_READ = 2
 
-    TYPE_QUESTION = 0
+    TYPE_NEW_ANSWER = 0
+    TYPE_NEW_QUESTION_COMMENT = 1
+    TYPE_NEW_ANSWER_COMMENT = 2
+    TYPE_QUESTION_EDIT_AUTHORIZED = 3
+    TYPE_ANSWER_EDIT_AUTHORIZED = 4
 
     user = models.ForeignKey(User)
     sender = models.ForeignKey(User, related_name='sender')
@@ -22,10 +26,32 @@ class Message(models.Model):
 
     def get_notification_text(self):
         text = ''
-        if self.type == self.TYPE_QUESTION:
+        if self.type == self.TYPE_NEW_ANSWER:
             question_id = self.params
             question = Question.objects.get(id=question_id)
-            text = '<span style="font-weight:bold">Nová reakce na tvůj dotaz:</span><br>' + question.title
+            text = '<span style="font-weight:bold">Nová odpověď na tvůj dotaz:</span><br>' + question.title
+
+        elif self.type == self.TYPE_NEW_QUESTION_COMMENT:
+            question_id = self.params
+            question = Question.objects.get(id=question_id)
+            text = '<span style="font-weight:bold">Nový komentář k tvému dotazu:</span><br>' + question.title
+
+        elif self.type == self.TYPE_NEW_ANSWER_COMMENT:
+            answer_id = self.params
+            answer = Answer.objects.get(id=answer_id)
+            text = '<span style="font-weight:bold">Nový komentář ke tvé odpovědi k otázce:</span><br>' + \
+                   answer.question.title
+
+        elif self.type == self.TYPE_QUESTION_EDIT_AUTHORIZED:
+            revision_id = self.params
+            revision = QuestionRevision.objects.get(id=revision_id)
+            text = '<span style="font-weight:bold">Tvoje úpravy u otázky' + revision.question.title + ' byly schváleny'
+
+        elif self.type == self.TYPE_ANSWER_EDIT_AUTHORIZED:
+            revision_id = self.params
+            revision = AnswerRevision.objects.get(id=revision_id)
+            text = '<span style="font-weight:bold">Tvoje úpravy k odpovědi u otázky' + revision.answer.question.title \
+                   + ' byly schváleny'
 
         return text
 

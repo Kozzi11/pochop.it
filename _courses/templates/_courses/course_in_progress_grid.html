@@ -1,4 +1,4 @@
-{% load url_constants %}
+{% load pochopit_tags %}
 {% for course in course_list %}
     <div class="row col-md-6">
         <a class="course-grid-item" href="#{% url_from_constant '_courses' 'COURSE_OPEN' course.id%}">
