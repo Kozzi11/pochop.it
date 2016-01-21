@@ -35,6 +35,7 @@ class QuestionRevisionForm(forms.ModelForm):
             'title',
             'text',
             'tags',
+            'editor_comment',
         ]
         labels = {
             'title': _("Question heading")
@@ -42,14 +43,14 @@ class QuestionRevisionForm(forms.ModelForm):
 
 
 class QuestionSupervisorRevisionForm(QuestionRevisionForm):
-
     CHOICES = (
         ('1', _('low')),
         ('2', _('middle')),
         ('3', _('high')),
     )
-    sophistication = forms.CharField(widget=forms.Select(choices=CHOICES))
-    supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
+    sophistication = forms.CharField(widget=forms.Select(choices=CHOICES), label=_('sophistication'))
+    supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False,
+                                         label=_('Supervisor comment'))
 
     def __init__(self, *args, **kwargs):
         super(QuestionSupervisorRevisionForm, self).__init__(*args, **kwargs)

@@ -4,7 +4,6 @@ from django.contrib import messages
 
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
@@ -86,7 +85,7 @@ def view_question(request, question_id, question_title):
         else:
             if request.POST['text']:
                 form.save()
-                MessageUtil.send_message(user, question.user, Message.TYPE_NEW_ANSWER, question.id)
+                MessageUtil.send_message(user, question.user, Message.TYPE_NEW_ANSWER, params=question.id)
                 url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
                 return HttpResponseRedirect(url)
             else:
@@ -147,6 +146,16 @@ def authorize_question_edit(request, question_id):
     if request.method == 'POST':
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
+            url = reverse(URLS.QUESTIONS)
+            if 'not-approve' in request.POST:
+                revision.status = QuestionRevision.STATUS_REJECTED
+                revision.supervisor = supervisor
+                revision.editor_comment = request.POST['editor_comment']
+                revision.save()
+                MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_AUTHORIZED,
+                                         params=revision.id)
+                return HttpResponseRedirect(url)
+
             revision.status = QuestionRevision.STATUS_APPROVED
             revision.supervisor = supervisor
             question.title = revision.title
@@ -178,9 +187,9 @@ def authorize_question_edit(request, question_id):
                                         trans_type=MinuteTransaction.TYPE_EDIT_QUESTION,
                                         context_info=context_info)
 
-            MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_AUTHORIZED, revision.id)
+            MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_AUTHORIZED,
+                                     params=revision.id)
 
-            url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
         else:
             messages.add_message(request, messages.ERROR, _('Revision already approved'))
@@ -207,9 +216,9 @@ def question_add_comment(request):
 
     if user.id == question.user_id:
         for question_comment in question.questioncomment_set.exclude(user=user):
-            MessageUtil.send_message(user, question_comment.user, Message.TYPE_NEW_QUESTION_COMMENT, question.id)
+            MessageUtil.send_message(user, question_comment.user, Message.TYPE_NEW_QUESTION_COMMENT, params=question.id)
     else:
-        MessageUtil.send_message(user, question.user, Message.TYPE_NEW_QUESTION_COMMENT, question.id)
+        MessageUtil.send_message(user, question.user, Message.TYPE_NEW_QUESTION_COMMENT, params=question.id)
 
     return HttpResponse('')
 
@@ -280,7 +289,8 @@ def authorize_answer_edit(request, answer_id):
                                         trans_type=MinuteTransaction.TYPE_EDIT_ANSWER,
                                         context_info=context_info)
 
-            MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_AUTHORIZED, revision.id)
+            MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_AUTHORIZED,
+                                     params=revision.id)
 
             url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
@@ -308,9 +318,9 @@ def answer_add_comment(request):
 
     if user.id == answer.user_id:
         for answer_comment in answer.answercomment_set.exclude(user=user):
-            MessageUtil.send_message(user, answer_comment.user, Message.TYPE_NEW_ANSWER_COMMENT, answer.id)
+            MessageUtil.send_message(user, answer_comment.user, Message.TYPE_NEW_ANSWER_COMMENT, params=answer.id)
     else:
-        MessageUtil.send_message(user, answer.user, Message.TYPE_NEW_ANSWER_COMMENT, answer.id)
+        MessageUtil.send_message(user, answer.user, Message.TYPE_NEW_ANSWER_COMMENT, params=answer.id)
     return HttpResponse('')
 
 

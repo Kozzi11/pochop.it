@@ -14,14 +14,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-            <h4>{% trans "Question" %}</h4>
+            <h4>{{ user.first_name }} {% trans "is asking" %}</h4>
                 <div id="questions_container">
                     <div class="grid-item">
                         <div class="grid-item-container">
                             <div class="q-action-bar">
                                 {% if user.is_authenticated %}
                                     <a href="{% url_from_constant '_questions' 'EDIT_QUESTION' question.id %}">
-                                        <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit' %}
+                                        <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit question' %}
                                     </a>
                                 {% endif %}
                                 {% if authorize_question_edit and question.has_active_revision and question.user.id != user.id%}
@@ -100,7 +100,7 @@
             <div class="row spacer">
                 <div class="col-md-8 col-md-offset-2">
                 {% if question.answer_set.count %}
-                    <h4>{% trans "Answers" %}</h4>
+                    <h4>{% trans "Yours answers" %}</h4>
                 {% endif %}
                     {% for answer in question.answer_set.all %}
                         <div id="questions_container">
@@ -109,7 +109,7 @@
                                     <div class="q-action-bar">
                                        {% if user.is_authenticated %}
                                             <a href="{% url_from_constant '_questions' 'EDIT_ANSWER' answer.id %}">
-                                                <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit' %}
+                                                <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit answer' %}
                                             </a>
                                         {% endif %}
                                         {% if authorize_answer_edit and answer.has_active_revision and answer.user.id != user.id %}

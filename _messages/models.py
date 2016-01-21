@@ -14,7 +14,9 @@ class Message(models.Model):
     TYPE_NEW_QUESTION_COMMENT = 1
     TYPE_NEW_ANSWER_COMMENT = 2
     TYPE_QUESTION_EDIT_AUTHORIZED = 3
-    TYPE_ANSWER_EDIT_AUTHORIZED = 4
+    TYPE_QUESTION_EDIT_DENIED = 4
+    TYPE_ANSWER_EDIT_AUTHORIZED = 5
+    TYPE_ANSWER_EDIT_DENIED = 6
 
     user = models.ForeignKey(User)
     sender = models.ForeignKey(User, related_name='sender')
