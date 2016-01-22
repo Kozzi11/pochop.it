@@ -24,6 +24,7 @@ a:hover, .dropdown-menu>li>a:hover{
 /* OBECNE OBSAH */
 #content {
     margin-top: 20px;
+    margin-bottom: 60px;
 }
 .spacer {
     margin-top: 25px;

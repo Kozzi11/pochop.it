@@ -309,7 +309,7 @@ msgstr ""
 
 #: pochopit/templates/pochopit/base.html:64
 msgid "About"
-msgstr "Kdo jsme"
+msgstr "O projektu"
 
 #: pochopit/templates/pochopit/base.html:65
 msgid "Questions"
