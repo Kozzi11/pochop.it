@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 21:58+0100\n"
+"POT-Creation-Date: 2016-01-23 16:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,8 +66,6 @@ msgstr ""
 #: _courses/templates/_courses/course/main.html:22
 #: _courses/templates/_courses/lesson/main.html:18
 #: _courses/templates/_courses/slide/main.html:18
-#: _questions/templates/_questions/question_detail.html:189
-#: _questions/templates/_questions/question_form.html:23
 #: _questions/templates/_questions/tag_form.html:22
 msgid "Save"
 msgstr ""
@@ -130,170 +128,195 @@ msgstr ""
 msgid "Main"
 msgstr ""
 
-#: _questions/forms.py:9 _questions/forms.py:26
+#: _questions/forms.py:9
 msgid "Concise description of the problem"
 msgstr ""
 
-#: _questions/forms.py:11 _questions/forms.py:28
+#: _questions/forms.py:11 _questions/forms.py:26
 msgid "Tags"
 msgstr ""
 
-#: _questions/forms.py:20 _questions/forms.py:41
-#: _questions/templates/_questions/question_revision.html:20
+#: _questions/forms.py:12 _questions/forms.py:27
+#: _questions/templates/_questions/question_revision.html:33
 msgid "Question heading"
 msgstr ""
 
-#: _questions/forms.py:47
-msgid "low"
-msgstr ""
-
-#: _questions/forms.py:48
-msgid "middle"
-msgstr ""
-
-#: _questions/forms.py:49
-msgid "high"
-msgstr ""
-
-#: _questions/forms.py:51
-msgid "sophistication"
-msgstr ""
-
-#: _questions/forms.py:53
-msgid "Supervisor comment"
-msgstr ""
-
-#: _questions/forms.py:62
-msgid "Your answer"
-msgstr ""
-
-#: _questions/forms.py:73
-#: _questions/templates/_questions/answer_revision.html:25
-msgid "Answer"
-msgstr ""
-
-#: _questions/templates/_questions/answer_revision.html:23
-msgid "Original answer"
-msgstr ""
-
-#: _questions/templates/_questions/answer_revision.html:30
-#: _questions/templates/_questions/answer_revision.html:31
+#: _questions/forms.py:29 _questions/forms.py:72
+#: _questions/templates/_questions/answer_revision.html:44
 msgid "Editor comment"
 msgstr ""
 
-#: _questions/templates/_questions/answer_revision.html:37
-msgid "Edited answer"
+#: _questions/forms.py:43 _questions/forms.py:84
+msgid "low"
 msgstr ""
 
-#: _questions/templates/_questions/answer_revision.html:49
-#: _questions/templates/_questions/question_revision.html:64
-msgid "Approve"
+#: _questions/forms.py:44 _questions/forms.py:85
+msgid "middle"
 msgstr ""
 
-#: _questions/templates/_questions/answer_revision.html:51
-#: _questions/templates/_questions/question_revision.html:66
-msgid "Submit for approval"
+#: _questions/forms.py:45 _questions/forms.py:86
+msgid "high"
 msgstr ""
 
-#: _questions/templates/_questions/question_detail.html:17
-msgid "is asking"
+#: _questions/forms.py:47 _questions/forms.py:88
+msgid "sophistication"
 msgstr ""
 
-#: _questions/templates/_questions/question_detail.html:24
-msgid "edit question"
+#: _questions/forms.py:49 _questions/forms.py:90
+msgid "Supervisor comment"
 msgstr ""
 
-#: _questions/templates/_questions/question_detail.html:29
-#: _questions/templates/_questions/question_detail.html:117
-msgid "changes"
+#: _questions/forms.py:58
+msgid "Your answer"
 msgstr ""
 
-#: _questions/templates/_questions/question_detail.html:82
-#: _questions/templates/_questions/question_detail.html:163
-msgid "add comment"
+#: _questions/templates/_questions/answer_revision.html:25
+#: _questions/templates/_questions/question_revision.html:19
+#, python-format
+msgid ""
+"This question was already edited by %(first_name)s %(last_name)s, but not "
+"proceesed."
 msgstr ""
 
-#: _questions/templates/_questions/question_detail.html:86
-#: _questions/templates/_questions/question_detail.html:166
-msgid "Type your additional question"
+#: _questions/templates/_questions/answer_revision.html:34
+#: _questions/templates/_questions/question_revision.html:28
+msgid "Version from"
 msgstr ""
 
-#: _questions/templates/_questions/question_detail.html:89
-#: _questions/templates/_questions/question_detail.html:169
-msgid "Send"
-msgstr ""
-
-#: _questions/templates/_questions/question_detail.html:103
-msgid "Yours answers"
-msgstr ""
-
-#: _questions/templates/_questions/question_detail.html:112
-msgid "edit answer"
-msgstr ""
-
-#: _questions/templates/_questions/question_revision.html:17
+#: _questions/templates/_questions/answer_revision.html:36
+#: _questions/templates/_questions/question_revision.html:30
 msgid "Original version"
 msgstr ""
 
-#: _questions/templates/_questions/question_revision.html:40
+#: _questions/templates/_questions/answer_revision.html:43
+#: _questions/templates/_questions/question_revision.html:60
 msgid "Edit comment"
 msgstr ""
 
-#: _questions/templates/_questions/question_revision.html:47
+#: _questions/templates/_questions/answer_revision.html:50
+#: _questions/templates/_questions/question_revision.html:67
 msgid "Edited version"
 msgstr ""
 
-#: _questions/templates/_questions/question_revision.html:59
+#: _questions/templates/_questions/answer_revision.html:62
+#: _questions/templates/_questions/question_revision.html:79
 msgid "not approve"
 msgstr ""
 
-#: _questions/templates/_questions/questions.html:18
-msgid "Ask PochopIT members"
+#: _questions/templates/_questions/answer_revision.html:67
+#: _questions/templates/_questions/question_revision.html:84
+msgid "Approve"
 msgstr ""
 
-#: _questions/templates/_questions/questions.html:25
-msgid "Please, Try find the answer first :)"
+#: _questions/templates/_questions/answer_revision.html:69
+#: _questions/templates/_questions/question_revision.html:86
+msgid "Submit for approval"
+msgstr ""
+
+#: _questions/templates/_questions/question.html:25
+#: _questions/templates/_questions/question_detail.html:65
+#: _questions/templates/_questions/question_detail.html:92
+#: _questions/templates/_questions/question_detail.html:171
+#: _questions/templates/_questions/question_detail.html:193
+msgid "you"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:18
+msgid "your question is"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:20
+msgid "is asking"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:28
+msgid "edit question"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:31
+#: _questions/templates/_questions/question_detail.html:138
+msgid "it is scrap"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:36
+#: _questions/templates/_questions/question_detail.html:143
+msgid "changes"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:105
+#: _questions/templates/_questions/question_detail.html:205
+msgid "add comment"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:109
+#: _questions/templates/_questions/question_detail.html:208
+msgid "Type your additional question"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:112
+#: _questions/templates/_questions/question_detail.html:211
+msgid "Send"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:126
+msgid "Yours answers"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:135
+msgid "edit answer"
+msgstr ""
+
+#: _questions/templates/_questions/question_detail.html:231
+msgid "advise"
+msgstr ""
+
+#: _questions/templates/_questions/question_form.html:23
+msgid "Ask question"
+msgstr ""
+
+#: _questions/templates/_questions/questions.html:19
+msgid "Ask PochopIT members"
 msgstr ""
 
 #: _questions/templates/_questions/questions.html:27
 msgid "Search"
 msgstr ""
 
-#: _questions/views.py:64 _questions/views.py:127
+#: _questions/views.py:63 _questions/views.py:129
 msgid "Concise description of the problem must be specified"
 msgstr ""
 
-#: _questions/views.py:85
+#: _questions/views.py:84
 msgid "You can add only one answer to question!"
 msgstr ""
 
-#: _questions/views.py:93 _questions/views.py:235
+#: _questions/views.py:92 _questions/views.py:257
 msgid "Answer was not filed"
 msgstr ""
 
-#: _questions/views.py:144 _questions/views.py:251
+#: _questions/views.py:155 _questions/views.py:282
 msgid "Nothing to review!"
 msgstr ""
 
-#: _questions/views.py:186 _questions/views.py:288
+#: _questions/views.py:207 _questions/views.py:329
 msgid "Revision already approved"
 msgstr ""
 
-#: _questions/views.py:328 _questions/views.py:382
+#: _questions/views.py:369 _questions/views.py:423
 msgid "You can not vote for your question!"
 msgstr ""
 
-#: _questions/views.py:332 _questions/views.py:386 _questions/views.py:421
-#: _questions/views.py:477
+#: _questions/views.py:373 _questions/views.py:427 _questions/views.py:462
+#: _questions/views.py:518
 msgid "You can not vote more than once!"
 msgstr ""
 
-#: _questions/views.py:337 _questions/views.py:391 _questions/views.py:426
-#: _questions/views.py:482
+#: _questions/views.py:378 _questions/views.py:432 _questions/views.py:467
+#: _questions/views.py:523
 msgid "You can not vote more than "
 msgstr ""
 
-#: _questions/views.py:417 _questions/views.py:473
+#: _questions/views.py:458 _questions/views.py:514
 msgid "You can not vote for your answer!"
 msgstr ""
 

@@ -3,21 +3,24 @@ import datetime
 from django.contrib import messages
 
 from django.contrib.auth import get_user
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from _messages.models import Message
 from _messages.utils import MessageUtil
-from _questions.constants import URLS, PERMISSION
+from _questions.constants import URLS, PERMISSION, PERMISSION_GROUPS
 from _questions.forms import QuestionForm, TagForm, AnswerForm, QuestionRevisionForm, AnswerRevisionForm, \
     QuestionSupervisorRevisionForm, AnswerSupervisorRevisionForm
 from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer, QuestionRevision, AnswerRevision, \
-    QuestionComment, AnswerComment
+    QuestionComment, AnswerComment, QuestionScrap, AnswerScrap, AnswerCommentScrap, QuestionCommentScrap
 from django.utils.translation import ugettext as _
 from pochopit.app_util import AppUtil
 from pochopit.models import MinuteTransaction
+
+QUESTION_SCRAP_LIMIT = 5
+ANSWER_SCRAP_LIMIT = QUESTION_SCRAP_LIMIT
 
 
 def questions(request):
@@ -25,7 +28,14 @@ def questions(request):
         search_query = request.GET['q']
     else:
         search_query = ''
-    return render(request, '_questions/questions.html', {'search_query': search_query})
+
+    if request.user.is_authenticated():
+        user_is_supervisor = get_user(request).groups.filter(name=PERMISSION_GROUPS.SUPERVISOR).exists()
+    else:
+        user_is_supervisor = False
+
+    return render(request, '_questions/questions.html',
+                  {'search_query': search_query, 'user_is_supervisor': user_is_supervisor})
 
 
 def questions_grid_data(request):
@@ -34,10 +44,11 @@ def questions_grid_data(request):
     if 'q' in request.POST:
         search_list = request.POST['q'].split(' ')
         question_list = Question.objects.filter(
-            reduce(lambda x, y: x | y, [Q(title__contains=item) for item in search_list])).order_by('-created')[
-                        offset:offset + 10]
+            reduce(lambda x, y: x | y, [Q(title__contains=item) for item in search_list])).exclude(
+            scrap__gt=5).order_by('-created')[offset:offset + 10]
     else:
-        question_list = Question.objects.all().order_by('-created')[offset:offset + 10]
+        question_list = Question.objects.exclude(scrap__gt=QUESTION_SCRAP_LIMIT).order_by('-created')[
+                        offset:offset + 10]
 
     return render(request, '_questions/question.html', {'question_list': question_list})
 
@@ -95,10 +106,11 @@ def view_question(request, question_id, question_title):
         question.save()
         form = AnswerForm()
 
+    answer_set = question.answer_set.exclude(scrap__gt=ANSWER_SCRAP_LIMIT)
     auth_question_edit = user.has_perm(PERMISSION.AUTHORIZE_QUESTION_EDIT)
     auth_answer_edit = user.has_perm(PERMISSION.AUTHORIZE_ANSWER_EDIT)
     return render(request, '_questions/question_detail.html',
-                  {'question': question, 'form': form, 'show_answer_input': show_answer_input,
+                  {'question': question, 'form': form, 'show_answer_input': show_answer_input, 'answer_set': answer_set,
                    'authorize_question_edit': auth_question_edit, 'authorize_answer_edit': auth_answer_edit})
 
 
@@ -106,11 +118,14 @@ def view_question(request, question_id, question_title):
 def edit_question(request, question_id):
     question = Question.objects.get(id=question_id)
     tags = question.tag_set.all()
+    prev_revision = None
+
     question_revision = QuestionRevision()
     question_revision.question = question
     question_revision.editor = get_user(request)
     question_revision.title = question.title
     question_revision.text = question.text
+
     if request.method == 'POST':
         form = QuestionRevisionForm(request.POST, instance=question_revision)
         added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
@@ -125,10 +140,19 @@ def edit_question(request, question_id):
         else:
             form.add_error('text', _("Concise description of the problem must be specified"))
     else:
-        form = QuestionRevisionForm(instance=question_revision)
+        if question.questionrevision_set \
+                .filter(status=QuestionRevision.STATUS_AWATING_APPROVAL).count() > 0:
+
+            prev_revision = question.questionrevision_set \
+                                .filter(status=QuestionRevision.STATUS_AWATING_APPROVAL).order_by('-created')[:1][0]
+            form = QuestionRevisionForm(instance=prev_revision)
+            form.initial['editor_comment'] = ''
+            tags = prev_revision.tags.all()
+        else:
+            form = QuestionRevisionForm(instance=question_revision)
 
     return render(request, '_questions/question_revision.html',
-                  {'form': form, 'tags': tags, 'question': question})
+                  {'form': form, 'tags': tags, 'question': question, 'prev_revision': prev_revision})
 
 
 @login_required
@@ -152,7 +176,7 @@ def authorize_question_edit(request, question_id):
                 revision.supervisor = supervisor
                 revision.editor_comment = request.POST['editor_comment']
                 revision.save()
-                MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_AUTHORIZED,
+                MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_DENIED,
                                          params=revision.id)
                 return HttpResponseRedirect(url)
 
@@ -224,9 +248,27 @@ def question_add_comment(request):
 
 
 @login_required
+def question_scrap(request, question_id):
+    user = get_user(request)
+    question = Question.objects.get(id=question_id)
+    url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+    count = QuestionScrap.objects.filter(question_id=question_id, user=user).count()
+    if count == 0:
+        question.scrap += 1
+        question.save()
+        qscrap = QuestionScrap(question_id=question_id, user=user)
+        qscrap.save()
+        messages.add_message(request, messages.INFO, _('You have scrap this question.'))
+    else:
+        messages.add_message(request, messages.WARNING, _('You already scrap this question!'))
+    return HttpResponseRedirect(url)
+
+
+@login_required
 def edit_answer(request, answer_id):
     answer = Answer.objects.get(id=answer_id)
     question = answer.question
+    prev_revision = None
 
     answer_revision = AnswerRevision()
     answer_revision.answer = answer
@@ -243,9 +285,18 @@ def edit_answer(request, answer_id):
         else:
             form.add_error('text', _("Answer was not filed"))
     else:
-        form = AnswerRevisionForm(instance=answer_revision)
+        if answer.answerrevision_set \
+                .filter(status=AnswerRevision.STATUS_AWATING_APPROVAL).count() > 0:
 
-    return render(request, '_questions/answer_revision.html', {'form': form, 'question': question, 'answer': answer})
+            prev_revision = answer.answerrevision_set \
+                                .filter(status=AnswerRevision.STATUS_AWATING_APPROVAL).order_by('-created')[:1][0]
+            form = AnswerRevisionForm(instance=prev_revision)
+            form.initial['editor_comment'] = ''
+        else:
+            form = AnswerRevisionForm(instance=answer_revision)
+
+    return render(request, '_questions/answer_revision.html',
+                  {'form': form, 'question': question, 'answer': answer, 'prev_revision': prev_revision})
 
 
 @login_required
@@ -263,6 +314,16 @@ def authorize_answer_edit(request, answer_id):
     if request.method == 'POST':
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
+            url = reverse(URLS.QUESTIONS)
+            if 'not-approve' in request.POST:
+                revision.status = AnswerRevision.STATUS_REJECTED
+                revision.supervisor = supervisor
+                revision.editor_comment = request.POST['editor_comment']
+                revision.save()
+                MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_DENIED,
+                                         params=revision.id)
+                return HttpResponseRedirect(url)
+
             revision.status = AnswerRevision.STATUS_APPROVED
             revision.supervisor = supervisor
             answer.text = revision.text
@@ -292,7 +353,6 @@ def authorize_answer_edit(request, answer_id):
             MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_AUTHORIZED,
                                      params=revision.id)
 
-            url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
         else:
             messages.add_message(request, messages.ERROR, _('Revision already approved'))
@@ -322,6 +382,60 @@ def answer_add_comment(request):
     else:
         MessageUtil.send_message(user, answer.user, Message.TYPE_NEW_ANSWER_COMMENT, params=answer.id)
     return HttpResponse('')
+
+
+@login_required
+def answer_scrap(request, answer_id):
+    user = get_user(request)
+    answer = Answer.objects.get(id=answer_id)
+    question = answer.question
+    url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+    count = AnswerScrap.objects.filter(answer_id=answer_id, user=user).count()
+    if count == 0:
+        answer.scrap += 1
+        answer.save()
+        ascrap = AnswerScrap(answer_id=answer_id, user=user)
+        ascrap.save()
+        messages.add_message(request, messages.INFO, _('You have scrap answer.'))
+    else:
+        messages.add_message(request, messages.WARNING, _('You already scrap this answer!'))
+    return HttpResponseRedirect(url)
+
+
+@login_required
+def question_comment_scrap(request, question_comment_id):
+    user = get_user(request)
+    comment = QuestionComment.objects.get(id=question_comment_id)
+    question = comment.question
+    url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+    count = QuestionCommentScrap.objects.filter(question_comment_id=question_comment_id, user=user).count()
+    if count == 0:
+        comment.scrap += 1
+        comment.save()
+        qcscrap = QuestionCommentScrap(question_comment_id=question_comment_id, user=user)
+        qcscrap.save()
+        messages.add_message(request, messages.INFO, _('You have scrap comment.'))
+    else:
+        messages.add_message(request, messages.WARNING, _('You already scrap this comment!'))
+    return HttpResponseRedirect(url)
+
+
+@login_required
+def answer_comment_scrap(request, answer_comment_id):
+    user = get_user(request)
+    comment = AnswerComment.objects.get(id=answer_comment_id)
+    question = comment.answer.question
+    url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
+    count = AnswerCommentScrap.objects.filter(answer_comment_id=answer_comment_id, user=user).count()
+    if count == 0:
+        comment.scrap += 1
+        comment.save()
+        acscrap = AnswerCommentScrap(answer_comment_id=answer_comment_id, user=user)
+        acscrap.save()
+        messages.add_message(request, messages.INFO, _('You have scrap comment.'))
+    else:
+        messages.add_message(request, messages.WARNING, _('You already scrap this comment!'))
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -503,12 +617,17 @@ def vote_down_answer(request, answer_id):
 
 
 @login_required
+@permission_required(PERMISSION.ADD_TAG)
 def create_tag(request):
     if request.method == 'POST':
-        tag = Tag()
-        tag.user = get_user(request)
-        form = TagForm(request.POST, instance=tag)
-        form.save()
+        tag_exits = Tag.objects.filter(title=request.POST['title'].strip()).count() > 0
+        if not tag_exits:
+            tag = Tag()
+            tag.user = get_user(request)
+            form = TagForm(request.POST, instance=tag)
+            form.save()
+        else:
+            messages.add_message(request, messages.WARNING, _('Tag already exits!'))
         url = reverse(URLS.CREATE_TAG)
         return HttpResponseRedirect(url)
     else:
@@ -526,3 +645,8 @@ def find_tags(request):
     for tag in tags:
         response += '<li onclick="addTag(' + str(tag.id) + ', \'' + tag.title + '\')">' + tag.title + '</li>'
     return HttpResponse(response)
+
+
+@user_passes_test(lambda u: u.groups.filter(name=PERMISSION_GROUPS.SUPERVISOR).exists())
+def administration(request):
+    return render(request, '_questions/administration.html')

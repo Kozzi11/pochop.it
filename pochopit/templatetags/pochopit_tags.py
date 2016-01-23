@@ -21,3 +21,8 @@ def urls_constant(app, constant_name):
 def has_permission(user, app, permission):
     mod = __import__(app)
     return user.has_permission(getattr(mod.constants.PERMISSION, permission))
+
+
+@register.filter
+def has_active_revision(model, user):
+    return model.has_active_revision(user)

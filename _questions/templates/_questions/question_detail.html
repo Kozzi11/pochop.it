@@ -14,7 +14,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-            <h4>{{ user.first_name }} {% trans "is asking" %}</h4>
+            {% if user.id == question.user_id %}
+                <h4>{% trans "your question is" %}</h4>
+            {% else %}
+                <h4>{{ question.user.first_name }} {% trans "is asking" %}</h4>
+            {% endif %}
                 <div id="questions_container">
                     <div class="grid-item">
                         <div class="grid-item-container">
@@ -23,10 +27,13 @@
                                     <a href="{% url_from_constant '_questions' 'EDIT_QUESTION' question.id %}">
                                         <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit question' %}
                                     </a>
-                                {% endif %}
-                                {% if authorize_question_edit and question.has_active_revision and question.user.id != user.id%}
-                                    |<a href="{% url_from_constant '_questions' 'AUTHORIZE_QUESTION_EDIT' question.id %}">
-                                        <span class="glyphicon glyphicon-sunglasses"></span>&nbsp{% trans 'changes' %}
+                                    {% if question|has_active_revision:user and authorize_question_edit  and question.user.id != user.id%}
+                                        |<a href="{% url_from_constant '_questions' 'AUTHORIZE_QUESTION_EDIT' question.id %}">
+                                            <span class="glyphicon glyphicon-sunglasses"></span>&nbsp{% trans 'changes' %}
+                                        </a>
+                                    {% endif %}
+                                    |<a href="{% url_from_constant '_questions' 'SCRAP_QUESTION' question.id %}" class="danger">
+                                        <span class="glyphicon glyphicon-trash"></span>&nbsp{% trans 'it is scrap' %}
                                     </a>
                                 {% endif %}
                             </div>
@@ -52,7 +59,15 @@
                                     <td class="q-content-td">
                                         <div>
                                             <span class="q-title">{{ question.title }}</span>
-                                            <span class="q-date">{{ question.created|date:"j. M" }} | <a href="#">{{ user.first_name }} {{ user.last_name }}</a></span>
+                                            <span class="q-date">{{ question.created|date:"j. M" }} |
+                                                <a href="#">
+                                                {% if user.id == question.user_id %}
+                                                         {% trans 'you' %}
+                                                    {% else %}
+                                                         {{ question.user.first_name }} {{ question.user.last_name }}
+                                                    {% endif %}
+                                                </a>
+                                            </span>
                                             <div class="q-text">
                                                 {{ question.text|safe }}
                                             </div>
@@ -69,12 +84,24 @@
                                     <td>
                                         <div class="comment_container">
                                             {% for comment in question.questioncomment_set.all %}
-                                                <div class="comment">
-                                                   <div class="q-text">
-                                                            {{ comment.text }}&nbsp;&nbsp;<span class="comment-tail">(<a href="#" class="user-name">{{ question.user.first_name }} {{ question.user.last_name }}</a>
-                                                       <span class="date">{{ question.created|date:"j. M o H:i" }}</span>)</span>
-                                                   </div>
-                                                </div>
+                                                {% if comment.scrap <= 5 %}
+                                                    <div class="comment">
+                                                       <div class="q-text"> {{ comment.text }}&nbsp;&nbsp;
+                                                           <span class="comment-tail">(
+                                                                <a href="#"  class="user-name">
+                                                                    {% if user.id == comment.user_id %}
+                                                                             {% trans 'you' %}
+                                                                        {% else %}
+                                                                             {{ comment.user.first_name }} {{ comment.user.last_name }}
+                                                                        {% endif %}
+                                                                </a>
+                                                                <span class="date">{{ question.created|date:"j. M o H:i" }}</span>
+                                                           ) <a href="{% url_from_constant '_questions' 'SCRAP_QUESTION_COMMENT' comment.id %}" class="danger">
+                                                                <span class="glyphicon glyphicon-trash"></span>&nbsp{% trans 'it is scrap' %}
+                                                            </a></span>
+                                                       </div>
+                                                    </div>
+                                                {% endif %}
                                             {% endfor %}
                                         </div>
                                         {% if user.is_authenticated %}
@@ -99,10 +126,10 @@
         </div>
             <div class="row spacer">
                 <div class="col-md-8 col-md-offset-2">
-                {% if question.answer_set.count %}
+                {% if answer_set.count %}
                     <h4>{% trans "Yours answers" %}</h4>
                 {% endif %}
-                    {% for answer in question.answer_set.all %}
+                    {% for answer in answer_set.all %}
                         <div id="questions_container">
                             <div class="grid-item">
                                 <div class="grid-item-container">
@@ -111,12 +138,15 @@
                                             <a href="{% url_from_constant '_questions' 'EDIT_ANSWER' answer.id %}">
                                                 <span class="glyphicon glyphicon-pencil"></span>&nbsp{% trans 'edit answer' %}
                                             </a>
-                                        {% endif %}
-                                        {% if authorize_answer_edit and answer.has_active_revision and answer.user.id != user.id %}
+                                       {% if answer|has_active_revision:user and authorize_answer_edit and answer.user.id != user.id %}
                                             |<a href="{% url_from_constant '_questions' 'AUTHORIZE_ANSWER_EDIT' answer.id %}">
                                                 <span class="glyphicon glyphicon-sunglasses"></span>&nbsp{% trans 'changes' %}
                                             </a>
-                                        {% endif %}
+                                       {% endif %}
+                                            |<a href="{% url_from_constant '_questions' 'SCRAP_ANSWER' answer.id %}" class="danger">
+                                                <span class="glyphicon glyphicon-trash"></span>&nbsp{% trans 'it is scrap' %}
+                                            </a>
+                                       {% endif %}
                                     </div>
                                     <table>
                                         <tr>
@@ -139,7 +169,15 @@
                                             </td>
                                             <td class="q-content-td">
                                                 <div>
-                                                    <span class="q-date">{{ answer.created|date:"j. M" }} | <a href="#">{{ answer.user.first_name }} {{ answer.user.last_name }}</a></span>
+                                                    <span class="q-date">{{ answer.created|date:"j. M" }} |
+                                                        <a href="#">
+                                                            {% if user.id == answer.user_id %}
+                                                                 {% trans 'you' %}
+                                                            {% else %}
+                                                                 {{ answer.user.first_name }} {{ answer.user.last_name }}
+                                                            {% endif %}
+                                                        </a>
+                                                    </span>
                                                     <div class="q-text">
                                                         {{ answer.text|safe }}
                                                     </div>
@@ -151,12 +189,26 @@
                                             <td>
                                                 <div class="comment_container">
                                                     {% for comment in answer.answercomment_set.all %}
-                                                        <div class="comment">
-                                                           <div class="q-text">
-                                                                    {{ comment.text }}&nbsp;&nbsp;<span class="comment-tail">(<a href="#" class="user-name">{{ answer.user.first_name }} {{ answer.user.last_name }}</a>
-                                                               <span class="date">{{ answer.created|date:"j. M o H:i" }}</span>)</span>
-                                                           </div>
-                                                        </div>
+                                                        {% if comment.scrap <= 5 %}
+                                                            <div class="comment">
+                                                               <div class="q-text"> {{ comment.text }}&nbsp;&nbsp;
+                                                                   <span class="comment-tail">(
+                                                                            <a href="#" class="user-name">
+                                                                                {% if user.id == comment.user_id %}
+                                                                                     {% trans 'you' %}
+                                                                                {% else %}
+                                                                                     {{ comment.user.first_name }} {{ comment.user.last_name }}
+                                                                                {% endif %}
+                                                                            </a>
+                                                                       <span class="date">{{ answer.created|date:"j. M o H:i" }}
+                                                                           )<a href="{% url_from_constant '_questions' 'SCRAP_ANSWER_COMMENT' comment.id %}" class="danger">
+                                                                                <span class="glyphicon glyphicon-trash"></span>&nbsp{% trans 'it is scrap' %}
+                                                                            </a>
+                                                                       </span>
+                                                                   </span>
+                                                               </div>
+                                                            </div>
+                                                        {% endif %}
                                                     {% endfor %}
                                                 </div>
                                                 <span class="contain-glyphicon" onclick="$('#textarea-answer' + {{ answer.id }}).toggle()">
@@ -186,7 +238,7 @@
                       {% bootstrap_form form %}
                         <div class="form-group text-right">
                             <button type="submit" class="btn btn-primary">
-                                {% trans "Save" %}
+                                {% trans "advise" %}
                             </button>
                         </div>
                     </form>

@@ -8,7 +8,8 @@ class QuestionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
                            label=_("Concise description of the problem"), required=False)
 
-    tags = forms.CharField(required=False, label=_("Tags"))
+    tags = forms.CharField(required=False, label='', widget=forms.TextInput(attrs={"placeholder": _("Tags")}))
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": _("Question heading")}))
 
     class Meta:
         model = Question
@@ -16,18 +17,16 @@ class QuestionForm(forms.ModelForm):
             'title',
             'text',
         ]
-        labels = {
-            'title': _("Question heading")
-        }
 
 
 class QuestionRevisionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
-                           label=_("Concise description of the problem"), required=False)
+                           label='', required=False)
 
-    tags = forms.CharField(required=False, label=_("Tags"))
-
-    editor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+    tags = forms.CharField(required=False, label='', widget=forms.TextInput(attrs={"placeholder": _("Tags")}))
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": _("Question heading")}))
+    editor_comment = forms.CharField(label='',
+                                     widget=forms.Textarea(attrs={'rows': 4, "placeholder": _("Editor comment")}))
 
     class Meta:
         model = QuestionRevision
@@ -37,9 +36,6 @@ class QuestionRevisionForm(forms.ModelForm):
             'tags',
             'editor_comment',
         ]
-        labels = {
-            'title': _("Question heading")
-        }
 
 
 class QuestionSupervisorRevisionForm(QuestionRevisionForm):
@@ -70,9 +66,10 @@ class AnswerForm(forms.ModelForm):
 
 class AnswerRevisionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
-                           label=_("Answer"), required=False)
+                           label='', required=False)
 
-    editor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+    editor_comment = forms.CharField(label='',
+                                     widget=forms.Textarea(attrs={'rows': 4, "placeholder": _("Editor comment")}))
 
     class Meta:
         model = AnswerRevision
@@ -83,7 +80,14 @@ class AnswerRevisionForm(forms.ModelForm):
 
 
 class AnswerSupervisorRevisionForm(AnswerRevisionForm):
-    supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
+    CHOICES = (
+        ('1', _('low')),
+        ('2', _('middle')),
+        ('3', _('high')),
+    )
+    sophistication = forms.CharField(widget=forms.Select(choices=CHOICES), label=_('sophistication'))
+    supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False,
+                                         label=_('Supervisor comment'))
 
     def __init__(self, *args, **kwargs):
         super(AnswerSupervisorRevisionForm, self).__init__(*args, **kwargs)

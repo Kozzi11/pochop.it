@@ -9,6 +9,7 @@ class Message(models.Model):
     STATUS_UNSEEN = 0
     STATUS_SEEN = 1
     STATUS_READ = 2
+    STATUS_DELETED = 3
 
     TYPE_NEW_ANSWER = 0
     TYPE_NEW_QUESTION_COMMENT = 1
@@ -47,13 +48,24 @@ class Message(models.Model):
         elif self.type == self.TYPE_QUESTION_EDIT_AUTHORIZED:
             revision_id = self.params
             revision = QuestionRevision.objects.get(id=revision_id)
-            text = '<span style="font-weight:bold">Tvoje úpravy u otázky' + revision.question.title + ' byly schváleny'
+            text = '<span style="font-weight:bold">Schváleny úpravy otázky:</span><br>' + revision.question.title
 
         elif self.type == self.TYPE_ANSWER_EDIT_AUTHORIZED:
             revision_id = self.params
             revision = AnswerRevision.objects.get(id=revision_id)
-            text = '<span style="font-weight:bold">Tvoje úpravy k odpovědi u otázky' + revision.answer.question.title \
-                   + ' byly schváleny'
+            text = '<span style="font-weight:bold">Schváleny úpravy odpovědi u otázky:</span><br>' + \
+                   revision.answer.question.title
+
+        elif self.type == self.TYPE_QUESTION_EDIT_DENIED:
+            revision_id = self.params
+            revision = QuestionRevision.objects.get(id=revision_id)
+            text = '<span style="font-weight:bold">Zamítnuty úpravy otázky:</span><br>' + revision.question.title
+
+        elif self.type == self.TYPE_ANSWER_EDIT_DENIED:
+            revision_id = self.params
+            revision = AnswerRevision.objects.get(id=revision_id)
+            text = '<span style="font-weight:bold">Zamítnuty úpravy odpovědi u otázky:</span><br>' + \
+                   revision.answer.question.title
 
         return text
 

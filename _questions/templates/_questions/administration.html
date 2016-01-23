@@ -1,0 +1,18 @@
+{% extends "pochopit/base.html" %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load pochopit_tags %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <a href="{% url_from_constant '_questions' 'CREATE_TAG' %}">{% trans 'add tag' %}</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

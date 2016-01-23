@@ -30,7 +30,7 @@
     font-size: 12px;
 }
 .q-content-td {
-    padding: 12px 0 12px 18px;
+    padding: 4px 0 12px 18px;
     width: 100%;
     vertical-align: top;
 }
@@ -50,7 +50,7 @@
 .q-tag {
     background-color: #B7E487;
     padding: 4px;
-    cursor: pointer;
+    cursor: default;
 }
 .q-tag a:hover {
     text-decoration: none;
@@ -65,6 +65,9 @@
 }
 .q-action-bar a:hover{
     text-decoration: none;
+}
+a.danger:hover{
+    color: #de322e;
 }
 .comment {
     padding: 4px 4px 4px 18px;
@@ -109,16 +112,21 @@
     background-color: #f5f5f5;
 }
 #tag-holder {
-    padding: 6px 4px 10px 0;
+
 }
 #tag-holder .glyphicon {
     margin-left: 3px;
     top: 2px;
+    color: #5a5a5a;;
 }
 #tag-holder .q-tag {
+    margin-bottom: 6px;
+    display: inline-block;
     margin-right: 6px;
 }
-
 #tag-holder .glyphicon:hover {
     color: #de322e;
+}
+.yellow-alert {
+    background: #FFE761;padding: 1px 12px;
 }

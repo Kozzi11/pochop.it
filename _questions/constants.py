@@ -1,6 +1,6 @@
 
-
 class URLS:
+    ADMINISTRATION = 'administration'
     QUESTIONS = 'questions'
     QUESTIONS_GRID_DATA = 'questions_grid_data'
     ASK_QUESTION = 'ask_question'
@@ -17,8 +17,17 @@ class URLS:
     VOTE_DOWN_QUESTION = 'vote_down_question'
     VOTE_UP_ANSWER = 'vote_up_answer'
     VOTE_DOWN_ANSWER = 'vote_down_answer'
+    SCRAP_QUESTION = 'scrap_question'
+    SCRAP_ANSWER = 'scrap_answer'
+    SCRAP_QUESTION_COMMENT = 'scrap_question_comment'
+    SCRAP_ANSWER_COMMENT = 'scrap_answer_comment'
 
 
 class PERMISSION:
     AUTHORIZE_QUESTION_EDIT = '_questions.change_questionrevision'
     AUTHORIZE_ANSWER_EDIT = '_questions.change_answerrevision'
+    ADD_TAG = '_questions.change_tag'
+
+
+class PERMISSION_GROUPS:
+    SUPERVISOR = 'supervisor'

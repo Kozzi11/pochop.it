@@ -12,18 +12,22 @@
 {% block content %}
 
 <div class="container">
+    {% if user_is_supervisor %}
+        <div class="row">
+            <a href="{% url_from_constant '_questions' 'ADMINISTRATION' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans 'Administration' %}</a>
+        </div>
+    {% endif %}
     <div class="row spacer">
         <div class="col-md-8 col-md-offset-2">
             <div class="form-group">
-                <h3 style="display: inline">Nevíš si rady nebo tě něco zajímá</h3>
+                <h3 style="display: inline">Nevíš si rady nebo tě něco zajímá?</h3>
                 <a href="{% url_from_constant '_questions' 'ASK_QUESTION' %}" class="btn btn-primary pull-right" role="button">{% trans "Ask PochopIT members" %}</a>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="form-group">
-                <label for="srch-term">&nbsp;</label>
+            <div class="form-group" style="margin-top: 6px">
                 <div class="input-group">
                      <input type="text" class="form-control" onkeyup="if(event.keyCode == 13) {window.location.href = {% url_from_constant '_questions' 'QUESTIONS' %} + '?q=' + $('#srch-term').val().replace(/ /g, '+')}" placeholder="{% trans "Search" %}" name="srch-term" id="srch-term" value="{{ search_query }}">
                      <div class="input-group-btn">
