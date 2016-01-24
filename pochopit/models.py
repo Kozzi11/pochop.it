@@ -2,12 +2,13 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class UserSetting(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
-    minutes = models.BigIntegerField(default=0)
+    mits = models.BigIntegerField(default=0)
+    businesscard = models.TextField(default='')
 
 
-class MinuteTransaction(models.Model):
+class MitTransaction(models.Model):
 
     TYPE_ADD_QUESTION = 1  # az alespon x lidi oznaci otazku za prospesnou
     TYPE_ADD_ANSWER = 2  # az alespon x lidi oznaci odpoved za prospesnou

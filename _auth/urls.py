@@ -1,25 +1,14 @@
-"""pochopit URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.8/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Add an import:  from blog import urls as blog_urls
-    2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
-"""
 from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
-from _homepage.constants import URLS
+from _auth.constants import URLS
+from _homepage.constants import URLS as HOMEPAGE_URLS
 
 urlpatterns = [
-    url(r'^login/$', auth_views.login, {'template_name': '_auth/login.html'}),
-    url(r'^logout/$', auth_views.logout, {'next_page': URLS.HOMEPAGE}),
-    url(r'^sing_up/$', views.sign_up, name='sign_up')
+    url(r'^login/$', auth_views.login, {'template_name': '_auth/login.html'}, name=URLS.SIGN_IN),
+    url(r'^logout/$', auth_views.logout, {'next_page': HOMEPAGE_URLS.HOMEPAGE}),
+    url(r'^sing_up/$', views.sign_up, name=URLS.SIGN_UP),
+    url(r'^profile/(.*)/$', views.profile, name=URLS.PROFILE),
+    url(r'^my_profile/$', views.my_profile, name=URLS.MY_PROFILE),
+    url(r'^my_profile/edit$', views.my_profile_edit, name=URLS.MY_PROFILE_EDIT),
 ]

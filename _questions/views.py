@@ -17,7 +17,7 @@ from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer, Q
     QuestionComment, AnswerComment, QuestionScrap, AnswerScrap, AnswerCommentScrap, QuestionCommentScrap
 from django.utils.translation import ugettext as _
 from pochopit.app_util import AppUtil
-from pochopit.models import MinuteTransaction
+from pochopit.models import MitTransaction
 
 QUESTION_SCRAP_LIMIT = 5
 ANSWER_SCRAP_LIMIT = QUESTION_SCRAP_LIMIT
@@ -193,22 +193,22 @@ def authorize_question_edit(request, question_id):
             context_info = 'question_id:' + str(question.id) + ';' + 'revision_id:' + str(revision.id)
             system_user = AppUtil.get_system_user()
             AppUtil.process_transaction(user_from=system_user, user_to=supervisor,
-                                        amount=MinuteTransaction.AMOUNT_APPROVE_QUESTION_EDIT,
-                                        trans_type=MinuteTransaction.TYPE_APPROVE_QUESTION_EDIT,
+                                        amount=MitTransaction.AMOUNT_APPROVE_QUESTION_EDIT,
+                                        trans_type=MitTransaction.TYPE_APPROVE_QUESTION_EDIT,
                                         context_info=context_info)
 
             amount = 0
             sophistication = request.POST['sophistication']
             if sophistication == '1':
-                amount = MinuteTransaction.AMOUNT_EDIT_QUESTION_SMALL
+                amount = MitTransaction.AMOUNT_EDIT_QUESTION_SMALL
             elif sophistication == '2':
-                amount = MinuteTransaction.AMOUNT_EDIT_QUESTION_MIDDLE
+                amount = MitTransaction.AMOUNT_EDIT_QUESTION_MIDDLE
             elif sophistication == '3':
-                amount = MinuteTransaction.AMOUNT_EDIT_QUESTION_FULL
+                amount = MitTransaction.AMOUNT_EDIT_QUESTION_FULL
 
             AppUtil.process_transaction(user_from=system_user, user_to=revision.editor,
                                         amount=amount,
-                                        trans_type=MinuteTransaction.TYPE_EDIT_QUESTION,
+                                        trans_type=MitTransaction.TYPE_EDIT_QUESTION,
                                         context_info=context_info)
 
             MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_AUTHORIZED,
@@ -332,22 +332,22 @@ def authorize_answer_edit(request, answer_id):
             context_info = 'answer_id:' + str(answer.id) + ';' + 'revision_id:' + str(revision.id)
             system_user = AppUtil.get_system_user()
             AppUtil.process_transaction(user_from=system_user, user_to=supervisor,
-                                        amount=MinuteTransaction.AMOUNT_APPROVE_ANSWER_EDIT,
-                                        trans_type=MinuteTransaction.TYPE_APPROVE_ANSWER_EDIT,
+                                        amount=MitTransaction.AMOUNT_APPROVE_ANSWER_EDIT,
+                                        trans_type=MitTransaction.TYPE_APPROVE_ANSWER_EDIT,
                                         context_info=context_info)
 
             amount = 0
             sophistication = request.POST['sophistication']
             if sophistication == '1':
-                amount = MinuteTransaction.AMOUNT_EDIT_ANSWER_SMALL
+                amount = MitTransaction.AMOUNT_EDIT_ANSWER_SMALL
             elif sophistication == '2':
-                amount = MinuteTransaction.AMOUNT_EDIT_ANSWER_MIDDLE
+                amount = MitTransaction.AMOUNT_EDIT_ANSWER_MIDDLE
             elif sophistication == '3':
-                amount = MinuteTransaction.AMOUNT_EDIT_ANSWER_FULL
+                amount = MitTransaction.AMOUNT_EDIT_ANSWER_FULL
 
             AppUtil.process_transaction(user_from=system_user, user_to=revision.editor,
                                         amount=amount,
-                                        trans_type=MinuteTransaction.TYPE_EDIT_ANSWER,
+                                        trans_type=MitTransaction.TYPE_EDIT_ANSWER,
                                         context_info=context_info)
 
             MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_AUTHORIZED,
@@ -456,9 +456,9 @@ def vote_up_question(request, question_id):
         messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
         return HttpResponseRedirect(url)
 
-    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+    if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
         messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
         return HttpResponseRedirect(url)
 
     vote = VoteQuestion()
@@ -467,27 +467,27 @@ def vote_up_question(request, question_id):
     vote.question = question
 
     votequestion_set = question.votequestion_set.filter(
-        Q(minutes__lt=MinuteTransaction.MAX_AMOUNT_VOTE_QUESTION) & Q(up=True))
+        Q(mits__lt=MitTransaction.MAX_AMOUNT_VOTE_QUESTION) & Q(up=True))
     for votequestion in votequestion_set:
         user_from = AppUtil.get_system_user()
         user_to = votequestion.user
-        votequestion.minutes += MinuteTransaction.AMOUNT_VOTE_QUESTION
+        votequestion.mits += MitTransaction.AMOUNT_VOTE_QUESTION
         context_info = 'question_id:' + str(question.id) + ';' + 'vote_id:' + str(vote.id)
         AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                    amount=MinuteTransaction.AMOUNT_VOTE_QUESTION,
-                                    trans_type=MinuteTransaction.TYPE_VOTE_QUESTION, context_info=context_info)
+                                    amount=MitTransaction.AMOUNT_VOTE_QUESTION,
+                                    trans_type=MitTransaction.TYPE_VOTE_QUESTION, context_info=context_info)
         votequestion.save()
 
     vote.save()
     question.votes += 1
-    if question.paid is False and question.votes == MinuteTransaction.VOTE_COUNT_ADD_QUESTION:
+    if question.paid is False and question.votes == MitTransaction.VOTE_COUNT_ADD_QUESTION:
         user_from = AppUtil.get_system_user()
         user_to = question.user
         question.paid = True
         context_info = 'question_id:' + str(question.id) + ';' + 'vote_id:' + str(vote.id)
         AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                    amount=MinuteTransaction.AMOUNT_ADD_QUESTION,
-                                    trans_type=MinuteTransaction.TYPE_ADD_QUESTION, context_info=context_info)
+                                    amount=MitTransaction.AMOUNT_ADD_QUESTION,
+                                    trans_type=MitTransaction.TYPE_ADD_QUESTION, context_info=context_info)
     question.save()
     return HttpResponseRedirect(url)
 
@@ -510,9 +510,9 @@ def vote_down_question(request, question_id):
         messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
         return HttpResponseRedirect(url)
 
-    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+    if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
         messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
         return HttpResponseRedirect(url)
 
     vote = VoteQuestion()
@@ -545,9 +545,9 @@ def vote_up_answer(request, answer_id):
         messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
         return HttpResponseRedirect(url)
 
-    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+    if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
         messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
         return HttpResponseRedirect(url)
 
     vote = VoteAnswer()
@@ -556,27 +556,27 @@ def vote_up_answer(request, answer_id):
     vote.up = True
 
     voteanser_set = answer.voteanswer_set.filter(
-        Q(minutes__lt=MinuteTransaction.MAX_AMOUNT_VOTE_ANSWER) & Q(up=True))
+        Q(mits__lt=MitTransaction.MAX_AMOUNT_VOTE_ANSWER) & Q(up=True))
     for voteanswer in voteanser_set:
         user_from = AppUtil.get_system_user()
         user_to = voteanswer.user
-        voteanswer.minutes += MinuteTransaction.AMOUNT_VOTE_ANSWER
+        voteanswer.mits += MitTransaction.AMOUNT_VOTE_ANSWER
         context_info = 'answer_id:' + str(answer.id) + ';' + 'vote_id:' + str(vote.id)
         AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                    amount=MinuteTransaction.AMOUNT_VOTE_ANSWER,
-                                    trans_type=MinuteTransaction.TYPE_VOTE_ANSWER, context_info=context_info)
+                                    amount=MitTransaction.AMOUNT_VOTE_ANSWER,
+                                    trans_type=MitTransaction.TYPE_VOTE_ANSWER, context_info=context_info)
         voteanswer.save()
 
     vote.save()
     answer.votes += 1
-    if answer.paid is False and answer.votes == MinuteTransaction.VOTE_COUNT_ADD_ANSWR:
+    if answer.paid is False and answer.votes == MitTransaction.VOTE_COUNT_ADD_ANSWR:
         user_from = AppUtil.get_system_user()
         user_to = answer.user
         answer.paid = True
         context_info = 'answer_id:' + str(answer.id) + ';' + 'vote_id:' + str(vote.id)
         AppUtil.process_transaction(user_from=user_from, user_to=user_to,
-                                    amount=MinuteTransaction.AMOUNT_ADD_ANSWER,
-                                    trans_type=MinuteTransaction.TYPE_ADD_ANSWER, context_info=context_info)
+                                    amount=MitTransaction.AMOUNT_ADD_ANSWER,
+                                    trans_type=MitTransaction.TYPE_ADD_ANSWER, context_info=context_info)
     answer.save()
     return HttpResponseRedirect(url)
 
@@ -601,9 +601,9 @@ def vote_down_answer(request, answer_id):
         messages.add_message(request, messages.WARNING, _('You can not vote more than once!'))
         return HttpResponseRedirect(url)
 
-    if count_of_vote_in_day >= MinuteTransaction.DAY_VOTE_LIMIT:
+    if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
         messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MinuteTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
         return HttpResponseRedirect(url)
 
     vote = VoteAnswer()

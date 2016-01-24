@@ -21,11 +21,7 @@
                         <div>
                             <a href="{% url_from_constant "_questions" "VIEW_QUESTION" question.id  question.title.split|join:"-"%}" class="q-title">{{ question.title }}</a>
                             <span class="q-date">{{ question.created|date:"j. M" }} |
-                                {% if user.id == question.user_id %}
-                                    <a href="#">{% trans 'you' %}</a>
-                                {% else %}
-                                    <a href="#">{{ question.user.first_name }} {{ question.user.last_name }}</a>
-                                {% endif %}
+                                <a href="{% url_from_constant '_auth' 'PROFILE' question.user_id %}">{% if user.id == question.user_id %}{% trans 'you' %}{% else %}{{ question.user.first_name }} {{ question.user.last_name }}{% endif %}</a>
                             </span>
                             <div class="q-text">
                                 {{ question.text|safe|truncatechars:500 }}

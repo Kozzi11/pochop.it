@@ -14,7 +14,9 @@
 <div class="container">
     {% if user_is_supervisor %}
         <div class="row">
-            <a href="{% url_from_constant '_questions' 'ADMINISTRATION' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans 'Administration' %}</a>
+            <div class="col-md-8 col-md-offset-2">
+                <a href="{% url_from_constant '_questions' 'ADMINISTRATION' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans 'Administration' %}</a>
+            </div>
         </div>
     {% endif %}
     <div class="row spacer">

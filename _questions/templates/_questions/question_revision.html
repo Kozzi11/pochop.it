@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-6">
                 {% if prev_revision %}
-                    <h3> {% trans 'Version from' %} {{ prev_revision.editor.first_name }} {{ prev_revision.editor.last_name }}</h3>
+                    <h3> {% trans 'Version from' %}<a href="{% url_from_constant '_auth' 'PROFILE' prev_revision.editor_id %}">  {{ prev_revision.editor.first_name }} {{ prev_revision.editor.last_name }}</a></h3>
                 {% else %}
                     <h3> {% trans 'Original version' %} </h3>
                 {% endif %}

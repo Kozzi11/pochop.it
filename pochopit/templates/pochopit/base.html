@@ -54,7 +54,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'homepage' %}">
+          <a class="navbar-brand" href="{% url_from_constant '_homepage' 'HOMEPAGE' %}">
               <img class="logo" alt="Brand" src="{% static "pochopit/assets/pochop_it_logo.png" %}">
           </a>
         </div>
@@ -67,7 +67,7 @@
           {% if user.is_authenticated %}
               <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="#">{{ user_minutes }}&nbsp;<span class="glyphicon glyphicon-hourglass"></span></a>
+                    <a href="#">{{ user_mits }}&nbsp;<span class="glyphicon glyphicon-hourglass"></span></a>
                 </li>
                 <li class="dropdown" onclick="loadMessages(this)">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -87,18 +87,18 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">{% trans "My account" %}</a></li>
-                        <li><a href="{% url 'logout' %}">{% trans "Sign out" %}</a></li>
+                        <li><a href="{% url_from_constant '_auth' 'MY_PROFILE' %}">{% trans "My account" %}</a></li>
+                        <li><a href="{% url_from_constant '_auth' 'SIGN_OUT' %}">{% trans "Sign out" %}</a></li>
                     </ul>
                 </li>
               </ul>
           {% else %}
               <ul class="nav navbar-nav navbar-right">
                   <li>
-                    <a href="{% url 'sign_up' %}">{% trans "Sign up" %}</a>
+                    <a href="{% url_from_constant '_auth' 'SIGN_UP' %}">{% trans "Sign up" %}</a>
                   </li>
                   <li>
-                    <a href="{% url 'login' %}">{% trans "Sign in" %}</a>
+                    <a href="{% url_from_constant '_auth' 'SIGN_IN' %}">{% trans "Sign in" %}</a>
                   </li>
               </ul>
           {% endif %}

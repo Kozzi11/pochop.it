@@ -60,7 +60,7 @@
                                         <div>
                                             <span class="q-title">{{ question.title }}</span>
                                             <span class="q-date">{{ question.created|date:"j. M" }} |
-                                                <a href="#">
+                                                <a href="{% url_from_constant '_auth' 'PROFILE' question.user_id %}">
                                                 {% if user.id == question.user_id %}
                                                          {% trans 'you' %}
                                                     {% else %}
@@ -88,7 +88,7 @@
                                                     <div class="comment">
                                                        <div class="q-text"> {{ comment.text }}&nbsp;&nbsp;
                                                            <span class="comment-tail">(
-                                                                <a href="#"  class="user-name">
+                                                                <a href="{% url_from_constant '_auth' 'PROFILE' comment.user_id %}"  class="user-name">
                                                                     {% if user.id == comment.user_id %}
                                                                              {% trans 'you' %}
                                                                         {% else %}
@@ -170,7 +170,7 @@
                                             <td class="q-content-td">
                                                 <div>
                                                     <span class="q-date">{{ answer.created|date:"j. M" }} |
-                                                        <a href="#">
+                                                        <a href="{% url_from_constant '_auth' 'PROFILE' answer.user_id %}">
                                                             {% if user.id == answer.user_id %}
                                                                  {% trans 'you' %}
                                                             {% else %}
@@ -193,7 +193,7 @@
                                                             <div class="comment">
                                                                <div class="q-text"> {{ comment.text }}&nbsp;&nbsp;
                                                                    <span class="comment-tail">(
-                                                                            <a href="#" class="user-name">
+                                                                            <a href="{% url_from_constant '_auth' 'PROFILE' comment.user_id %}" class="user-name">
                                                                                 {% if user.id == comment.user_id %}
                                                                                      {% trans 'you' %}
                                                                                 {% else %}

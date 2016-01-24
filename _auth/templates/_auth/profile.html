@@ -1,0 +1,72 @@
+{% extends "pochopit/base.html" %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load pochopit_tags %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_auth/css/style.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>{% trans 'Base info' %}
+                    {% if profile_user.id == user.id %}
+                        <a href="{% url_from_constant '_auth' 'MY_PROFILE_EDIT' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{% trans 'edit profil' %}</a>
+                    {% endif %}</h3>
+                <h4 class="text-">{% trans 'commitment' %}: {{ profile_user.userprofile.mits }} {% trans 'mits' %}</h4>
+                {{ profile_user.first_name }}  {{ profile_user.last_name }}<br>
+                {{ profile_user.email }}<br>
+                <h3 style="margin-top: 50px">{% trans 'businesscard' %}</h3>
+                <div class="profile-businesscard">
+{#                    {{ profile_user.userprofile.businesscard|safe }}#}
+                 {% include '_auth/businesscard.html' %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h3>{% trans 'statistics' %}</h3>
+                <div>
+                    <h4>{% trans 'Poradit' %}</h4>
+                    <table class="table">
+                        <tr>
+                            <td></td>
+                            <td>{% trans 'number' %}</td>
+                            <td>{% trans 'credit' %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'questions' %}</td>
+                            <td>{{ stats.poradit.questions.count }}</td>
+                            <td>{{ stats.poradit.questions.mits }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'answers' %}</td>
+                            <td>{{ stats.poradit.answers.count }}</td>
+                            <td>{{ stats.poradit.answers.mits }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'edits' %}</td>
+                            <td>{{ stats.poradit.edits.count }}</td>
+                            <td>{{ stats.poradit.edits.mits }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'votes' %}</td>
+                            <td>{{ stats.poradit.votes.count }}</td>
+                            <td>{{ stats.poradit.votes.mits }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'administration' %}</td>
+                            <td>{{ stats.poradit.admin.count }}</td>
+                            <td>{{ stats.poradit.admin.mits }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'summary' %}</td>
+                            <td>{{ stats.poradit.summary.count }}</td>
+                            <td>{{ stats.poradit.summary.mits }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

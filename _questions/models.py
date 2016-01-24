@@ -118,7 +118,7 @@ class VoteQuestion(models.Model):
     question = models.ForeignKey(Question)
     user = models.ForeignKey(User)
     up = models.BooleanField()
-    minutes = models.IntegerField(default=0)
+    mits = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
 
@@ -126,5 +126,5 @@ class VoteAnswer(models.Model):
     answer = models.ForeignKey(Answer)
     user = models.ForeignKey(User)
     up = models.BooleanField()
-    minutes = models.IntegerField(default=0)
+    mits = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
