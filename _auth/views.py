@@ -21,9 +21,10 @@ def sign_up(request):
                 email=form.cleaned_data['email'])
             user = auth.authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password'])
             auth.login(request, user)
-            user_setting = UserProfile()
-            user_setting.user = user
-            user_setting.save()
+            user_profile = UserProfile()
+            user_profile.user = user
+            user_profile.mits = 0
+            user_profile.save()
             return HttpResponseRedirect('/sing_up/success')
         else:
             form = SignUpForm()
@@ -57,9 +58,9 @@ def my_profile_edit(request):
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.email = form.cleaned_data['email']
-            profile = user.userprofile
-            profile.businesscard = form.cleaned_data['businesscard']
-            profile.save()
+            user_profile = user.userprofile
+            user_profile.businesscard = form.cleaned_data['businesscard']
+            user_profile.save()
             user.save()
             url = reverse(URLS.MY_PROFILE)
             return HttpResponseRedirect(url)

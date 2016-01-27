@@ -20,8 +20,11 @@
                 {{ profile_user.email }}<br>
                 <h3 style="margin-top: 50px">{% trans 'businesscard' %}</h3>
                 <div class="profile-businesscard">
-{#                    {{ profile_user.userprofile.businesscard|safe }}#}
-                 {% include '_auth/businesscard.html' %}
+                {% if profile_user.userprofile.businesscard %}
+                    {{ profile_user.userprofile.businesscard|safe }}
+                {% else %}
+                    {% include '_auth/businesscard.html' %}
+                {% endif %}
                 </div>
             </div>
             <div class="col-md-4">

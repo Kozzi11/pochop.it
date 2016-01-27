@@ -1,7 +1,14 @@
-{% for notification in notifications %}
+{% load i18n %}
+{% if notifications.count == 0 %}
     <li class="notification">
-        <a href="{{ notification.get_url }}">
-            {{ notification.get_notification_text|safe }}
-        </a>
+        <a>{% trans 'You have not notification' %}</a>
     </li>
-{% endfor %}
+{% else %}
+    {% for notification in notifications %}
+        <li class="notification">
+            <a href="{{ notification.get_url }}">
+                {{ notification.get_notification_text|safe }}
+            </a>
+        </li>
+    {% endfor %}
+{% endif %}
