@@ -1,15 +1,25 @@
+import bleach
 from django import forms
 from tinymce.widgets import TinyMCE
 from _questions.models import Question, Tag, Answer, QuestionRevision, AnswerRevision
 from django.utils.translation import ugettext as _
+from pochopit import constants
 
 
 class QuestionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
-                           label=_("Concise description of the problem"), required=False)
+                           label=_("Concise description of the problem"), required=True)
 
     tags = forms.CharField(required=False, label='', widget=forms.TextInput(attrs={"placeholder": _("Tags")}))
     title = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": _("Question heading")}))
+
+    def clean_title(self):
+        text = self.cleaned_data['title']
+        return bleach.clean(text, tags=[], strip=True)
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        return bleach.clean(text, tags=constants.ALLOWED_TAGS)
 
     class Meta:
         model = Question
@@ -21,12 +31,24 @@ class QuestionForm(forms.ModelForm):
 
 class QuestionRevisionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
-                           label='', required=False)
+                           label='', required=True)
 
     tags = forms.CharField(required=False, label='', widget=forms.TextInput(attrs={"placeholder": _("Tags")}))
     title = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": _("Question heading")}))
     editor_comment = forms.CharField(label='',
                                      widget=forms.Textarea(attrs={'rows': 4, "placeholder": _("Editor comment")}))
+
+    def clean_title(self):
+        text = self.cleaned_data['title']
+        return bleach.clean(text, tags=[], strip=True)
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        return bleach.clean(text, tags=constants.ALLOWED_TAGS)
+
+    def clean_editor_comment(self):
+        text = self.cleaned_data['editor_comment']
+        return bleach.clean(text, tags=[])
 
     class Meta:
         model = QuestionRevision
@@ -54,8 +76,12 @@ class QuestionSupervisorRevisionForm(QuestionRevisionForm):
 
 
 class AnswerForm(forms.ModelForm):
-    text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=False,
+    text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=True,
                            label=_("Your answer"))
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        return bleach.clean(text, tags=constants.ALLOWED_TAGS)
 
     class Meta:
         model = Answer
@@ -66,10 +92,18 @@ class AnswerForm(forms.ModelForm):
 
 class AnswerRevisionForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
-                           label='', required=False)
+                           label='', required=True)
 
     editor_comment = forms.CharField(label='',
                                      widget=forms.Textarea(attrs={'rows': 4, "placeholder": _("Editor comment")}))
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        return bleach.clean(text, tags=constants.ALLOWED_TAGS)
+
+    def clean_editor_comment(self):
+        text = self.cleaned_data['editor_comment']
+        return bleach.clean(text, tags=[])
 
     class Meta:
         model = AnswerRevision

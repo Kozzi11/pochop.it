@@ -233,7 +233,7 @@
         {% if show_answer_input %}
             <div class="row spacer">
                 <div class="col-md-8 col-md-offset-2">
-                    <form action="{% url_from_constant "_questions" "VIEW_QUESTION" question.id question.title.split|join:"-"%}" method="post" class="form">
+                    <form novalidate action="{% url_from_constant "_questions" "VIEW_QUESTION" question.id question.title.split|join:"-"%}" method="post" class="form">
                       {% csrf_token %}
                       {% bootstrap_form form %}
                         <div class="form-group text-right">

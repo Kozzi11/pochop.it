@@ -1,5 +1,6 @@
 from functools import reduce
 import datetime
+import bleach
 from django.contrib import messages
 
 from django.contrib.auth import get_user
@@ -16,6 +17,7 @@ from _questions.forms import QuestionForm, TagForm, AnswerForm, QuestionRevision
 from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer, QuestionRevision, AnswerRevision, \
     QuestionComment, AnswerComment, QuestionScrap, AnswerScrap, AnswerCommentScrap, QuestionCommentScrap
 from django.utils.translation import ugettext as _
+from pochopit import constants
 from pochopit.app_util import AppUtil
 from pochopit.models import MitTransaction
 
@@ -62,16 +64,12 @@ def ask_question(request):
         added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
         tags = Tag.objects.filter(id__in=added_tags_ids)
         form = QuestionForm(request.POST, instance=question)
-        if request.POST['text']:
+        if form.is_valid():
             form.save()
-
             question.tag_set = tags
-            question.text = form.cleaned_data['text']
             question.save()
             url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
-        else:
-            form.add_error('text', _("Concise description of the problem must be specified"))
     else:
         form = QuestionForm()
 
@@ -94,13 +92,11 @@ def view_question(request, question_id, question_title):
         if show_answer_input is False:
             messages.add_message(request, messages.ERROR, _('You can add only one answer to question!'))
         else:
-            if request.POST['text']:
+            if form.is_valid():
                 form.save()
                 MessageUtil.send_message(user, question.user, Message.TYPE_NEW_ANSWER, params=question.id)
                 url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
                 return HttpResponseRedirect(url)
-            else:
-                form.add_error('text', _("Answer was not filed"))
     else:
         question.views += 1
         question.save()
@@ -130,10 +126,9 @@ def edit_question(request, question_id):
         form = QuestionRevisionForm(request.POST, instance=question_revision)
         added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
         tags = Tag.objects.filter(id__in=added_tags_ids)
-        if request.POST['text']:
+        if form.is_valid():
             form.save()
             question_revision.tags = tags
-            question_revision.text = form.cleaned_data['text']
             question_revision.save()
             url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
@@ -174,7 +169,7 @@ def authorize_question_edit(request, question_id):
             if 'not-approve' in request.POST:
                 revision.status = QuestionRevision.STATUS_REJECTED
                 revision.supervisor = supervisor
-                revision.editor_comment = request.POST['editor_comment']
+                revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
                 revision.save()
                 MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_DENIED,
                                          params=revision.id)
@@ -234,7 +229,7 @@ def question_add_comment(request):
     user = get_user(request)
     comment = QuestionComment()
     comment.user = user
-    comment.text = commnet_text
+    comment.text = bleach.clean(commnet_text, tags=constants.ALLOWED_TAGS)
     comment.question = question
     comment.save()
 
@@ -276,10 +271,8 @@ def edit_answer(request, answer_id):
     answer_revision.text = answer.text
     if request.method == 'POST':
         form = AnswerRevisionForm(request.POST, instance=answer_revision)
-        if request.POST['text']:
+        if form.is_valid():
             form.save()
-            answer_revision.text = form.cleaned_data['text']
-            answer_revision.save()
             url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
             return HttpResponseRedirect(url)
         else:
@@ -318,7 +311,7 @@ def authorize_answer_edit(request, answer_id):
             if 'not-approve' in request.POST:
                 revision.status = AnswerRevision.STATUS_REJECTED
                 revision.supervisor = supervisor
-                revision.editor_comment = request.POST['editor_comment']
+                revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
                 revision.save()
                 MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_DENIED,
                                          params=revision.id)
@@ -370,7 +363,7 @@ def answer_add_comment(request):
 
     comment = AnswerComment()
     comment.user = get_user(request)
-    comment.text = commnet_text
+    comment.text = bleach.clean(commnet_text, tags=constants.ALLOWED_TAGS)
     comment.answer = answer
     comment.save()
 

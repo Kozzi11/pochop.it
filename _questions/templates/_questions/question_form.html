@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <form action="{% url_from_constant "_questions" "ASK_QUESTION" %}"
+                <form novalidate action="{% url_from_constant "_questions" "ASK_QUESTION" %}"
                   method="post" class="form">
                   {% csrf_token %}
                   {% bootstrap_form form %}
