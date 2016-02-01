@@ -129,6 +129,15 @@ class AnswerSupervisorRevisionForm(AnswerRevisionForm):
 
 
 class TagForm(forms.ModelForm):
+
+    def clean_title(self):
+        text = self.cleaned_data['title']
+        return bleach.clean(text, tags=[], strip=True)
+
+    def clean_description(self):
+        text = self.cleaned_data['description']
+        return bleach.clean(text, tags=[], strip=True)
+
     class Meta:
         model = Tag
         fields = [

@@ -27,7 +27,7 @@ ANSWER_SCRAP_LIMIT = QUESTION_SCRAP_LIMIT
 
 def questions(request):
     if 'q' in request.GET:
-        search_query = request.GET['q']
+        search_query = bleach.clean(request.GET['q'], tags=[], strip=True)
     else:
         search_query = ''
 
@@ -166,10 +166,10 @@ def authorize_question_edit(request, question_id):
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
             url = reverse(URLS.QUESTIONS)
+            revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
             if 'not-approve' in request.POST:
                 revision.status = QuestionRevision.STATUS_REJECTED
                 revision.supervisor = supervisor
-                revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
                 revision.save()
                 MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_DENIED,
                                          params=revision.id)
@@ -308,10 +308,10 @@ def authorize_answer_edit(request, answer_id):
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
             url = reverse(URLS.QUESTIONS)
+            revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
             if 'not-approve' in request.POST:
                 revision.status = AnswerRevision.STATUS_REJECTED
                 revision.supervisor = supervisor
-                revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
                 revision.save()
                 MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_DENIED,
                                          params=revision.id)
