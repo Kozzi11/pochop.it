@@ -12,8 +12,8 @@ from django.shortcuts import render
 from _messages.models import Message
 from _messages.utils import MessageUtil
 from _questions.constants import URLS, PERMISSION, PERMISSION_GROUPS
-from _questions.forms import QuestionForm, TagForm, AnswerForm, QuestionRevisionForm, AnswerRevisionForm, \
-    QuestionSupervisorRevisionForm, AnswerSupervisorRevisionForm
+from _questions.forms import QuestionForm, TagForm, AnswerForm, QuestionEditForm, AnswerEditForm, \
+    QuestionRevisionForm, AnswerRevisionForm
 from _questions.models import Question, Tag, Answer, VoteQuestion, VoteAnswer, QuestionRevision, AnswerRevision, \
     QuestionComment, AnswerComment, QuestionScrap, AnswerScrap, AnswerCommentScrap, QuestionCommentScrap
 from django.utils.translation import ugettext as _
@@ -76,6 +76,7 @@ def ask_question(request):
     return render(request, '_questions/question_form.html', {'form': form, 'tags': tags})
 
 
+# noinspection PyUnusedLocal
 def view_question(request, question_id, question_title):
     question = Question.objects.get(id=question_id)
     user = get_user(request)
@@ -115,38 +116,34 @@ def edit_question(request, question_id):
     question = Question.objects.get(id=question_id)
     tags = question.tag_set.all()
     prev_revision = None
-
     question_revision = QuestionRevision()
-    question_revision.question = question
-    question_revision.editor = get_user(request)
-    question_revision.title = question.title
-    question_revision.text = question.text
-
     if request.method == 'POST':
-        form = QuestionRevisionForm(request.POST, instance=question_revision)
-        added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
-        tags = Tag.objects.filter(id__in=added_tags_ids)
+        form = QuestionEditForm(request.POST, instance=question_revision)
         if form.is_valid():
+            question_revision.question = question
+            question_revision.editor = get_user(request)
             form.save()
+            added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
+            tags = Tag.objects.filter(id__in=added_tags_ids)
             question_revision.tags = tags
             question_revision.save()
             url = reverse(URLS.QUESTIONS)
             return HttpResponseRedirect(url)
-        else:
-            form.add_error('text', _("Concise description of the problem must be specified"))
     else:
+        question_revision.title = question.title
+        question_revision.text = question.text
         if question.questionrevision_set \
                 .filter(status=QuestionRevision.STATUS_AWATING_APPROVAL).count() > 0:
 
             prev_revision = question.questionrevision_set \
                                 .filter(status=QuestionRevision.STATUS_AWATING_APPROVAL).order_by('-created')[:1][0]
-            form = QuestionRevisionForm(instance=prev_revision)
+            form = QuestionEditForm(instance=prev_revision)
             form.initial['editor_comment'] = ''
             tags = prev_revision.tags.all()
         else:
-            form = QuestionRevisionForm(instance=question_revision)
+            form = QuestionEditForm(instance=question_revision)
 
-    return render(request, '_questions/question_revision.html',
+    return render(request, '_questions/question_edit.html',
                   {'form': form, 'tags': tags, 'question': question, 'prev_revision': prev_revision})
 
 
@@ -163,28 +160,28 @@ def authorize_question_edit(request, question_id):
         return HttpResponseRedirect(URLS.QUESTIONS)
 
     if request.method == 'POST':
+        revision_form = QuestionRevisionForm(request.POST, instance=revision)
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
             url = reverse(URLS.QUESTIONS)
-            revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
+            revision.supervisor = supervisor
+            revision_form.save()
             if 'not-approve' in request.POST:
                 revision.status = QuestionRevision.STATUS_REJECTED
-                revision.supervisor = supervisor
                 revision.save()
                 MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_QUESTION_EDIT_DENIED,
                                          params=revision.id)
                 return HttpResponseRedirect(url)
 
             revision.status = QuestionRevision.STATUS_APPROVED
-            revision.supervisor = supervisor
+            revision.save()
+
             question.title = revision.title
             question.text = revision.text
-
             added_tags_ids = filter(None, request.POST['added_tags'].split(';'))
             tags = Tag.objects.filter(id__in=added_tags_ids)
             question.tag_set = tags
             question.save()
-            revision.save()
             context_info = 'question_id:' + str(question.id) + ';' + 'revision_id:' + str(revision.id)
             system_user = AppUtil.get_system_user()
             AppUtil.process_transaction(user_from=system_user, user_to=supervisor,
@@ -212,8 +209,9 @@ def authorize_question_edit(request, question_id):
             return HttpResponseRedirect(url)
         else:
             messages.add_message(request, messages.ERROR, _('Revision already approved'))
+    else:
+        revision_form = QuestionRevisionForm(instance=revision)
 
-    revision_form = QuestionSupervisorRevisionForm(instance=revision)
     tags = revision.tags.all()
 
     return render(request, '_questions/question_revision.html',
@@ -266,29 +264,27 @@ def edit_answer(request, answer_id):
     prev_revision = None
 
     answer_revision = AnswerRevision()
-    answer_revision.answer = answer
-    answer_revision.editor = get_user(request)
-    answer_revision.text = answer.text
     if request.method == 'POST':
-        form = AnswerRevisionForm(request.POST, instance=answer_revision)
+        form = AnswerEditForm(request.POST, instance=answer_revision)
         if form.is_valid():
+            answer_revision.answer = answer
+            answer_revision.editor = get_user(request)
             form.save()
             url = reverse(URLS.VIEW_QUESTION, args=(question.id, question.title.replace(' ', '-')))
             return HttpResponseRedirect(url)
-        else:
-            form.add_error('text', _("Answer was not filed"))
     else:
+        answer_revision.text = answer.text
         if answer.answerrevision_set \
                 .filter(status=AnswerRevision.STATUS_AWATING_APPROVAL).count() > 0:
 
             prev_revision = answer.answerrevision_set \
                                 .filter(status=AnswerRevision.STATUS_AWATING_APPROVAL).order_by('-created')[:1][0]
-            form = AnswerRevisionForm(instance=prev_revision)
+            form = AnswerEditForm(instance=prev_revision)
             form.initial['editor_comment'] = ''
         else:
-            form = AnswerRevisionForm(instance=answer_revision)
+            form = AnswerEditForm(instance=answer_revision)
 
-    return render(request, '_questions/answer_revision.html',
+    return render(request, '_questions/answer_edit.html',
                   {'form': form, 'question': question, 'answer': answer, 'prev_revision': prev_revision})
 
 
@@ -305,23 +301,25 @@ def authorize_answer_edit(request, answer_id):
         return HttpResponseRedirect(URLS.QUESTIONS)
 
     if request.method == 'POST':
+        form = AnswerRevisionForm(request.POST, instance=revision)
         revision_id = request.POST['revision_id']
         if int(revision_id) == revision.id:
             url = reverse(URLS.QUESTIONS)
-            revision.editor_comment = bleach.clean(request.POST['editor_comment'], tags=[])
+            revision.supervisor = supervisor
             if 'not-approve' in request.POST:
                 revision.status = AnswerRevision.STATUS_REJECTED
-                revision.supervisor = supervisor
-                revision.save()
+                form.save()
                 MessageUtil.send_message(supervisor, revision.editor, Message.TYPE_ANSWER_EDIT_DENIED,
                                          params=revision.id)
                 return HttpResponseRedirect(url)
 
+            form.save()
             revision.status = AnswerRevision.STATUS_APPROVED
             revision.supervisor = supervisor
+            revision.save()
+
             answer.text = revision.text
             answer.save()
-            revision.save()
             context_info = 'answer_id:' + str(answer.id) + ';' + 'revision_id:' + str(revision.id)
             system_user = AppUtil.get_system_user()
             AppUtil.process_transaction(user_from=system_user, user_to=supervisor,
@@ -349,8 +347,9 @@ def authorize_answer_edit(request, answer_id):
             return HttpResponseRedirect(url)
         else:
             messages.add_message(request, messages.ERROR, _('Revision already approved'))
+    else:
+        form = AnswerRevisionForm(instance=revision)
 
-    form = AnswerSupervisorRevisionForm(instance=revision)
     return render(request, '_questions/answer_revision.html',
                   {'question': answer.question, 'answer': answer, 'revision': revision, 'form': form})
 
@@ -450,8 +449,7 @@ def vote_up_question(request, question_id):
         return HttpResponseRedirect(url)
 
     if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
-        messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        messages.add_message(request, messages.WARNING, _('You can not vote more than'))
         return HttpResponseRedirect(url)
 
     vote = VoteQuestion()
@@ -504,8 +502,7 @@ def vote_down_question(request, question_id):
         return HttpResponseRedirect(url)
 
     if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
-        messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        messages.add_message(request, messages.WARNING, _('You can not vote more than'))
         return HttpResponseRedirect(url)
 
     vote = VoteQuestion()
@@ -539,8 +536,7 @@ def vote_up_answer(request, answer_id):
         return HttpResponseRedirect(url)
 
     if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
-        messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        messages.add_message(request, messages.WARNING, _('You can not vote more than'))
         return HttpResponseRedirect(url)
 
     vote = VoteAnswer()
@@ -595,8 +591,7 @@ def vote_down_answer(request, answer_id):
         return HttpResponseRedirect(url)
 
     if count_of_vote_in_day >= MitTransaction.DAY_VOTE_LIMIT:
-        messages.add_message(request, messages.WARNING, _(
-            'You can not vote more than ' + str(MitTransaction.DAY_VOTE_LIMIT) + ' times in 24 hours'))
+        messages.add_message(request, messages.WARNING, _('You can not vote more than'))
         return HttpResponseRedirect(url)
 
     vote = VoteAnswer()

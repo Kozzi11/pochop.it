@@ -12,6 +12,6 @@ def get_notification_list(request):
         notif.status = Message.STATUS_SEEN
         notif.save()
 
-    if notifications.count() > 15:
-        notifications = notifications[:15]
+    if notifications.count() > 10:
+        notifications = notifications[:10]
     return render(request, '_messages/notifications.html', {'notifications': notifications})

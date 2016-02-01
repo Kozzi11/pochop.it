@@ -1,0 +1,165 @@
+{% extends "pochopit/base.html" %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% load pochopit_tags %}
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="{% static "_questions/css/style.css" %}">
+{% endblock %}
+{% block content %}
+<head>
+    {{ form.media }}
+</head>
+    <div class="container">
+        {% if prev_revision %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="yellow-alert">
+                        <h4>{% blocktrans with first_name=prev_revision.editor.first_name last_name=prev_revision.editor.last_name %}This question was already edited by {{ first_name }} {{ last_name }}, but not proceesed.{% endblocktrans %}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6">
+                {% if prev_revision %}
+                    <h3> {% trans 'Version from' %}<a href="{% url_from_constant '_auth' 'PROFILE' prev_revision.editor_id %}">  {{ prev_revision.editor.first_name }} {{ prev_revision.editor.last_name }}</a></h3>
+                {% else %}
+                    <h3> {% trans 'Original version' %} </h3>
+                {% endif %}
+                <div class="form-group">
+                    <input class="form-control" disabled="disabled" name="title" placeholder="{% trans 'Question heading' %}"
+                           type="text" value="{% if prev_revision %}{{ prev_revision.title }}{% else %}{{ question.title }}{% endif %}">
+                </div>
+                <div class="form-group">
+                    <div style="height: 318px;border: 1px solid #CCCCCC;padding: 8px;">{% if prev_revision %}{{ prev_revision.text|safe }}{% else %}{{ question.text|safe }}{% endif %}</div>
+                </div>
+                {% if  question.tag_set.all %}
+                    <div class="form-group">
+                        <div id="tag-holder">
+                        {% if prev_revision %}
+                            {% for tag in prev_revision.tags.all %}
+                                <span id="tag-2" class="q-tag">
+                                    {{ tag.title }}
+                                </span>
+                            {% endfor %}
+                        {% else %}
+                            {% for tag in question.tag_set.all %}
+                                <span id="tag-2" class="q-tag">
+                                    {{ tag.title }}
+                                </span>
+                            {% endfor %}
+                        {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if prev_revision %}
+                    <div class="form-group" style="margin-top: {% if prev_revision %}24{% else %}-15{% endif %}px">
+                        <label class="control-label">{% trans 'Edit comment' %}</label>
+                        <textarea class="form-control" cols="40" disabled="disabled" placeholder=""
+                                  rows="4" title="">{{ prev_revision.editor_comment }}</textarea>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h3> {% trans 'Edited version' %} </h3>
+                <form action="{% url_from_constant "_questions" "EDIT_QUESTION" question.id %}" method="post" class="form">
+                  {% csrf_token %}
+                  {% bootstrap_form form%}
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Submit for approval" %}
+                        </button>
+                    </div>
+                    <input type="hidden" id="added_tags" name="added_tags"/>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var selectedTags = [];
+        var autoCompleteDiv = null;
+        var tagHolder = $('<div/>', {id: 'tag-holder'});
+        var tagInput = $('#id_tags');
+        var addedTagsInput = $('#added_tags');
+
+        tagInput.val('');
+        $(document).ready(function() {
+            tagInput.val('');
+            tagInput.before(tagHolder);
+            {% for tag in tags %}
+                addTag({{ tag.id }}, '{{ tag.title }}');
+            {% endfor %}
+            tagInput.on('input', function() {
+                if (this.value && this.value.length > 0) {
+                    var that = this;
+                    $.post('{% url_from_constant '_questions' 'FIND_TAGS' %}', {search: this.value, tags: addedTagsInput.val()}, function(data) {
+                        if (data) {
+                            if (autoCompleteDiv == null) {
+                                autoCompleteDiv = $('<div/>', {id: 'tag-autocomplete'});
+                                $(that).parent().append(autoCompleteDiv);
+                                autoCompleteDiv.outerWidth($(that).outerWidth());
+                            }
+                            autoCompleteDiv.html('<ul>' + data + '</ul>');
+                        }
+                    });
+                    $(that).focusout(function() {
+                        setTimeout(function() {
+                            removeAutoCompleteDiv();
+                        }, 500); //todo - vymyslet jinak
+                    });
+                } else {
+                    removeAutoCompleteDiv();
+                }
+            })
+        });
+
+        function removeAutoCompleteDiv() {
+            if (autoCompleteDiv != null) {
+                autoCompleteDiv.remove();
+                autoCompleteDiv = null;
+            }
+        }
+
+        function addTag(tagId, title) {
+            selectedTags.push({id: tagId, title: title});
+            var tagsString = '';
+            selectedTags.forEach(function(tag) {
+                tagsString += '<span id="tag-' + tag.id +'" class="q-tag">' + tag.title +
+                        '<span class="glyphicon glyphicon-remove" onclick="removeTag(' + tag.id + ', this)"></span>' +
+                        '</span>';
+            });
+            tagHolder.html(tagsString);
+            removeAutoCompleteDiv();
+            updateSelectedTags();
+            tagInput.val('');
+        }
+
+        function removeTag(tagId, element) {
+            $(element).parent().remove();
+            var index = 0;
+            var i = 0;
+            selectedTags.forEach(function(tag) {
+                if (tag.id == tagId) {
+                    index = i;
+                }
+                i++;
+            });
+            selectedTags.splice(index, 1);
+            updateSelectedTags();
+        }
+
+        function updateSelectedTags() {
+            var selectedTagsString = '';
+            selectedTags.forEach(function(tag) {
+                selectedTagsString += tag.id + ';';
+            });
+            addedTagsInput.val(selectedTagsString);
+        }
+    </script>
+{% endblock %}

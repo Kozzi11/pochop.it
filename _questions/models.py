@@ -34,6 +34,7 @@ class QuestionRevision(models.Model):
     tags = models.ManyToManyField('Tag')
     editor_comment = models.TextField()
     supervisor_comment = models.TextField()
+    sophistication = models.IntegerField(default=0)
     status = models.IntegerField(default=STATUS_AWATING_APPROVAL)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -83,6 +84,7 @@ class AnswerRevision(models.Model):
     text = models.TextField()
     editor_comment = models.TextField()
     supervisor_comment = models.TextField()
+    sophistication = models.IntegerField(default=0)
     status = models.IntegerField(default=STATUS_AWATING_APPROVAL)
     created = models.DateTimeField(auto_now_add=True)
 

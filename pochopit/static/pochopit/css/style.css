@@ -97,6 +97,13 @@ a {
     border-right: 1px solid #ddd;
 }
 
+a:hover, a:focus {
+    color: #64B30F;
+}
+#mits a:hover {
+    color: #5a5a5a;
+    cursor: default;
+}
 .nav-pills>li.active>a {
     border: none;
     border-right: 4px solid #64B30F;

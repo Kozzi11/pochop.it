@@ -29,7 +29,7 @@ class QuestionForm(forms.ModelForm):
         ]
 
 
-class QuestionRevisionForm(forms.ModelForm):
+class QuestionEditForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
                            label='', required=True)
 
@@ -60,7 +60,7 @@ class QuestionRevisionForm(forms.ModelForm):
         ]
 
 
-class QuestionSupervisorRevisionForm(QuestionRevisionForm):
+class QuestionRevisionForm(forms.ModelForm):
     CHOICES = (
         ('1', _('low')),
         ('2', _('middle')),
@@ -70,9 +70,16 @@ class QuestionSupervisorRevisionForm(QuestionRevisionForm):
     supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False,
                                          label=_('Supervisor comment'))
 
-    def __init__(self, *args, **kwargs):
-        super(QuestionSupervisorRevisionForm, self).__init__(*args, **kwargs)
-        del self.fields['editor_comment']
+    def clean_supervisor_comment(self):
+        text = self.cleaned_data['supervisor_comment']
+        return bleach.clean(text, tags=[])
+
+    class Meta:
+        model = QuestionRevision
+        fields = [
+            'sophistication',
+            'supervisor_comment',
+        ]
 
 
 class AnswerForm(forms.ModelForm):
@@ -90,7 +97,7 @@ class AnswerForm(forms.ModelForm):
         ]
 
 
-class AnswerRevisionForm(forms.ModelForm):
+class AnswerEditForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE(attrs={'rows': 15}),
                            label='', required=True)
 
@@ -113,7 +120,7 @@ class AnswerRevisionForm(forms.ModelForm):
         ]
 
 
-class AnswerSupervisorRevisionForm(AnswerRevisionForm):
+class AnswerRevisionForm(forms.ModelForm):
     CHOICES = (
         ('1', _('low')),
         ('2', _('middle')),
@@ -123,9 +130,16 @@ class AnswerSupervisorRevisionForm(AnswerRevisionForm):
     supervisor_comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False,
                                          label=_('Supervisor comment'))
 
-    def __init__(self, *args, **kwargs):
-        super(AnswerSupervisorRevisionForm, self).__init__(*args, **kwargs)
-        del self.fields['editor_comment']
+    def clean_supervisor_comment(self):
+        text = self.cleaned_data['supervisor_comment']
+        return bleach.clean(text, tags=[])
+
+    class Meta:
+        model = AnswerRevision
+        fields = [
+            'sophistication',
+            'supervisor_comment',
+        ]
 
 
 class TagForm(forms.ModelForm):

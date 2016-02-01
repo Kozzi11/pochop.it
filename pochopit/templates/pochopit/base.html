@@ -66,7 +66,7 @@
             </ul>
           {% if user.is_authenticated %}
               <ul class="nav navbar-nav navbar-right">
-                <li>
+                <li id="mits">
                     <a href="#">{{ user_mits }}&nbsp;<span class="glyphicon glyphicon-hourglass"></span></a>
                 </li>
                 <li class="dropdown" onclick="loadMessages(this)">

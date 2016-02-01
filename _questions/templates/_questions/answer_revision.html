@@ -18,56 +18,32 @@
                 <div style="margin-top: 12px;">{{ question.text|safe }}</div>
             </div>
         </div>
-        {% if prev_revision %}
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="yellow-alert">
-                        <h4>{% blocktrans with first_name=prev_revision.editor.first_name last_name=prev_revision.editor.last_name %}This question was already edited by {{ first_name }} {{ last_name }}, but not proceesed.{% endblocktrans %}
-                        </h4>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
         <div class="row">
             <div class="col-md-6">
-                {% if prev_revision %}
-                    <h3> {% trans 'Version from' %}<a href="{% url_from_constant '_auth' 'PROFILE' prev_revision.editor_id %}"> {{ prev_revision.editor.first_name }} {{ prev_revision.editor.last_name }}</a></h3>
-                {% else %}
-                    <h3> {% trans 'Original version' %} </h3>
-                {% endif %}
+                <h3> {% trans 'Original version' %} </h3>
                 <div class="form-group">
-                    <div style="height: {% if prev_revision %}{{ 293 }}{% else %}{{ 318 }}{% endif %}px;border: 1px solid #CCCCCC;padding: 8px;">{% if prev_revision %}{{ prev_revision.text|safe }}{% else %}{{ answer.text|safe }}{% endif %}</div>
+                    <div style="height:{{ 318 }}px;border: 1px solid #CCCCCC;padding: 8px;">{{ answer.text|safe }}</div>
                 </div>
-                {% if revision  or prev_revision %}
-                    <div class="form-group">
-                        <label class="control-label">{% trans 'Edit comment' %}</label>
-                        <textarea class="form-control" cols="40" disabled="disabled" placeholder="{% trans 'Editor comment' %}"
-                                  rows="4" title="">{% if prev_revision %}{{ prev_revision.editor_comment }}{% else %}{{ answer.editor_comment }}{% endif %}</textarea>
-                    </div>
-                {% endif %}
+                <div class="form-group">
+                    <label class="control-label">{% trans 'Edit comment' %}</label>
+                    <textarea class="form-control" cols="40" disabled="disabled" placeholder="{% trans 'Editor comment' %}"
+                              rows="4" title="">{{ revision.editor_comment }}</textarea>
+                </div>
             </div>
             <div class="col-md-6">
                 <h3> {% trans 'Edited version' %} </h3>
-                <form novalidate action="
-                {% if revision %}
-                    {% url_from_constant "_questions" "AUTHORIZE_ANSWER_EDIT" answer.id %}
-                {% else %}
-                    {% url_from_constant "_questions" "EDIT_ANSWER" answer.id %}
-                {% endif %}" method="post" class="form">
+                <div class="form-group">
+                    <div style="height:{{ 318 }}px;border: 1px solid #CCCCCC;padding: 8px;">{{ revision.text|safe }}</div>
+                </div>
+                <form novalidate action="{% url_from_constant "_questions" "AUTHORIZE_ANSWER_EDIT" answer.id %}" method="post" class="form">
                   {% csrf_token %}
                   {% bootstrap_form form%}
                     <div class="form-group text-right">
-                        {% if revision %}
-                             <button type="submit" class="btn btn-danger" name="not-approve">
-                                    {% trans 'not approve' %}
-                            </button>
-                        {% endif %}
+                         <button type="submit" class="btn btn-danger" name="not-approve">
+                                {% trans 'not approve' %}
+                        </button>
                         <button type="submit" class="btn btn-primary">
-                            {% if revision %}
-                                {% trans "Approve" %}
-                            {% else %}
-                                {% trans "Submit for approval" %}
-                            {% endif %}
+                            {% trans "Approve" %}
                         </button>
                     </div>
                     <input type="hidden" id="revision_id" name="revision_id" value="{{ revision.id }}"/>
