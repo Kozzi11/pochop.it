@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     '_auth',
     '_courses',
     '_components',
+    '_questions',
+    '_messages',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -12,13 +12,14 @@ Webove stranky spolku pochopit
 5. `pip install django-eztables` - u linuxu je mozne ze budete potrebovat prikaz spustit jako `sudo`
 6. `pip install django-tinymce`
 7. `pip install bleach`
-8. pull projektu z [githubu](https://github.com/Kozzi11/pochop.it)
-9. v jiz pulnutem projektu spustit v terminalu:
+8. `pip install python-social-auth`
+9. pull projektu z [githubu](https://github.com/Kozzi11/pochop.it)
+10. v jiz pulnutem projektu spustit v terminalu:
   * `cp pochopit/settings.py.example pochopit/settings.py`
   * `python manage.py makemigrations`
   * `python manage.py migrate`
-10. vytvoreni super usera
+11. vytvoreni super usera
   * `python manage.py createsuperuser`
-11. Na widlich je potreba jeste naistalovat getttext [navod](https://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows)
-12. spusteni severu bud pres **pycharm** nebo rucne: `manage.py runserver`
+12. Na widlich je potreba jeste naistalovat getttext [navod](https://docs.djangoproject.com/en/1.7/topics/i18n/translation/#gettext-on-windows)
+13. spusteni severu bud pres **pycharm** nebo rucne: `manage.py runserver`
   * mozno predat *ip* a *port* viz : `runserver [port or address:port]`
