@@ -19,7 +19,8 @@ class QuestionForm(forms.ModelForm):
 
     def clean_text(self):
         text = self.cleaned_data['text']
-        return bleach.clean(text, tags=constants.ALLOWED_TAGS)
+        text = bleach.clean(text, tags=constants.ALLOWED_TAGS, attributes={'*': ['class']})
+        return text
 
     class Meta:
         model = Question

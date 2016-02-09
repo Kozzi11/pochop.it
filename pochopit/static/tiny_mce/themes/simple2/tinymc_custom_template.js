@@ -12,8 +12,8 @@
 	var DOM = tinymce.DOM;
 
 	// Tell it to load theme specific language pack(s)
-	tinymce.ThemeManager.requireLangPack('simple');
-
+	//tinymce.ThemeManager.requireLangPack('simple');
+	tinymce.ScriptLoader.add('/static/tiny_mce/themes/simple2/langs/cs.js');
 	tinymce.create('tinymce.themes.Simple2Theme', {
 		init : function(ed, url) {
 			var t = this, states = ['Bold', 'Italic', 'Underline', 'Codeblock', 'Strikethrough', 'InsertUnorderedList', 'InsertOrderedList'], s = ed.settings;
@@ -23,7 +23,12 @@
 
             // Register Codeblock command
             ed.addCommand('Codeblock', function(ui, v) {
-                ed.selection.setContent('<code>' + ed.selection.getContent() + '</code>');
+				var div = $('<div style="position:absolute; top: -1000px"></div>');
+				div.html('<pre class="prettyprint"><code>' + ed.selection.getContent() + '</code></pre>');
+				$(document.body).append(div);
+     			PR.prettyPrint();
+                ed.selection.setContent(div.html() + '<p>&nbsp;</p>');
+				div.remove();
             });
 
 			ed.onInit.add(function() {
@@ -53,20 +58,20 @@
 
 			// Create toolbar
 			tb = t.toolbar = cf.createToolbar("tools1");
-			tb.add(cf.createButton('bold', {title : 'simple.bold_desc', cmd : 'Bold'}));
-			tb.add(cf.createButton('italic', {title : 'simple.italic_desc', cmd : 'Italic'}));
-			tb.add(cf.createButton('underline', {title : 'simple.underline_desc', cmd : 'Underline'}));
-			tb.add(cf.createButton('strikethrough', {title : 'simple.striketrough_desc', cmd : 'Strikethrough'}));
+			tb.add(cf.createButton('bold', {title : 'simple2.bold_desc', cmd : 'Bold'}));
+			tb.add(cf.createButton('italic', {title : 'simple2.italic_desc', cmd : 'Italic'}));
+			tb.add(cf.createButton('underline', {title : 'simple2.underline_desc', cmd : 'Underline'}));
+			tb.add(cf.createButton('strikethrough', {title : 'simple2.striketrough_desc', cmd : 'Strikethrough'}));
 			tb.add(cf.createSeparator());
-            tb.add(cf.createButton('codeblock', {title : 'simple.code', cmd : 'Codeblock'}));
+            tb.add(cf.createButton('codeblock', {title : 'simple2.code', cmd : 'Codeblock'}));
             tb.add(cf.createSeparator());
-			tb.add(cf.createButton('undo', {title : 'simple.undo_desc', cmd : 'Undo'}));
-			tb.add(cf.createButton('redo', {title : 'simple.redo_desc', cmd : 'Redo'}));
+			tb.add(cf.createButton('undo', {title : 'simple2.undo_desc', cmd : 'Undo'}));
+			tb.add(cf.createButton('redo', {title : 'simple2.redo_desc', cmd : 'Redo'}));
 			tb.add(cf.createSeparator());
-			tb.add(cf.createButton('cleanup', {title : 'simple.cleanup_desc', cmd : 'mceCleanup'}));
+			tb.add(cf.createButton('cleanup', {title : 'simple2.cleanup_desc', cmd : 'mceCleanup'}));
 			tb.add(cf.createSeparator());
-			tb.add(cf.createButton('insertunorderedlist', {title : 'simple.bullist_desc', cmd : 'InsertUnorderedList'}));
-			tb.add(cf.createButton('insertorderedlist', {title : 'simple.numlist_desc', cmd : 'InsertOrderedList'}));
+			tb.add(cf.createButton('insertunorderedlist', {title : 'simple2.bullist_desc', cmd : 'InsertUnorderedList'}));
+			tb.add(cf.createButton('insertorderedlist', {title : 'simple2.numlist_desc', cmd : 'InsertOrderedList'}));
 			tb.renderTo(n);
 
 			return {

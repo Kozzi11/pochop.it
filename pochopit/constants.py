@@ -4,6 +4,7 @@ ALLOWED_TAGS = [
     'acronym',
     'b',
     'blockquote',
+    'pre',
     'code',
     'em',
     'i',
@@ -12,5 +13,6 @@ ALLOWED_TAGS = [
     'strong',
     'ul',
     'span',
-    'p'
+    'p',
+    'br',
 ]
