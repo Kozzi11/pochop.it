@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from _auth.constants import URLS
+from _homepage.constants import URLS as HOMEPAGE_URLS
 from _auth.forms import SignUpForm, ProfileForm
 from django.contrib.auth.models import User
 from _questions.models import Question, Answer, VoteQuestion, VoteAnswer, QuestionRevision, AnswerRevision
@@ -12,25 +13,28 @@ from pochopit.models import UserProfile, MitTransaction
 
 
 def sign_up(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse(HOMEPAGE_URLS.HOMEPAGE))
+
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = User.objects.create_user(
+            User.objects.create_user(
                 form.cleaned_data['email'],
                 password=form.cleaned_data['password'],
                 email=form.cleaned_data['email'])
             user = auth.authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password'])
             auth.login(request, user)
+            user.first_name = form.cleaned_data['username']
+            user.save()
             user_profile = UserProfile()
             user_profile.user = user
             user_profile.mits = 0
             user_profile.save()
-            return HttpResponseRedirect('/sing_up/success')
-        else:
-            form = SignUpForm()
-            return render(request, '_auth/sign_up.html', {'form': form})
+            return HttpResponseRedirect(reverse(HOMEPAGE_URLS.HOMEPAGE))
+    else:
+        form = SignUpForm()
 
-    form = SignUpForm()
     return render(request, '_auth/sign_up.html', {'form': form})
 
 
@@ -38,7 +42,7 @@ def sign_up(request):
 def profile(request, user_id):
     profile_user = User.objects.get(id=user_id)
     stats = get_stats(profile_user)
-    return render(request, '_auth/profile.html', {'stats': stats,'profile_user': profile_user})
+    return render(request, '_auth/profile.html', {'stats': stats, 'profile_user': profile_user})
 
 
 @login_required
@@ -69,6 +73,10 @@ def my_profile_edit(request):
                                     'businesscard': user.userprofile.businesscard})
 
     return render(request, '_auth/profile_edit.html', {'form': form})
+
+
+def password_reset_done(request):
+    return render(request, '_auth/password_reset_done.html')
 
 
 def get_stats(user):

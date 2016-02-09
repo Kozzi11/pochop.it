@@ -37,6 +37,7 @@
         var tagHolder = $('<div/>', {id: 'tag-holder'});
         var tagInput = $('#id_tags');
         var addedTagsInput = $('#added_tags');
+        var selectedIndex = -1;
 
         tagInput.val('');
         $(document).ready(function() {
@@ -75,6 +76,7 @@
                 autoCompleteDiv.remove();
                 autoCompleteDiv = null;
             }
+            selectedIndex = 0;
         }
 
         function addTag(tagId, title) {
@@ -112,5 +114,27 @@
             });
             addedTagsInput.val(selectedTagsString);
         }
+
+    document.onkeydown = checkKey;
+    function checkKey(e) {
+        e = e || window.event;
+        if (e.keyCode == '38') {
+            // up arrow
+        } else if (e.keyCode == '40') {
+            // down arrow
+            if (autoCompleteDiv) {
+                console.log(autoCompleteDiv[0]);
+                autoCompleteDiv.find('ul').find('li').each(function(i) {
+                    if (i == selectedIndex) {
+                        $(this).addClass('active');
+                    } else {
+
+                    }
+                });
+            }
+        } else if (e.keyCode == '30' && selectedIndex > 0) {
+
+        }
+    }
     </script>
 {% endblock %}
