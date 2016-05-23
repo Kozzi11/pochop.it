@@ -15,15 +15,12 @@
                     {% if profile_user.id == user.id %}
                         <a href="{% url_from_constant '_auth' 'MY_PROFILE_EDIT' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{% trans 'edit profil' %}</a>
                     {% endif %}</h3>
-                <h4 class="text-">{% trans 'commitment' %}: {{ profile_user.userprofile.mits }} {% trans 'mits' %}</h4>
-                {{ profile_user.first_name }}  {{ profile_user.last_name }}<br>
-                {{ profile_user.email }}<br>
-                <h3 style="margin-top: 50px">{% trans 'businesscard' %}</h3>
+                <h4 class="text-">{% trans 'Username' %}:<b> {{ profile_user.first_name }}  {{ profile_user.last_name }}</b></h4>
+                <h4 class="text-">{% trans 'commitment' %}:<b> {{ profile_user.userprofile.mits }} {% trans 'mits' %}</b></h4>
                 <div class="profile-businesscard">
                 {% if profile_user.userprofile.businesscard %}
+                    <h3 style="margin-top: 50px">{% trans 'Other info' %}</h3>
                     {{ profile_user.userprofile.businesscard|safe }}
-                {% else %}
-                    {% include '_auth/businesscard.html' %}
                 {% endif %}
                 </div>
             </div>

@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from django import forms
 from django.contrib.auth.models import User
 from tinymce.widgets import TinyMCE
+from pochopit import constants
 
 
 class SignUpForm(forms.Form):
@@ -36,6 +37,19 @@ class LoginForm(AuthenticationForm):
 
 
 class ProfileForm(forms.Form):
-    first_name = forms.CharField(label=_('Username'), max_length=100)
+    first_name = forms.CharField(label=_('First name'), max_length=100)
+    last_name = forms.CharField(label=_('Last name'), max_length=100)
     email = forms.EmailField(label=_('E-mail'), max_length=254, required=True)
-    businesscard = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=False, label=_("Vaše vizitka"))
+    businesscard = forms.CharField(widget=TinyMCE(attrs={'rows': 15}), required=False, label=_("Other info"))
+
+    def clean_first_name(self):
+        text = self.cleaned_data['first_name']
+        return bleach.clean(text, tags=[])
+
+    def clean_last_name(self):
+        text = self.cleaned_data['last_name']
+        return bleach.clean(text, tags=[])
+
+    def clean_businesscard(self):
+        text = self.cleaned_data['businesscard']
+        return bleach.clean(text, tags=constants.ALLOWED_TAGS)
