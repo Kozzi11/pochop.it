@@ -8,33 +8,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-23 20:01+0200\n"
+"POT-Creation-Date: 2016-07-13 21:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: _auth/forms.py:11 _auth/templates/_auth/profile.html:18
+#: .\_auth\forms.py:11 .\_auth\templates\_auth\profile.html:18
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: _auth/forms.py:12 _auth/forms.py:36 _auth/forms.py:42
+#: .\_auth\forms.py:12 .\_auth\forms.py:36 .\_auth\forms.py:42
 msgid "E-mail"
 msgstr "E-mail"
 
-#: _auth/forms.py:13
+#: .\_auth\forms.py:13
 msgid "Password"
 msgstr "Heslo"
 
-#: _auth/forms.py:14
+#: .\_auth\forms.py:14
 msgid "Confirm password"
 msgstr "Ověření hesla"
 
-#: _auth/forms.py:26
+#: .\_auth\forms.py:26
 msgid ""
 "This email is already registered. If you've forgotten your password, "
 "generate a new one."
@@ -42,55 +42,58 @@ msgstr ""
 "Tento e-mail je již zaregistrovaný. Pokud jsi zapomněl/a heslo, vygeneruj si "
 "prosím nové."
 
-#: _auth/forms.py:31
+#: .\_auth\forms.py:31
 msgid "The two password fields did not match!"
 msgstr "Zadaná hesla se neshodují!"
 
-#: _auth/forms.py:40
+#: .\_auth\forms.py:40
 msgid "First name"
 msgstr "Jméno"
 
-#: _auth/forms.py:41
+#: .\_auth\forms.py:41
 msgid "Last name"
 msgstr "Příjmení"
 
-#: _auth/forms.py:43 _auth/templates/_auth/profile.html:22
+#: .\_auth\forms.py:43 .\_auth\templates\_auth\profile.html:22
 msgid "Other info"
 msgstr "Další informace"
 
-#: _auth/templates/_auth/login.html:11
+#: .\_auth\templates\_auth\login.html:11
 msgid "You are already logged in!"
 msgstr "Již jsi přihlášen/a!"
 
-#: _auth/templates/_auth/login.html:17 _auth/templates/_auth/sign_up.html:13
+#: .\_auth\templates\_auth\login.html:17
+#: .\_auth\templates\_auth\sign_up.html:13
 msgid "Login with Facebook"
 msgstr "Přihlásit přes Facebook"
 
-#: _auth/templates/_auth/login.html:18 _auth/templates/_auth/sign_up.html:14
+#: .\_auth\templates\_auth\login.html:18
+#: .\_auth\templates\_auth\sign_up.html:14
 msgid "Login with Google"
 msgstr "Přihlásit přes Google"
 
-#: _auth/templates/_auth/login.html:28
+#: .\_auth\templates\_auth\login.html:28
 msgid ""
 "Your account doesn't have access to this page. To proceed, please login with "
 "an account that has access."
 msgstr "Nemáš dostatečná oprávnění!"
 
-#: _auth/templates/_auth/login.html:30
+#: .\_auth\templates\_auth\login.html:30
 msgid "Please login to see this page."
 msgstr "Pro pokračování se musíš přihlásit."
 
-#: _auth/templates/_auth/login.html:39
-#: _auth/templates/_auth/password_reset.html:17
-#: _auth/templates/_auth/sign_up.html:24 _auth/templates/_auth/thanks.html:13
+#: .\_auth\templates\_auth\login.html:39
+#: .\_auth\templates\_auth\password_reset.html:17
+#: .\_auth\templates\_auth\sign_up.html:24
+#: .\_auth\templates\_auth\thanks.html:13
 msgid "Submit"
 msgstr "Odeslat"
 
-#: _auth/templates/_auth/login.html:45
+#: .\_auth\templates\_auth\login.html:45
 msgid "Lost password?"
 msgstr "Zapomenuté heslo?"
 
-#: _auth/templates/_auth/password_reset.html:10
+#: .\_auth\templates\_auth\password_reset.html:10
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
@@ -98,13 +101,13 @@ msgstr ""
 "Zapomněl/a jsi heslo? Zadej prosím svůj email a my ti pošlem instrukce, jak "
 "vygenerovat heslo nové."
 
-#: _auth/templates/_auth/password_reset_done.html:9
+#: .\_auth\templates\_auth\password_reset_done.html:9
 msgid ""
 "We've emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr "Odeslali jsme ti instrukce pro změnu hesla na zadaný email."
 
-#: _auth/templates/_auth/password_reset_done.html:10
+#: .\_auth\templates\_auth\password_reset_done.html:10
 msgid ""
 "If you don't receive an email, please make sure you've entered the address "
 "you registered with, and check your spam folder."
@@ -112,192 +115,192 @@ msgstr ""
 "Pokud ti email nedorazí, prosím zkontroluj zadanou emailovou adresu a "
 "podívej se do spamu."
 
-#: _auth/templates/_auth/profile.html:14
+#: .\_auth\templates\_auth\profile.html:14
 msgid "Base info"
 msgstr "Základní informace"
 
-#: _auth/templates/_auth/profile.html:16
+#: .\_auth\templates\_auth\profile.html:16
 msgid "edit profil"
 msgstr "upravit profil"
 
-#: _auth/templates/_auth/profile.html:19
+#: .\_auth\templates\_auth\profile.html:19
 msgid "commitment"
 msgstr "Angažovanost"
 
-#: _auth/templates/_auth/profile.html:19
+#: .\_auth\templates\_auth\profile.html:19
 msgid "mits"
 msgstr "mitů"
 
-#: _auth/templates/_auth/profile.html:28
+#: .\_auth\templates\_auth\profile.html:28
 msgid "statistics"
 msgstr "Statistiky"
 
-#: _auth/templates/_auth/profile.html:30
+#: .\_auth\templates\_auth\profile.html:30
 msgid "Poradit"
 msgstr "Poradit"
 
-#: _auth/templates/_auth/profile.html:34
+#: .\_auth\templates\_auth\profile.html:34
 msgid "number"
 msgstr "počet"
 
-#: _auth/templates/_auth/profile.html:35
+#: .\_auth\templates\_auth\profile.html:35
 msgid "credit"
 msgstr "kredit [mit]"
 
-#: _auth/templates/_auth/profile.html:38
+#: .\_auth\templates\_auth\profile.html:38
 msgid "questions"
 msgstr "otázky"
 
-#: _auth/templates/_auth/profile.html:43
+#: .\_auth\templates\_auth\profile.html:43
 msgid "answers"
 msgstr "odpovědi"
 
-#: _auth/templates/_auth/profile.html:48
+#: .\_auth\templates\_auth\profile.html:48
 msgid "edits"
 msgstr "úpravy"
 
-#: _auth/templates/_auth/profile.html:53
+#: .\_auth\templates\_auth\profile.html:53
 msgid "votes"
 msgstr "hlasování"
 
-#: _auth/templates/_auth/profile.html:58
+#: .\_auth\templates\_auth\profile.html:58
 msgid "administration"
 msgstr "administrace"
 
-#: _auth/templates/_auth/profile.html:63
+#: .\_auth\templates\_auth\profile.html:63
 msgid "summary"
 msgstr "suma sumárum"
 
-#: _auth/templates/_auth/profile_edit.html:21
-#: _components/templates/_components/html/html_settings.html:21
-#: _courses/templates/_courses/course/main.html:22
-#: _courses/templates/_courses/lesson/main.html:18
-#: _courses/templates/_courses/slide/main.html:18
-#: _questions/templates/_questions/tag_form.html:22
+#: .\_auth\templates\_auth\profile_edit.html:21
+#: .\_components\templates\_components\html\html_settings.html:21
+#: .\_courses\templates\_courses\course\main.html:22
+#: .\_courses\templates\_courses\lesson\main.html:18
+#: .\_courses\templates\_courses\slide\main.html:18
+#: .\_questions\templates\_questions\tag_form.html:22
 msgid "Save"
 msgstr "Hotovo"
 
-#: _components/templates/_components/html/html_settings.html:13
-#: _courses/templates/_courses/course/main.html:14
-#: _courses/templates/_courses/lesson/main.html:10
-#: _courses/templates/_courses/slide/main.html:10
+#: .\_components\templates\_components\html\html_settings.html:13
+#: .\_courses\templates\_courses\course\main.html:14
+#: .\_courses\templates\_courses\lesson\main.html:10
+#: .\_courses\templates\_courses\slide\main.html:10
 msgid "Delete"
 msgstr "Smazat"
 
-#: _courses/templates/_courses/course/description.html:7
+#: .\_courses\templates\_courses\course\description.html:7
 msgid "Enroll in a course"
 msgstr "Zapsat kurz"
 
-#: _courses/templates/_courses/course/lessons.html:7
+#: .\_courses\templates\_courses\course\lessons.html:7
 msgid "Add new lesson"
 msgstr "Přidat novou lekci"
 
-#: _courses/templates/_courses/course/lessons.html:16 _courses/views.py:74
-#: _courses/views.py:204
+#: .\_courses\templates\_courses\course\lessons.html:16 .\_courses\views.py:74
+#: .\_courses\views.py:204
 msgid "Lesson"
 msgstr "Lekce"
 
-#: _courses/templates/_courses/my.html:8
+#: .\_courses\templates\_courses\my.html:8
 msgid "Create new course"
 msgstr "Vytvořit nový kurz"
 
-#: _courses/templates/_courses/my.html:18
+#: .\_courses\templates\_courses\my.html:18
 msgid "Course"
 msgstr "Kurz"
 
-#: _courses/templates/_courses/slide/content.html:9
+#: .\_courses\templates\_courses\slide\content.html:9
 msgid "Add component"
 msgstr "Přidat novou komponentu"
 
-#: _courses/views.py:26
+#: .\_courses\views.py:26
 msgid "All"
 msgstr "Všechny"
 
-#: _courses/views.py:31
+#: .\_courses\views.py:31
 msgid "In progress"
 msgstr "Zapsané"
 
-#: _courses/views.py:37
+#: .\_courses\views.py:37
 msgid "Completed"
 msgstr "Dokončené"
 
-#: _courses/views.py:43
+#: .\_courses\views.py:43
 msgid "My courses"
 msgstr "Mé kurzy"
 
-#: _courses/views.py:70
+#: .\_courses\views.py:70
 msgid "New course"
 msgstr "Mé kurzy"
 
-#: _courses/views.py:81 _courses/views.py:211 _courses/views.py:264
+#: .\_courses\views.py:81 .\_courses\views.py:211 .\_courses\views.py:264
 msgid "Slide"
 msgstr "Slide"
 
-#: _courses/views.py:86 _courses/views.py:216 _courses/views.py:269
-#: _courses/views.py:322
+#: .\_courses\views.py:86 .\_courses\views.py:216 .\_courses\views.py:269
+#: .\_courses\views.py:322
 msgid "Component"
 msgstr "Komponenta"
 
-#: _courses/views.py:233
+#: .\_courses\views.py:233
 msgid "Main"
 msgstr "Obecné"
 
-#: _messages/templates/_messages/notifications.html:4
+#: .\_messages\templates\_messages\notifications.html:4
 msgid "You have not notification"
 msgstr "Kde nic, tu nic..."
 
-#: _questions/forms.py:11
+#: .\_questions\forms.py:11
 msgid "Concise description of the problem"
 msgstr ""
 "Zde popiš podrobněji tvůj dotaz, pokud možno jasně a stručně prosíme :)"
 
-#: _questions/forms.py:13 _questions/forms.py:37
+#: .\_questions\forms.py:13 .\_questions\forms.py:37
 msgid "Tags"
 msgstr "Zkus najít nějaké vhodné tagy"
 
-#: _questions/forms.py:14 _questions/forms.py:38
-#: _questions/templates/_questions/question_edit.html:34
-#: _questions/templates/_questions/question_revision.html:19
-#: _questions/templates/_questions/question_revision.html:45
+#: .\_questions\forms.py:14 .\_questions\forms.py:38
+#: .\_questions\templates\_questions\question_edit.html:34
+#: .\_questions\templates\_questions\question_revision.html:19
+#: .\_questions\templates\_questions\question_revision.html:45
 msgid "Question heading"
 msgstr "Tři, čtyři výstižná slova"
 
-#: _questions/forms.py:40 _questions/forms.py:106
-#: _questions/templates/_questions/answer_edit.html:45
-#: _questions/templates/_questions/answer_revision.html:29
+#: .\_questions\forms.py:40 .\_questions\forms.py:106
+#: .\_questions\templates\_questions\answer_edit.html:45
+#: .\_questions\templates\_questions\answer_revision.html:29
 msgid "Editor comment"
 msgstr "Krátce popiš co jsi upravil"
 
-#: _questions/forms.py:66 _questions/forms.py:126
+#: .\_questions\forms.py:66 .\_questions\forms.py:126
 msgid "low"
 msgstr "nic moc"
 
-#: _questions/forms.py:67 _questions/forms.py:127
+#: .\_questions\forms.py:67 .\_questions\forms.py:127
 msgid "middle"
 msgstr "šlo to"
 
-#: _questions/forms.py:68 _questions/forms.py:128
+#: .\_questions\forms.py:68 .\_questions\forms.py:128
 msgid "high"
 msgstr "slušný"
 
-#: _questions/forms.py:70 _questions/forms.py:130
+#: .\_questions\forms.py:70 .\_questions\forms.py:130
 msgid "sophistication"
 msgstr "Jak moc byla úprava přínosná"
 
-#: _questions/forms.py:72 _questions/forms.py:132
+#: .\_questions\forms.py:72 .\_questions\forms.py:132
 msgid "Supervisor comment"
 msgstr "Cheš k tomu něco dodat?"
 
-#: _questions/forms.py:88
+#: .\_questions\forms.py:88
 msgid "Your answer"
 msgstr "Tvoje odpověď"
 
-#: _questions/templates/_questions/administration.html:14
+#: .\_questions\templates\_questions\administration.html:14
 msgid "new tag"
 msgstr "Přidat nový tag"
 
-#: _questions/templates/_questions/answer_edit.html:26
-#: _questions/templates/_questions/question_edit.html:20
+#: .\_questions\templates\_questions\answer_edit.html:26
+#: .\_questions\templates\_questions\question_edit.html:20
 #, python-format
 msgid ""
 "This question was already edited by %(first_name)s %(last_name)s, but not "
@@ -306,211 +309,218 @@ msgstr ""
 "Tuto otázku již upravil/a %(first_name)s %(last_name)s, tato úprava ale "
 "ještě nebyla schválena."
 
-#: _questions/templates/_questions/answer_edit.html:35
-#: _questions/templates/_questions/question_edit.html:29
+#: .\_questions\templates\_questions\answer_edit.html:35
+#: .\_questions\templates\_questions\question_edit.html:29
 msgid "Version from"
 msgstr "Verze od"
 
-#: _questions/templates/_questions/answer_edit.html:37
-#: _questions/templates/_questions/answer_revision.html:23
-#: _questions/templates/_questions/question_edit.html:31
-#: _questions/templates/_questions/question_revision.html:17
+#: .\_questions\templates\_questions\answer_edit.html:37
+#: .\_questions\templates\_questions\answer_revision.html:23
+#: .\_questions\templates\_questions\question_edit.html:31
+#: .\_questions\templates\_questions\question_revision.html:17
 msgid "Original version"
 msgstr "Původní verze"
 
-#: _questions/templates/_questions/answer_edit.html:44
-#: _questions/templates/_questions/answer_revision.html:28
-#: _questions/templates/_questions/question_edit.html:61
-#: _questions/templates/_questions/question_revision.html:37
+#: .\_questions\templates\_questions\answer_edit.html:44
+#: .\_questions\templates\_questions\answer_revision.html:28
+#: .\_questions\templates\_questions\question_edit.html:61
+#: .\_questions\templates\_questions\question_revision.html:37
 msgid "Edit comment"
 msgstr "Popis úpravy"
 
-#: _questions/templates/_questions/answer_edit.html:51
-#: _questions/templates/_questions/answer_revision.html:34
-#: _questions/templates/_questions/question_edit.html:68
-#: _questions/templates/_questions/question_revision.html:43
+#: .\_questions\templates\_questions\answer_edit.html:51
+#: .\_questions\templates\_questions\answer_revision.html:34
+#: .\_questions\templates\_questions\question_edit.html:68
+#: .\_questions\templates\_questions\question_revision.html:43
 msgid "Edited version"
 msgstr "Vylepšená verze"
 
-#: _questions/templates/_questions/answer_edit.html:57
-#: _questions/templates/_questions/question_edit.html:74
+#: .\_questions\templates\_questions\answer_edit.html:57
+#: .\_questions\templates\_questions\question_edit.html:74
 msgid "Submit for approval"
 msgstr "Hotovo, poslat na schválení"
 
-#: _questions/templates/_questions/answer_revision.html:43
-#: _questions/templates/_questions/question_revision.html:65
+#: .\_questions\templates\_questions\answer_revision.html:43
+#: .\_questions\templates\_questions\question_revision.html:65
 msgid "not approve"
 msgstr "Zamítnout"
 
-#: _questions/templates/_questions/answer_revision.html:46
-#: _questions/templates/_questions/question_revision.html:68
+#: .\_questions\templates\_questions\answer_revision.html:46
+#: .\_questions\templates\_questions\question_revision.html:68
 msgid "Approve"
 msgstr "Schválit"
 
-#: _questions/templates/_questions/question.html:24
-#: _questions/templates/_questions/question_detail.html:66
-#: _questions/templates/_questions/question_detail.html:94
-#: _questions/templates/_questions/question_detail.html:176
-#: _questions/templates/_questions/question_detail.html:199
+#: .\_questions\templates\_questions\question.html:24
+#: .\_questions\templates\_questions\question_detail.html:67
+#: .\_questions\templates\_questions\question_detail.html:95
+#: .\_questions\templates\_questions\question_detail.html:177
+#: .\_questions\templates\_questions\question_detail.html:200
 msgid "you"
 msgstr "Ty"
 
-#: _questions/templates/_questions/question_detail.html:19
+#: .\_questions\templates\_questions\question_detail.html:20
 msgid "your question is"
 msgstr "Ptáš se"
 
-#: _questions/templates/_questions/question_detail.html:21
+#: .\_questions\templates\_questions\question_detail.html:22
 msgid "is asking"
 msgstr " se ptá"
 
-#: _questions/templates/_questions/question_detail.html:29
+#: .\_questions\templates\_questions\question_detail.html:30
 msgid "edit question"
 msgstr "uprav otázku"
 
-#: _questions/templates/_questions/question_detail.html:33
-#: _questions/templates/_questions/question_detail.html:144
+#: .\_questions\templates\_questions\question_detail.html:34
+#: .\_questions\templates\_questions\question_detail.html:145
 msgid "changes"
 msgstr "zkontrolovat změny"
 
-#: _questions/templates/_questions/question_detail.html:37
-#: _questions/templates/_questions/question_detail.html:101
-#: _questions/templates/_questions/question_detail.html:148
-#: _questions/templates/_questions/question_detail.html:206
+#: .\_questions\templates\_questions\question_detail.html:38
+#: .\_questions\templates\_questions\question_detail.html:102
+#: .\_questions\templates\_questions\question_detail.html:149
+#: .\_questions\templates\_questions\question_detail.html:207
 msgid "it is scrap"
 msgstr "odpad"
 
-#: _questions/templates/_questions/question_detail.html:110
-#: _questions/templates/_questions/question_detail.html:216
+#: .\_questions\templates\_questions\question_detail.html:111
+#: .\_questions\templates\_questions\question_detail.html:217
 msgid "add comment"
 msgstr "přidej komentář"
 
-#: _questions/templates/_questions/question_detail.html:114
-#: _questions/templates/_questions/question_detail.html:219
+#: .\_questions\templates\_questions\question_detail.html:115
+#: .\_questions\templates\_questions\question_detail.html:220
 msgid "Type your additional question"
 msgstr "komentář"
 
-#: _questions/templates/_questions/question_detail.html:117
-#: _questions/templates/_questions/question_detail.html:222
+#: .\_questions\templates\_questions\question_detail.html:118
+#: .\_questions\templates\_questions\question_detail.html:223
 msgid "Send"
 msgstr "Šup tam s ním"
 
-#: _questions/templates/_questions/question_detail.html:131
+#: .\_questions\templates\_questions\question_detail.html:132
 msgid "Yours answers"
 msgstr "Vaše odpovědi"
 
-#: _questions/templates/_questions/question_detail.html:140
+#: .\_questions\templates\_questions\question_detail.html:141
 msgid "edit answer"
 msgstr "uprav odpověď"
 
-#: _questions/templates/_questions/question_detail.html:242
+#: .\_questions\templates\_questions\question_detail.html:243
 msgid "advise"
 msgstr "Poradit"
 
-#: _questions/templates/_questions/question_form.html:25
+#: .\_questions\templates\_questions\question_form.html:25
 msgid "Ask question"
 msgstr "Zeptat se"
 
-#: _questions/templates/_questions/questions.html:18
+#: .\_questions\templates\_questions\questions.html:18
 msgid "Administration"
 msgstr "administrace"
 
-#: _questions/templates/_questions/questions.html:26
+#: .\_questions\templates\_questions\questions.html:26
 msgid "Ask PochopIT members"
 msgstr "Zeptej se"
 
-#: _questions/templates/_questions/questions.html:34
+#: .\_questions\templates\_questions\questions.html:34
 msgid "Search"
 msgstr "Hledat"
 
-#: _questions/views.py:94
+#: .\_questions\views.py:94
 msgid "You can add only one answer to question!"
 msgstr "Nemůžeš hlasovat pro svoji otázku."
 
-#: _questions/views.py:159 _questions/views.py:300
+#: .\_questions\views.py:159 .\_questions\views.py:300
 msgid "Nothing to review!"
 msgstr "Všechny revize již byly zmáknuty!"
 
-#: _questions/views.py:211 _questions/views.py:349
+#: .\_questions\views.py:211 .\_questions\views.py:349
 msgid "Revision already approved"
 msgstr "Revizi již někdo zmáknul."
 
-#: _questions/views.py:254
+#: .\_questions\views.py:254
 msgid "You have scrap this question."
 msgstr "Označil/a jsi otázku jako odpad."
 
-#: _questions/views.py:256
+#: .\_questions\views.py:256
 msgid "You already scrap this question!"
 msgstr "Nemůžeš označit jako odpad dvaktrát tu samou otázku!"
 
-#: _questions/views.py:391
+#: .\_questions\views.py:391
 msgid "You have scrap answer."
 msgstr "Označil/a jsi odpověď jako odpad."
 
-#: _questions/views.py:393
+#: .\_questions\views.py:393
 msgid "You already scrap this answer!"
 msgstr "Nemůžeš označit jak odpad dvaktrát tu samou odpověď!"
 
-#: _questions/views.py:409 _questions/views.py:427
+#: .\_questions\views.py:409 .\_questions\views.py:427
 msgid "You have scrap comment."
 msgstr "Nemůžeš označit jak odpad dvaktrát ten samý komentář!"
 
-#: _questions/views.py:411 _questions/views.py:429
+#: .\_questions\views.py:411 .\_questions\views.py:429
 msgid "You already scrap this comment!"
 msgstr "Nemůžeš označit jak odpad dvaktrát ten samý komentář!"
 
-#: _questions/views.py:444 _questions/views.py:497
+#: .\_questions\views.py:444 .\_questions\views.py:497
 msgid "You can not vote for your question!"
 msgstr "Nemůžeš hlasovat pro svoji otázku."
 
-#: _questions/views.py:448 _questions/views.py:501 _questions/views.py:535
-#: _questions/views.py:590
+#: .\_questions\views.py:448 .\_questions\views.py:501
+#: .\_questions\views.py:535 .\_questions\views.py:590
 msgid "You can not vote more than once!"
 msgstr "Nemůžeš hlasovat vicekrát!"
 
-#: _questions/views.py:452 _questions/views.py:505 _questions/views.py:539
-#: _questions/views.py:594
+#: .\_questions\views.py:452 .\_questions\views.py:505
+#: .\_questions\views.py:539 .\_questions\views.py:594
 msgid "You can not vote more than"
 msgstr "Překročil jsi denní limit hlasování! Zkus to zítra."
 
-#: _questions/views.py:531 _questions/views.py:586
+#: .\_questions\views.py:531 .\_questions\views.py:586
 msgid "You can not vote for your answer!"
 msgstr "Nemůžeš hlasovat pro svoji odpověď."
 
-#: _questions/views.py:618
+#: .\_questions\views.py:618
 msgid "Tag already exits!"
 msgstr "Tag už existuje!"
 
-#: pochopit/templates/pochopit/base.html:64
+#: .\pochopit\templates\pochopit\base.html:64
 msgid "About"
 msgstr "O projektu"
 
-#: pochopit/templates/pochopit/base.html:65
+#: .\pochopit\templates\pochopit\base.html:65
 msgid "Questions"
 msgstr "Poradit"
 
-#: pochopit/templates/pochopit/base.html:81
+#: .\pochopit\templates\pochopit\base.html:66
+msgid "Connect"
+msgstr "Zapojit"
+
+#: .\pochopit\templates\pochopit\base.html:82
 msgid "Loading..."
 msgstr "Načítám..."
 
-#: pochopit/templates/pochopit/base.html:86
+#: .\pochopit\templates\pochopit\base.html:87
 msgid "Settings"
 msgstr "Nastavení"
 
-#: pochopit/templates/pochopit/base.html:90
+#: .\pochopit\templates\pochopit\base.html:91
 msgid "My account"
 msgstr "Můj účet"
 
-#: pochopit/templates/pochopit/base.html:91
+#: .\pochopit\templates\pochopit\base.html:92
 msgid "Sign out"
 msgstr "Odhlásit"
 
-#: pochopit/templates/pochopit/base.html:98
+#: .\pochopit\templates\pochopit\base.html:99
 msgid "Sign up"
 msgstr "Registrovat"
 
-#: pochopit/templates/pochopit/base.html:101
+#: .\pochopit\templates\pochopit\base.html:102
 msgid "Sign in"
 msgstr "Přihlásit"
+
+#~ msgid "Projects"
+#~ msgstr "Naše projekty"
 
 #, fuzzy
 #~| msgid "businesscard"

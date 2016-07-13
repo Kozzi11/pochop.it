@@ -63,6 +63,7 @@
 {#              <li><a href="{% url_from_constant '_courses' 'COURSES'%} ">{% trans "Courses" %}</a></li>#}
                 <li><a href="{% url_from_constant '_homepage' 'ABOUT' %}">{% trans "About" %}</a></li>
                 <li><a href="{% url_from_constant '_questions' 'QUESTIONS' %}">{% trans "Questions" %}</a></li>
+                <li><a href="{% url_from_constant '_homepage' 'CONNECT' %}">{% trans "Connect" %}</a></li>
             </ul>
           {% if user.is_authenticated %}
               <ul class="nav navbar-nav navbar-right">

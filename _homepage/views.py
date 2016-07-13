@@ -7,3 +7,7 @@ def homepage(request):
 
 def about(request):
     return render(request, '_homepage/about.html')
+
+
+def connect(request):
+    return render(request, '_homepage/connect.html')
